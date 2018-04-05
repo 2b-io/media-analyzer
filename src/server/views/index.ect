@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+      }
+
+      html {
+        box-sizing: border-box;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table td, table th {
+        border: 1px solid #666;
+        padding: 10px;
+        text-align: center;
+      }
+
+      tr.highlighted {
+        background: #ccc;
+      }
+
+      .wrapper {
+        display: flex;
+        width: 100%;
+      }
+
+      .col {
+        padding: 10px;
+        flex-grow: 1;
+        flex-basis: 0;
+        flex-shrink: 1;
+        flex: 1 1 0;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+
+      .trim {
+        max-width: 200px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    </style>
+    <script>
+    <!--
+      var IMG_TAGS = <%- JSON.stringify(@imgTags) %>;
+      var IMAGE_DATA = <%- JSON.stringify(@imageData) %>;
+    -->
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="col">
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2">
+                <span>Images</span>
+              </th>
+              <th>
+                <span>Natural</span>
+              </th>
+              <th>
+                <span>Displayed</span>
+              </th>
+              <th>
+                <span>Size</span>
+              </th>
+              <th>
+                <span>Optimized</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4">
+                <strong>Total</strong>
+              </td>
+              <td><%= @prettyTotalSize %></td>
+              <td><%= @prettyTotalOptimizedSize %></td>
+            </tr>
+            <% for img, index in @imgTags : %>
+              <tr class="<%= img.canOptimized && 'highlighted' %>">
+                <td>
+                  <span><%= index + 1 %></span>
+                </td>
+                <td>
+                  <div class="trim">
+                    <a href="<%= img.url %>" target="_blank"><%= img.url %></a>
+                  </div>
+                </td>
+                <% if img.imgTag : %>
+                  <td class="nowrap">
+                    <%= img.natural.width %> x <%= img.natural.height %>
+                  </td>
+                  <td class="nowrap">
+                    <%= img.displayed.width %> x <%= img.displayed.height %>
+                  </td>
+                <% else : %>
+                  <td class="nowrap" colspan="2">
+                    <span>CSS Background</span>
+                  </td>
+                <% end %>
+                <td class="nowrap">
+                  <a href="<%= img.url %>"><%= img.prettySize %></a>
+                </td>
+                <td class="nowrap">
+                  <a href="<%= img.optimizedPath %>"><%= img.prettyOptimizedSize %></a>
+                </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td colspan="4">
+                <strong>Total</strong>
+              </td>
+              <td><%= @prettyTotalSize %></td>
+              <td><%= @prettyTotalOptimizedSize %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <img src="<%= @screenshot %>">
+      </div>
+    </div>
+  </body>
+</html>

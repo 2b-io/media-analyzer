@@ -22,10 +22,14 @@
     "express": "4.16.3",
     "mime": "2.2.2",
     "mime-match": "1.0.2",
+    "mkdirp": "0.5.1",
     "morgan": "1.9.0",
     "phantom": "4.0.12",
+    "pretty-bytes": "4.0.2",
     "recursive-config": "1.0.1",
-    "remove": "^0.1.5"
+    "remove": "^0.1.5",
+    "shorthash": "0.0.2",
+    "superagent": "3.8.2"
   },
   "scripts": {
     "start": "yarn dev:server",
