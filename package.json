@@ -33,6 +33,8 @@
   },
   "scripts": {
     "start": "yarn dev:server",
-    "dev:server": "cd src && nodemon server/ --exec babel-node --CONFIG=../internals/config.dev.js"
+    "dev:server": "cd src && nodemon server/ --exec babel-node --CONFIG=../internals/config.dev.js",
+    "build": "cd src && babel . -d ../build && cp -r server/views ../build/server/views",
+    "clean": "rm -rf build"
   }
 }
