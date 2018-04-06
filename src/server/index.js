@@ -133,7 +133,11 @@ const normalizeUrl = (protocol, domain) => (url) => {
   return url
 }
 
-app.get('/', [
+app.get('/', (req, res, next) => {
+  res.render('index')
+})
+
+app.get('/analyze', [
   (req, res, next) => {
       (async () => {
         req._instance = await phantom.create()
@@ -316,7 +320,7 @@ app.get('/', [
       const totalSize = imgs.reduce((size, imgs) => size + (imgs.size || 0), 0)
       const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
 
-      res.render('index', {
+      res.render('analyze', {
         all,
         totalSize,
         totalOptimizedSize,

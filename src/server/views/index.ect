@@ -14,132 +14,55 @@
       *, *:before, *:after {
         box-sizing: inherit;
       }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
 
-      table td, table th {
+      .form {
+        margin-top: 50px;
+        margin-right: auto;
+        margin-left: auto;
         border: 1px solid #666;
+        width: 300px;
         padding: 10px;
-        text-align: center;
         font-size: 12px;
       }
 
-      tr.highlighted {
-        background: #ccc;
+      .row {
+        margin-bottom: 5px;
       }
 
-      .wrapper {
-        display: flex;
+      input[type="text"] {
         width: 100%;
+        padding: 5px;
       }
 
-      .col {
-        padding: 10px;
-        flex-grow: 1;
-        flex-basis: 0;
-        flex-shrink: 1;
-        flex: 1 1 0;
+      input, button {
+        height: 30px;
       }
 
-      img {
-        max-width: 100%;
+      .checkbox {
+        display: flex;
+        align-items: center;
       }
 
-      .nowrap {
-        white-space: nowrap;
-      }
-
-      .trim {
-        max-width: 200px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
+      .checkbox span {
+        margin-left: 10px;
       }
     </style>
-    <script>
-    <!--
-      var ALL = <%- JSON.stringify(@all) %>;
-      var IMG_TAGS = <%- JSON.stringify(@imgTags) %>;
-      var IMAGE_DATA = <%- JSON.stringify(@imageData) %>;
-    -->
-    </script>
   </head>
   <body>
-    <div class="wrapper">
-      <div class="col">
-        <table>
-          <thead>
-            <tr>
-              <th colspan="2">
-                <span>Images</span>
-              </th>
-              <th>
-                <span>Natural</span>
-              </th>
-              <th>
-                <span>Displayed</span>
-              </th>
-              <th>
-                <span>Size</span>
-              </th>
-              <th>
-                <span>Optimized</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="4">
-                <strong>Total</strong>
-              </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-            </tr>
-            <% for img, index in @imgTags : %>
-              <tr class="<%= img.canOptimized && 'highlighted' %>">
-                <td>
-                  <span><%= index + 1 %></span>
-                </td>
-                <td>
-                  <div class="trim">
-                    <a href="<%= img.url %>" target="_blank"><%= img.url %></a>
-                  </div>
-                </td>
-                <% if img.imgTag : %>
-                  <td class="nowrap">
-                    <%= img.natural.width %> x <%= img.natural.height %>
-                  </td>
-                  <td class="nowrap">
-                    <%= img.displayed.width %> x <%= img.displayed.height %>
-                  </td>
-                <% else : %>
-                  <td class="nowrap" colspan="2">
-                    <span>CSS Background</span>
-                  </td>
-                <% end %>
-                <td class="nowrap">
-                  <a href="<%= img.url %>"><%= img.prettySize %></a>
-                </td>
-                <td class="nowrap">
-                  <a href="<%= img.optimizedPath %>"><%= img.prettyOptimizedSize %></a>
-                </td>
-              </tr>
-            <% end %>
-            <tr>
-              <td colspan="4">
-                <strong>Total</strong>
-              </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-            </tr>
-          </tbody>
-        </table>
+    <form method="get" action="/analyze" class="form">
+      <div class="row">
+        <input type="text" name="url" placeholder="URL">
       </div>
-      <div class="col">
-        <img src="<%= @screenshot %>">
+      <div class="row">
+        <input type="text" name="delay" placeholder="Delay (optional)">
       </div>
-    </div>
+      <div class="row">
+        <label class="checkbox">
+          <input type="checkbox" name="m">
+          <span>Mobile</span>
+        </label>
+      </div>
+      <button type="submit">Analyze</button>
+    </form>
   </body>
 </html>
