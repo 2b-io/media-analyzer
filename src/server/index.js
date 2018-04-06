@@ -109,7 +109,8 @@ const optimize = async (imgs) => {
           img.prettyOptimizedSize = pretty(img.optimizedSize || 0)
         })
         .catch(error => {
-          img.optimizeSize = 0
+          img.optimizedPath = img.url
+          img.optimizeSize = img.size
           img.prettyOptimizedSize = 'N/A'
         })
     })
