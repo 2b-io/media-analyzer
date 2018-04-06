@@ -320,6 +320,10 @@ app.get('/analyze', [
       const totalSize = imgs.reduce((size, imgs) => size + (imgs.size || 0), 0)
       const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
 
+      imgs.forEach(img => {
+        img.percent = (img.optimizedSize / img.size) * 100
+      })
+
       res.render('analyze', {
         all,
         totalSize,
@@ -328,7 +332,8 @@ app.get('/analyze', [
         imgTags: imgs,
         imageData: images,
         prettyTotalSize: pretty(totalSize || 0),
-        prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0)
+        prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0),
+        percent: (totalOptimizedSize / totalSize) * 100
       })
     })()
     .catch(error => {

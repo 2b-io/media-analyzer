@@ -30,6 +30,10 @@
         background: #ccc;
       }
 
+      td.highlighted {
+        font-weight: bold;
+      }
+
       .wrapper {
         display: flex;
         width: 100%;
@@ -101,6 +105,9 @@
               <th>
                 <span>Optimized</span>
               </th>
+              <th>
+                <span>%</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -110,6 +117,7 @@
               </td>
               <td><%= @prettyTotalSize %></td>
               <td><%= @prettyTotalOptimizedSize %></td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
             </tr>
             <% for img, index in @imgTags : %>
               <tr class="<%= img.canOptimized && 'highlighted' %>">
@@ -139,6 +147,9 @@
                 <td class="nowrap">
                   <a href="<%= img.optimizedPath %>"><%= img.prettyOptimizedSize %></a>
                 </td>
+                <td class="nowrap <%= (img.percent < 100) && 'highlighted' || '' %>">
+                  <%= img.percent.toFixed(1) %>%
+                </td>
               </tr>
             <% end %>
             <tr>
@@ -147,6 +158,7 @@
               </td>
               <td><%= @prettyTotalSize %></td>
               <td><%= @prettyTotalOptimizedSize %></td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
             </tr>
           </tbody>
         </table>
