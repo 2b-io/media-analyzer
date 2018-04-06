@@ -290,7 +290,9 @@ app.get('/analyze', [
 
       mkdirp.sync(path.dirname(screenshot))
 
-      await page.render(path.join(screenshotDir, screenshot))
+      await page.render(path.join(screenshotDir, screenshot), {
+        quality: 50
+      })
 
       console.timeEnd('Capture')
 
