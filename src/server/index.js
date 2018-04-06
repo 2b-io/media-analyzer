@@ -162,7 +162,7 @@ const log = (requester) => {
       anchor = Date.now()
     }
 
-    console.log(info, finish ? Date.now() - anchor : '')
+    console.log(info, finish ? `${Date.now() - anchor}ms` : '')
 
     io.to(requester).emit('analyze_progress', {
       info: info,

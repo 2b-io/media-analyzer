@@ -119,7 +119,9 @@
       })
 
       socket.on('analyze_complete', function(msg) {
-        window.location.href = msg.reportLink
+        setTimeout(function() {
+          window.location.href = msg.reportLink
+        }, 3e3)
       })
 
       var form = document.getElementById('form')
