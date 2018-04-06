@@ -15,6 +15,7 @@ import { URL } from 'url'
 const DESKTOP_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
 
+const TIMEOUT = 60e3
 const app = express()
 
 const screenshotDir = path.join(__dirname, '../../screenshot')
@@ -31,6 +32,20 @@ const engine = ect({
 app.set('view engine', 'ect')
 app.engine('ect', engine.render)
 app.set('views', viewDir)
+
+app.use((req, res, next) => {
+  const timeout = setTimeout(() => {
+    console.log(`Request ${req.url} timeout`)
+
+    res.sendStatus(408)
+  }, TIMEOUT)
+
+  res.on('finish', () => {
+    clearTimeout(timeout)
+  })
+
+  next()
+})
 
 const waitForReady = async (page) => {
   const readyState = await page.evaluate(function() {
@@ -85,6 +100,10 @@ const optimize = async (imgs) => {
       .then(res => {
         img.optimizedSize = parseInt(res.headers['content-length'], 10)
         img.prettyOptimizedSize = pretty(img.optimizedSize || 0)
+      })
+      .catch(error => {
+        img.optimizeSize = 0
+        img.prettyOptimizedSize = 'N/A'
       })
   }))
 
@@ -268,6 +287,9 @@ app.get('/', (req, res, next) => {
       prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0)
     })
   })()
+  .catch(error => {
+    res.sendStatus(500)
+  })
 })
 
 app.use('/s', express.static(path.join(__dirname, '../../screenshot')))
