@@ -62,10 +62,22 @@
         margin-right: 10px;
         flex-basis: 0;
       }
+
+      .log {
+        border: 1px solid #black;
+        background: black;
+        color: white;
+        padding: 10px;
+        margin-top: 10px;
+        height: 300px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+      }
     </style>
+    <script src="/libs/socket.io-client/dist/socket.io.js"></script>
   </head>
   <body>
-    <form method="get" action="/analyze" class="form">
+    <form id="form" method="get" action="/analyze" class="form">
       <div class="row">
         <input type="text" name="url" placeholder="URL">
       </div>
@@ -89,7 +101,50 @@
           <span>UserAgent for Mobile Device</span>
         </label>
       </div>
-      <button type="submit">Analyze</button>
+      <div class="row">
+        <button type="submit" name="submit">Analyze</button>
+      </div>
+      <div id="log" class="log">
+      </div>
     </form>
+    <script>
+      var socket = io()
+
+      socket.on('analyze_progress', function(msg) {
+        console.log(msg)
+        var div = document.createElement('div')
+        div.innerHTML = msg.info + (msg.time ? (' [' + msg.time + 'ms]') : '')
+
+        log.appendChild(div)
+      })
+
+      socket.on('analyze_complete', function(msg) {
+        window.location.href = msg.reportLink
+      })
+
+      var form = document.getElementById('form')
+      var log = document.getElementById('log')
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault()
+
+        const formData = {
+          url: form.elements.url.value,
+          delay: form.elements.delay.value,
+          w: form.elements.w.value,
+          h: form.elements.h.value,
+          m: form.elements.m.checked
+        }
+
+        socket.emit('request_analyze', formData)
+
+        form.elements.url.disabled = true
+        form.elements.delay.disabled = true
+        form.elements.w.disabled = true
+        form.elements.h.disabled = true
+        form.elements.m.disabled = true
+        form.elements.submit.disabled = true
+      })
+    </script>
   </body>
 </html>

@@ -29,6 +29,8 @@
     "recursive-config": "1.0.1",
     "remove": "^0.1.5",
     "shorthash": "0.0.2",
+    "socket.io": "2.1.0",
+    "socket.io-client": "2.1.0",
     "superagent": "3.8.2"
   },
   "scripts": {
