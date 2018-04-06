@@ -145,8 +145,12 @@ app.get('/analyze', [
         next()
       })()
 
-      res.on('finish', () => {
-        req._instance.exit()
+      res.on('finish', async () => {
+        console.log('Clear phantom...')
+
+        await req._instance.exit()
+
+        console.log('Clear phantom... done!')
       })
   },
   (req, res, next) => {
@@ -341,7 +345,9 @@ app.get('/analyze', [
       })
     })()
     .catch(error => {
-      res.sendStatus(500)
+      if (!res.headersSent) {
+        res.sendStatus(500)
+      }
     })
   }
 ])
