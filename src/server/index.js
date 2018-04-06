@@ -86,7 +86,8 @@ const optimize = async (imgs) => {
 
   await Promise.all(
     imgs.map(img => {
-      if (img.url.indexOf('https://server1.mn-cdn.com') === 0) {
+      if (img.url.indexOf('https://server1.mn-cdn.com') === 0 ||
+        img.url.indexOf('data') === 0) {
         img.optimizedPath = img.url
         img.optimizedSize = img.size
         img.prettyOptimizedSize = img.prettySize
@@ -157,6 +158,7 @@ app.get('/', [
         logLevel: 'debug'
       })
 
+      const all = {}
       const images = {}
       const css = []
       const js = []
@@ -172,14 +174,22 @@ app.get('/', [
       await page.setting('userAgent', ua)
       await page.on('onResourceReceived', (requestData) => {
         const { url } = requestData
+        const decodedUrl = decodeURIComponent(url)
 
-        const type = mime.getType(url)
+        all[decodedUrl] = requestData
 
-        if (!type) return
+        const type = requestData.contentType ||
+          mime.getType(new URL(decodedUrl).pathname)
+
+        if (!type) {
+          console.log('Strange request', requestData)
+
+          return
+        }
 
         if (mimeMatch(type, 'image/*')) {
           // console.info('Requesting', url)
-          images[decodeURIComponent(url)] = requestData
+          images[decodedUrl] = requestData
         } else if (mimeMatch(type, 'text/css')) {
           css.push(url)
         }
@@ -307,6 +317,7 @@ app.get('/', [
       const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
 
       res.render('index', {
+        all,
         totalSize,
         totalOptimizedSize,
         screenshot: `/s/${screenshot}`,
