@@ -90,7 +90,7 @@ const optimize = async (imgs) => {
         img.url.indexOf('data') === 0) {
         img.optimizedPath = img.url
         img.optimizedSize = img.size
-        img.prettyOptimizedSize = 'N/A'
+        img.prettyOptimizedSize = '✓'
 
         return Promise.resolve()
       }
