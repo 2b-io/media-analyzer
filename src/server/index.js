@@ -182,7 +182,7 @@ app.get('/', [
           mime.getType(new URL(decodedUrl).pathname)
 
         if (!type) {
-          console.log('Strange request', requestData)
+          console.log(`Strange request ${requestData.url}`)
 
           return
         }
