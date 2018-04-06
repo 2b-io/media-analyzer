@@ -47,6 +47,21 @@
       .checkbox span {
         margin-left: 10px;
       }
+
+      .inline {
+        display: flex;
+        align-items: center;
+      }
+
+      .inline > div {
+        flex-basis: 100%;
+      }
+
+      .inline > span.time {
+        margin-left: 10px;
+        margin-right: 10px;
+        flex-basis: 0;
+      }
     </style>
   </head>
   <body>
@@ -58,9 +73,20 @@
         <input type="text" name="delay" placeholder="Delay (optional)">
       </div>
       <div class="row">
+        <div class="inline">
+          <div>
+            <input type="text" name="w" placeholder="1280">
+          </div>
+          <span class="time">x</span>
+          <div>
+            <input type="text" name="h" placeholder="900">
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <label class="checkbox">
           <input type="checkbox" name="m">
-          <span>Mobile</span>
+          <span>UserAgent for Mobile Device</span>
         </label>
       </div>
       <button type="submit">Analyze</button>
