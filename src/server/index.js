@@ -101,11 +101,10 @@ const optimize = async (imgs) => {
         p = `${p}&w=${img.displayed.width}&h=${img.displayed.height}&m=crop`
       }
 
-      img.optimizedPath = p
-
       return request
         .get(p)
         .then(res => {
+          img.optimizedPath = p
           img.optimizedSize = parseInt(res.headers['content-length'], 10)
           img.prettyOptimizedSize = pretty(img.optimizedSize || 0)
         })
