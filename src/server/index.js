@@ -280,7 +280,14 @@ const analyze = async (data, requester) => {
 
   updateProgress(`Inspect DOM...`)
 
-  const normalize = normalizeUrl(url.protocol, url.hostname)
+  const location = await page.evaluate(function() {
+    return {
+      hostname: location.hostname,
+      protocol: location.protocol
+    }
+  })
+
+  const normalize = normalizeUrl(location.protocol, location.hostname)
 
   // report
   const imgTags = (await page.evaluate(function() {
