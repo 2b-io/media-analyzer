@@ -197,7 +197,9 @@ const analyze = async (data, requester) => {
 
   const page = await instance.createPage()
 
-  const url = data.url
+  const url = nu(data.url, {
+    stripWWW: false
+  })
   const viewportSize = {
     // width: 375,
     width: parseInt(data.w || 1280, 10),
@@ -232,11 +234,11 @@ const analyze = async (data, requester) => {
     }
   })
 
-  updateProgress(`GET ${nu(url)} ...`)
+  updateProgress(`GET ${url} ...`)
 
-  const status = await page.open(nu(url))
+  const status = await page.open(url)
 
-  updateProgress(`GET ${nu(url)} ${status}`, true)
+  updateProgress(`GET ${url} ${status}`, true)
 
   updateProgress(`Render...`)
 
