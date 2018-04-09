@@ -6,6 +6,7 @@ import http from 'http'
 import mkdirp from 'mkdirp'
 import mime from 'mime'
 import mimeMatch from 'mime-match'
+import nu from 'normalize-url'
 import path from 'path'
 import phantom from 'phantom'
 import pretty from 'pretty-bytes'
@@ -196,7 +197,7 @@ const analyze = async (data, requester) => {
 
   const page = await instance.createPage()
 
-  const url = new URL(data.url)
+  const url = data.url
   const viewportSize = {
     // width: 375,
     width: parseInt(data.w || 1280, 10),
@@ -231,11 +232,11 @@ const analyze = async (data, requester) => {
     }
   })
 
-  updateProgress(`GET ${url.toString()} ...`)
+  updateProgress(`GET ${nu(url)} ...`)
 
-  const status = await page.open(url.toString())
+  const status = await page.open(nu(url))
 
-  updateProgress(`GET ${url.toString()} ${status}`, true)
+  updateProgress(`GET ${nu(url)} ${status}`, true)
 
   updateProgress(`Render...`)
 
