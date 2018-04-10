@@ -170,171 +170,177 @@ const analyze = async (data, requester) => {
 
   updateProgress(`GET ${url} ...`)
 
-  const browser = await puppeteer.launch({
-    // headless: f,
-    args: [ '--no-sandbox', '--disable-dev-shm-usage' ]
-  })
+  let browser
 
-  const page = await browser.newPage()
-
-  await page._client.on('Network.dataReceived', async (event) => {
-    const req = page._networkManager._requestIdToRequest.get(event.requestId)
-
-    if (!req) {
-      return
-    }
-
-    const url = req.url()
-
-    if (url.startsWith('data:')) {
-      return
-    }
-
-    const length = event.dataLength
-
-    if (!(url in resources)) {
-      resources[url] = { url }
-    }
-
-    resources[url].size = (resources[url].size || 0) + length
-  })
-
-  await page.on('response', async (res) => {
-    const req = res.request()
-
-    const url = req.url()
-
-    if (url.startsWith('data:')) {
-      return
-    }
-
-    if (!(url in resources)) {
-      resources[url] = { url }
-    }
-
-    resources[url].status = res.status()
-    resources[url].contentType = (res.headers()['content-type'] || '')
-      .split(';').shift()
-  })
-
-  await page.setViewport(viewport)
-  await page.setUserAgent(ua)
-  const response = await page.goto(url, {
-    waitUntil: 'networkidle0',
-    timeout: 3000000
-  })
-
-  updateProgress(`GET ${url}... ${response.status()}`, true)
-
-  updateProgress(`Capture screenshot...`)
-
-  const screenshot = `${reportTag}.jpeg`
-
-  await page.screenshot({
-    path: path.join(screenshotDir, screenshot),
-    fullPage: true
-  })
-
-  updateProgress('Capture screenshot... done', true)
-
-  updateProgress(`Inspect DOM...`)
-
-  const location = await page.evaluate(() => ({
-    hostname: location.hostname,
-    protocol: location.protocol
-  }))
-
-  const normalize = normalizeUrl(location.protocol, location.hostname)
-
-  const imgTags = (
-    await page.evaluate(() => {
-      const imgs = document.querySelectorAll('img')
-
-      return [].slice.call(imgs).map(function(img) {
-        return {
-          natural:{
-            width: img.naturalWidth,
-            height: img.naturalHeight
-          },
-          displayed: {
-            width: img.clientWidth,
-            height: img.clientHeight
-          },
-          src: img.getAttribute('src')
-        }
-      })
+  try {
+    browser = await puppeteer.launch({
+      // headless: f,
+      args: [ '--no-sandbox', '--disable-dev-shm-usage' ]
     })
-  )
-  .filter(Boolean)
-  .filter(img => {
-    return img.src && img.natural.width > 0 && img.natural.height > 0 && img.displayed.width > 0 && img.displayed.height > 0
-  })
-  .map(img => ({
-    ...img,
-    shouldResize: (img.natural.width * img.natural.height) > (img.displayed.width * img.displayed.height),
-    url: normalize(img.src.trim())
-  }))
-  .reduce((tags, img) => {
-    const { url } = img
-    const existed = tags[url]
 
-    if (!existed) {
-      tags[url] = img
-    } else {
-      if ((img.displayed.width * img.displayed.height) > (existed.displayed.width * existed.displayed.height)) {
+    const page = await browser.newPage()
+
+    await page._client.on('Network.dataReceived', async (event) => {
+      const req = page._networkManager._requestIdToRequest.get(event.requestId)
+
+      if (!req) {
+        return
+      }
+
+      const url = req.url()
+
+      if (url.startsWith('data:')) {
+        return
+      }
+
+      const length = event.dataLength
+
+      if (!(url in resources)) {
+        resources[url] = { url }
+      }
+
+      resources[url].size = (resources[url].size || 0) + length
+    })
+
+    await page.on('response', async (res) => {
+      const req = res.request()
+
+      const url = req.url()
+
+      if (url.startsWith('data:')) {
+        return
+      }
+
+      if (!(url in resources)) {
+        resources[url] = { url }
+      }
+
+      resources[url].status = res.status()
+      resources[url].contentType = (res.headers()['content-type'] || '')
+        .split(';').shift()
+    })
+
+    await page.setViewport(viewport)
+    await page.setUserAgent(ua)
+    const response = await page.goto(url, {
+      waitUntil: 'networkidle0',
+      timeout: 2 * 60 * 1000 // 2 minutes
+    })
+
+    updateProgress(`GET ${url}... ${response.status()}`, true)
+
+    updateProgress(`Capture screenshot...`)
+
+    const screenshot = `${reportTag}.jpeg`
+
+    await page.screenshot({
+      path: path.join(screenshotDir, screenshot),
+      fullPage: true
+    })
+
+    updateProgress('Capture screenshot... done', true)
+
+    updateProgress(`Inspect DOM...`)
+
+    const location = await page.evaluate(() => ({
+      hostname: location.hostname,
+      protocol: location.protocol
+    }))
+
+    const normalize = normalizeUrl(location.protocol, location.hostname)
+
+    const imgTags = (
+      await page.evaluate(() => {
+        const imgs = document.querySelectorAll('img')
+
+        return [].slice.call(imgs).map(function(img) {
+          return {
+            natural:{
+              width: img.naturalWidth,
+              height: img.naturalHeight
+            },
+            displayed: {
+              width: img.clientWidth,
+              height: img.clientHeight
+            },
+            src: img.getAttribute('src')
+          }
+        })
+      })
+    )
+    .filter(Boolean)
+    .filter(img => {
+      return img.src && img.natural.width > 0 && img.natural.height > 0 && img.displayed.width > 0 && img.displayed.height > 0
+    })
+    .map(img => ({
+      ...img,
+      shouldResize: (img.natural.width * img.natural.height) > (img.displayed.width * img.displayed.height),
+      url: normalize(img.src.trim())
+    }))
+    .reduce((tags, img) => {
+      const { url } = img
+      const existed = tags[url]
+
+      if (!existed) {
         tags[url] = img
+      } else {
+        if ((img.displayed.width * img.displayed.height) > (existed.displayed.width * existed.displayed.height)) {
+          tags[url] = img
+        }
       }
+
+      return tags
+    }, {})
+
+    const images = Object.values(resources).reduce((images, resource) => {
+      const { url, contentType }  = resource
+
+      if (mimeMatch(contentType, 'image/*')) {
+        images[url] = {
+          ...resource,
+          prettySize: pretty(resource.size),
+          imgTag: imgTags[url],
+          css: !(url in imgTags),
+          percent: 100
+        }
+      }
+
+      return images
+    }, {})
+
+    updateProgress(`Inspect DOM... done`, true)
+
+    updateProgress(`Optimize...`)
+
+    const imgs = await optimize(Object.values(images))
+
+    updateProgress(`Optimize... done`, true)
+
+    const totalSize = imgs.reduce((size, imgs) => size + (imgs.size || 0), 0)
+    const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
+
+    imgs.forEach(img => {
+      img.percent = img.size ?
+        (img.optimizedSize / img.size) * 100 : 100
+    })
+
+    reports[reportTag] = {
+      resources,
+      imgs,
+      screenshot: `/s/${screenshot}`,
+      prettyTotalSize: pretty(totalSize || 0),
+      prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0),
+      percent: totalSize ?
+       (totalOptimizedSize / totalSize) * 100 : 100,
+      created: Date.now()
     }
 
-    return tags
-  }, {})
-
-  const images = Object.values(resources).reduce((images, resource) => {
-    const { url, contentType }  = resource
-
-    if (mimeMatch(contentType, 'image/*')) {
-      images[url] = {
-        ...resource,
-        prettySize: pretty(resource.size),
-        imgTag: imgTags[url],
-        css: !(url in imgTags),
-        percent: 100
-      }
+    io.to(requester).emit('analyze_complete', {
+      reportLink: `/reports/${reportTag}`
+    })
+  } finally {
+    if (browser) {
+      await browser.close()
     }
-
-    return images
-  }, {})
-
-  updateProgress(`Inspect DOM... done`, true)
-
-  updateProgress(`Optimize...`)
-
-  const imgs = await optimize(Object.values(images))
-
-  updateProgress(`Optimize... done`, true)
-
-  const totalSize = imgs.reduce((size, imgs) => size + (imgs.size || 0), 0)
-  const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
-
-  imgs.forEach(img => {
-    img.percent = img.size ?
-      (img.optimizedSize / img.size) * 100 : 100
-  })
-
-  reports[reportTag] = {
-    resources,
-    imgs,
-    screenshot: `/s/${screenshot}`,
-    prettyTotalSize: pretty(totalSize || 0),
-    prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0),
-    percent: totalSize ?
-     (totalOptimizedSize / totalSize) * 100 : 100,
-    created: Date.now()
   }
-
-  io.to(requester).emit('analyze_complete', {
-    reportLink: `/reports/${reportTag}`
-  })
-
-  await browser.close()
 }
