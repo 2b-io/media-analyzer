@@ -79,9 +79,8 @@
     </style>
     <script>
     <!--
-      var ALL = <%- JSON.stringify(@all) %>;
-      var IMG_TAGS = <%- JSON.stringify(@imgTags) %>;
-      var IMAGE_DATA = <%- JSON.stringify(@imageData) %>;
+      var RESOURCES = <%- JSON.stringify(@resources) %>;
+      var IMAGES = <%- JSON.stringify(@imgs) %>;
     -->
     </script>
   </head>
@@ -123,7 +122,7 @@
               <td><%= @prettyTotalOptimizedSize %></td>
               <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
             </tr>
-            <% for img, index in @imgTags : %>
+            <% for img, index in @imgs : %>
               <tr class="<%= img.canOptimized && 'highlighted' %>">
                 <td>
                   <span><%= index + 1 %></span>
@@ -135,10 +134,10 @@
                 </td>
                 <% if img.imgTag : %>
                   <td class="nowrap">
-                    <%= img.natural.width %> x <%= img.natural.height %>
+                    <%= img.imgTag.natural.width %> x <%= img.imgTag.natural.height %>
                   </td>
                   <td class="nowrap">
-                    <%= img.displayed.width %> x <%= img.displayed.height %>
+                    <%= img.imgTag.displayed.width %> x <%= img.imgTag.displayed.height %>
                   </td>
                 <% else : %>
                   <td class="nowrap" colspan="2">
