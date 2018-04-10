@@ -298,7 +298,7 @@ const analyze = async (data, requester) => {
       if (mimeMatch(contentType, 'image/*')) {
         images[url] = {
           ...resource,
-          prettySize: pretty(resource.size),
+          prettySize: pretty(resource.size || 0),
           imgTag: imgTags[url],
           css: !(url in imgTags),
           percent: 100
