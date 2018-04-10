@@ -4,3 +4,4 @@ FROM node:carbon
 WORKDIR /usr/src
 
 RUN npm install -g yarn
+RUN chmod +x /usr/local/bin/yarn

@@ -2,6 +2,7 @@ version: '3'
 services:
   web:
       build: .
+      container_name: media.crawler
       command: bash -c "yarn && yarn start"
       volumes:
         - .:/usr/src
