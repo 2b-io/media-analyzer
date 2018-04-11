@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       * {
         padding: 0;
@@ -37,6 +38,9 @@
       .wrapper {
         display: flex;
         width: 100%;
+        flex-wrap: wrap;
+        top: 40px;
+        position: relative;
       }
 
       .col {
@@ -71,6 +75,11 @@
         color: white;
         line-height: 20px;
         padding: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
       }
 
       .header a {
@@ -145,10 +154,10 @@
                   </td>
                 <% end %>
                 <td class="nowrap">
-                  <a href="<%= img.url %>"><%= img.prettySize %></a>
+                  <a href="<%= img.url %>" target="_blank"><%= img.prettySize %></a>
                 </td>
                 <td class="nowrap">
-                  <a href="<%= img.optimizedPath %>"><%= img.prettyOptimizedSize %></a>
+                  <a href="<%= img.optimizedPath %>" target="_blank"><%= img.prettyOptimizedSize %></a>
                 </td>
                 <td class="nowrap <%= (img.percent < 100) && 'highlighted' || '' %>">
                   <%= img.percent.toFixed(1) %>%
@@ -167,7 +176,9 @@
         </table>
       </div>
       <div class="col">
-        <img src="<%= @screenshot %>">
+        <a href="<%= @screenshot %>" target="_blank">
+          <img src="<%= @screenshot %>">
+        </a>
       </div>
     </div>
   </body>

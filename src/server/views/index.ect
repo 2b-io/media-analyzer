@@ -141,6 +141,7 @@
       var wait = document.getElementById('wait')
       var socket = io()
       var formData = {}
+      var disconnect = 0
 
       var appendLog = function(msg) {
         var div = document.createElement('div')
@@ -148,6 +149,31 @@
 
         log.appendChild(div)
       }
+
+      socket.on('disconnect', function() {
+        disconnect = Date.now()
+
+        appendLog({
+          info: 'Disconnected with server! Reconnect...'
+        })
+      })
+
+      socket.on('connect', function() {
+        if (!disconnect) {
+          appendLog({
+            info: 'Connect... done'
+          })
+        } else {
+          appendLog({
+            info: 'Reconnect... done',
+            time: Date.now() - disconnect
+          })
+
+          appendLog({
+            info: 'Some logs may be missing when you are disconnected'
+          })
+        }
+      })
 
       socket.on('accept_analyze_request', function(msg) {
         formData.url = msg.url
