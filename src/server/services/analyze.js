@@ -111,13 +111,16 @@ const analyze = async (data, progress) => {
 
     await page.screenshot({
       path: path.join(screenshotDir, screenshot),
-      fullPage: true
+      fullPage: true,
+      type: 'jpeg',
+      quality: 50
     })
 
     progress('Capture screenshot... done', true)
 
     progress(`Inspect DOM...`)
 
+    // get protocol & hostname from actual webpage, results of any redirects
     const location = await page.evaluate(() => ({
       hostname: location.hostname,
       protocol: location.protocol
@@ -125,6 +128,7 @@ const analyze = async (data, progress) => {
 
     const normalize = normalizeUrl(location.protocol, location.hostname)
 
+    // get size of displayed images (<img />)
     const imgTags = (
       await page.evaluate(() => {
         const imgs = document.querySelectorAll('img')
@@ -168,6 +172,7 @@ const analyze = async (data, progress) => {
       return tags
     }, {})
 
+    // find image from all received resources
     const images = Object.values(resources).reduce((images, resource) => {
       const { url, contentType }  = resource
 
@@ -192,6 +197,7 @@ const analyze = async (data, progress) => {
 
     progress(`Optimize... done`, true)
 
+    // do some summary
     const totalSize = imgs.reduce((size, imgs) => size + (imgs.size || 0), 0)
     const totalOptimizedSize = imgs.reduce((size, imgs) => size + (imgs.optimizedSize || 0), 0)
 

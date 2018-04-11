@@ -1,3 +1,4 @@
+import pretty from 'pretty-bytes'
 import request from 'superagent'
 
 const optimize = async (imgs) => {
