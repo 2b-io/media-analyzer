@@ -152,6 +152,7 @@
           div.innerHTML = msg.info + (msg.time ? (' [' + msg.time + 'ms]') : '');
 
           log.appendChild(div);
+          log.scrollTop = log.scrollHeight;
         };
 
         var disableInputs = function(disabled) {
