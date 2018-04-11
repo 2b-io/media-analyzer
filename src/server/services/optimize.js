@@ -2,8 +2,6 @@ import pretty from 'pretty-bytes'
 import request from 'superagent'
 
 const optimize = async (imgs) => {
-  console.time('Optimize')
-
   await Promise.all(
     imgs.map(img => {
       if (img.url.indexOf('https://server1.mn-cdn.com') === 0 ||
@@ -36,8 +34,6 @@ const optimize = async (imgs) => {
         })
     })
   )
-
-  console.timeEnd('Optimize')
 
   return imgs
 }

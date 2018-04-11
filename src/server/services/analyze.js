@@ -1,11 +1,9 @@
 import boolean from 'boolean'
 import mimeMatch from 'mime-match'
 import mkdirp from 'mkdirp'
-import nu from 'normalize-url'
 import path from 'path'
 import pretty from 'pretty-bytes'
 import puppeteer from 'puppeteer'
-import shortHash from 'shorthash'
 
 import normalizeUrl from 'services/normalize-url'
 import optimize from 'services/optimize'
@@ -18,11 +16,9 @@ const screenshotDir = path.join(__dirname, '../../../screenshot')
 mkdirp.sync(screenshotDir)
 
 const analyze = async (data, progress) => {
-  const url = nu(data.url, {
-    stripWWW: false
-  })
+  const { tag:reportTag, url } = data
 
-  const reportTag = shortHash.unique(url)
+  progress(`Analyze tag: ${reportTag}`)
 
   const report = await reportService.get(reportTag)
 
@@ -51,7 +47,8 @@ const analyze = async (data, progress) => {
   try {
     browser = await puppeteer.launch({
       // headless: f,
-      args: [ '--no-sandbox', '--disable-dev-shm-usage' ]
+      args: [ '--no-sandbox', '--disable-dev-shm-usage' ],
+      ignoreHTTPSErrors: true
     })
 
     const page = await browser.newPage()
@@ -99,7 +96,7 @@ const analyze = async (data, progress) => {
     await page.setViewport(viewport)
     await page.setUserAgent(ua)
     const response = await page.goto(url, {
-      waitUntil: 'networkidle0',
+      waitUntil: boolean(data.q) ? 'networkidle2' : 'networkidle0',
       timeout: 2 * 60 * 1000 // 2 minutes
     })
 

@@ -1,7 +1,9 @@
 import ect from 'ect'
 import express from 'express'
 import http from 'http'
+import nu from 'normalize-url'
 import path from 'path'
+import shortHash from 'shorthash'
 import socket from 'socket.io'
 
 import analyze from 'services/analyze'
@@ -23,6 +25,7 @@ app.set('views', viewDir)
 
 app.use('/s', express.static(path.join(__dirname, '../../screenshot')))
 app.use('/libs', express.static(path.join(__dirname, '../../node_modules')))
+app.use('/img', express.static(path.join(__dirname, '../../assets/img')))
 
 const server = http.Server(app)
 const io = socket(server)
@@ -36,17 +39,40 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('request_analyze', async (msg) => {
-    const logger = log(socket.id)
-    const reportLink = await analyze(msg, logger)
+    const url = nu(msg.url, { stripWWW: false })
 
-    if (!reportLink) {
-      io.to(socket.id).emit('analyze_error', {})
-      return
+    const data = {
+      ...msg,
+      url,
+      tag: shortHash.unique(url)
     }
 
-    io.to(socket.id).emit('analyze_complete', {
-      reportLink
-    })
+    socket.join(
+      data.tag,
+      () => socket.emit('accept_analyze_request', {
+        url,
+        tag: data.tag
+      })
+    )
+  })
+
+  socket.on('subscribe_analyze', async (msg) => {
+    const logger = log(msg.tag)
+
+    try {
+      const reportLink = await analyze(msg, logger)
+
+      io.emit('analyze_complete', {
+        tag: msg.tag,
+        reportLink
+      })
+    } catch (e) {
+      logger(`Error happens ${e.toString()}`)
+
+      io.emit('analyze_error', {
+        tag: msg.tag
+      })
+    }
   })
 })
 
@@ -64,7 +90,7 @@ app.get('/reports/:tag', async (req, res) => {
 
 server.listen(3005, () => console.log('App started at: 3005'))
 
-const log = (requester) => {
+const log = (tag) => {
   let anchor
 
   return (info, finish) => {
@@ -74,7 +100,8 @@ const log = (requester) => {
 
     console.log(info, finish ? `${Date.now() - anchor}ms` : '')
 
-    io.to(requester).emit('analyze_progress', {
+    io.emit('analyze_progress', {
+      tag,
       info: info,
       time: finish ? Date.now() - anchor : null
     })
