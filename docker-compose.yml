@@ -9,3 +9,10 @@ services:
         - /usr/src/node_modules
       ports:
         - "3005:3005"
+      depends_on:
+        - dynamodb
+
+  dynamodb:
+    image: dwmkerr/dynamodb
+    ports:
+      - "8000:8000"
