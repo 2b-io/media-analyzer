@@ -39,12 +39,6 @@
         -webkit-appearance: none;
       }
 
-      select {
-        background-image: url(/img/expand-arrow.png);
-        background-repeat: no-repeat;
-        background-position: right 5px center;
-      }
-
       input, button, select {
         height: 30px;
         padding: 5px 10px;
@@ -53,8 +47,20 @@
         border-radius: 0;
       }
 
+      select {
+        background-image: url(/img/expand-arrow.png);
+        background-repeat: no-repeat;
+        background-position: right 5px center;
+        padding-right: 18px;
+      }
+
       .small {
-        width: 150px;
+        max-width: 100px;
+      }
+
+      .small.double {
+        flex-basis: 200%;
+        max-width: 200px;
       }
 
       .checkbox {
@@ -69,6 +75,7 @@
       .inline {
         display: flex;
         align-items: center;
+        width: 100%;
       }
 
       .inline > div {
@@ -118,6 +125,14 @@
       </div>
       <div class="row">
         <div class="inline">
+          <div class="small double">
+            <select name="mode">
+              <option value="load">Quick Analyze</option>
+              <option value="networkidle2" selected>Default Analyze </option>
+              <option value="networkidle0">Slow Analyze</option>
+            </select>
+          </div>
+          <span class="time"></span>
           <div class="small">
             <input type="text" name="w" placeholder="1280">
           </div>
@@ -128,19 +143,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="inline">
-          <div>
-            <select name="m" class="small">
-              <option value="load">Quick Analyze</option>
-              <option value="networkidle2" selected>Default Analyze </option>
-              <option value="networkidle0">Slow Analyze</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="row">
         <label class="checkbox">
-          <input type="checkbox" name="m">
+          <input type="checkbox" name="mobile">
           <span>UserAgent for Mobile Device</span>
         </label>
       </div>
@@ -177,7 +181,7 @@
 
           console.log('disableInputs', value);
 
-          [ 'url', 'w', 'h', 'm', 'm', 'submit' ].forEach(function(input) {
+          [ 'url', 'w', 'h', 'mode', 'mobile', 'submit' ].forEach(function(input) {
             form.elements[input].disabled = value;
           });
         };
@@ -263,8 +267,8 @@
             url: form.elements.url.value,
             w: form.elements.w.value,
             h: form.elements.h.value,
-            q: form.elements.q.checked,
-            m: form.elements.m.checked
+            mode: form.elements.mode.value,
+            mobile: form.elements.mobile.checked
           };
 
           if (!formData.url) {

@@ -32,15 +32,15 @@ const analyze = async (data, progress) => {
     // width: 375,
     width: parseInt(data.w || 1280, 10),
     height: parseInt(data.h || 900, 10),
-    isMobile: boolean(data.m)
+    isMobile: boolean(data.mobile)
   }
 
-  const ua = boolean(data.m) ? MOBILE_UA : DESKTOP_UA
+  const ua = boolean(data.mobile) ? MOBILE_UA : DESKTOP_UA
 
   // collector
   const resources = {}
 
-  progress(`GET ${url} ...`)
+  progress(`[${data.mode}] GET ${url} ...`)
 
   let browser
 
@@ -98,11 +98,11 @@ const analyze = async (data, progress) => {
     })
 
     const response = await page.goto(url, {
-      waitUntil: 'load', //boolean(data.q) ? 'networkidle2' : 'networkidle0',
+      waitUntil: data.mode || 'load',
       timeout: 2 * 60 * 1000 // 2 minutes
     })
 
-    progress(`GET ${url}... ${response.status()}`, true)
+    progress(`[${data.mode}] GET ${url}... ${response.status()}`, true)
 
     progress(`Capture screenshot...`)
 
