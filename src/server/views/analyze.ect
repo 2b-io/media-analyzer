@@ -1,11 +1,13 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       * {
         padding: 0;
         margin: 0;
         font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+        font-size: 12px;
       }
 
       html {
@@ -37,6 +39,9 @@
       .wrapper {
         display: flex;
         width: 100%;
+        flex-wrap: wrap;
+        top: 40px;
+        position: relative;
       }
 
       .col {
@@ -71,6 +76,11 @@
         color: white;
         line-height: 20px;
         padding: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
       }
 
       .header a {
@@ -79,9 +89,8 @@
     </style>
     <script>
     <!--
-      var ALL = <%- JSON.stringify(@all) %>;
-      var IMG_TAGS = <%- JSON.stringify(@imgTags) %>;
-      var IMAGE_DATA = <%- JSON.stringify(@imageData) %>;
+      var RESOURCES = <%- JSON.stringify(@resources) %>;
+      var IMAGES = <%- JSON.stringify(@imgs) %>;
     -->
     </script>
   </head>
@@ -119,11 +128,17 @@
               <td colspan="4">
                 <strong>Total</strong>
               </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
+              <td>
+                <span><%= @prettyTotalSize %></span>
+              </td>
+              <td>
+                <span><%= @prettyTotalOptimizedSize %></span>
+              </td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
+                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+              </td>
             </tr>
-            <% for img, index in @imgTags : %>
+            <% for img, index in @imgs : %>
               <tr class="<%= img.canOptimized && 'highlighted' %>">
                 <td>
                   <span><%= index + 1 %></span>
@@ -135,10 +150,10 @@
                 </td>
                 <% if img.imgTag : %>
                   <td class="nowrap">
-                    <%= img.natural.width %> x <%= img.natural.height %>
+                    <%= img.imgTag.natural.width %> x <%= img.imgTag.natural.height %>
                   </td>
                   <td class="nowrap">
-                    <%= img.displayed.width %> x <%= img.displayed.height %>
+                    <%= img.imgTag.displayed.width %> x <%= img.imgTag.displayed.height %>
                   </td>
                 <% else : %>
                   <td class="nowrap" colspan="2">
@@ -146,13 +161,13 @@
                   </td>
                 <% end %>
                 <td class="nowrap">
-                  <a href="<%= img.url %>"><%= img.prettySize %></a>
+                  <a href="<%= img.url %>" target="_blank"><%= img.prettySize %></a>
                 </td>
                 <td class="nowrap">
-                  <a href="<%= img.optimizedPath %>"><%= img.prettyOptimizedSize %></a>
+                  <a href="<%= img.optimizedPath %>" target="_blank"><%= img.prettyOptimizedSize %></a>
                 </td>
                 <td class="nowrap <%= (img.percent < 100) && 'highlighted' || '' %>">
-                  <%= img.percent.toFixed(1) %>%
+                  <%= (100 - img.percent) > 0 && '-' || '' %><%= (100 - img.percent).toFixed(1) %>%
                 </td>
               </tr>
             <% end %>
@@ -160,15 +175,23 @@
               <td colspan="4">
                 <strong>Total</strong>
               </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
+              <td>
+                <span><%= @prettyTotalSize %></span>
+              </td>
+              <td>
+                <span><%= @prettyTotalOptimizedSize %></span>
+              </td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
+                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="col">
-        <img src="<%= @screenshot %>">
+        <a href="<%= @screenshot %>" target="_blank">
+          <img src="<%= @screenshot %>">
+        </a>
       </div>
     </div>
   </body>

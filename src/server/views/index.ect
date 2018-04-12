@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
       * {
         padding: 0;
         margin: 0;
         font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+        font-size: 12px;
       }
 
       html {
@@ -20,6 +21,7 @@
         margin-top: 50px;
         margin-right: auto;
         margin-left: auto;
+        margin-bottom: 20px;
         border: 1px solid #666;
         width: 90vw;
         padding: 10px;
@@ -28,19 +30,37 @@
 
       .row {
         margin-bottom: 5px;
+        display: flex;
+        align-items: center;
       }
 
-      input[type="text"] {
+      input[type="text"], select {
         width: 100%;
         -webkit-appearance: none;
       }
 
-      input, button {
+      input, button, select {
         height: 30px;
-        padding: 5px;
+        padding: 5px 10px;
         border: 1px solid #999;
-        background: white;
+        background-color: white;
         border-radius: 0;
+      }
+
+      select {
+        background-image: url(/img/expand-arrow.png);
+        background-repeat: no-repeat;
+        background-position: right 5px center;
+        padding-right: 18px;
+      }
+
+      .small {
+        max-width: 100px;
+      }
+
+      .small.double {
+        flex-basis: 200%;
+        max-width: 200px;
       }
 
       .checkbox {
@@ -55,6 +75,7 @@
       .inline {
         display: flex;
         align-items: center;
+        width: 100%;
       }
 
       .inline > div {
@@ -68,7 +89,7 @@
       }
 
       .log {
-        border: 1px solid #black;
+        border: 1px solid black;
         background: black;
         color: white;
         padding: 10px;
@@ -76,6 +97,23 @@
         height: 300px;
         overflow-x: hidden;
         overflow-y: scroll;
+        line-height: 16px;
+      }
+
+      .wait {
+        background-image: url(/img/load.gif);
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 45px;
+        display: inline-block;
+        margin-left: 10px;
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      .wait.shown {
+        opacity: 1;
       }
     </style>
     <script src="/libs/socket.io-client/dist/socket.io.js"></script>
@@ -86,71 +124,169 @@
         <input type="text" name="url" placeholder="URL">
       </div>
       <div class="row">
-        <input type="text" name="delay" placeholder="Delay (optional)">
-      </div>
-      <div class="row">
         <div class="inline">
-          <div>
+          <div class="small double">
+            <select name="mode">
+              <option value="load">Quick Analyze</option>
+              <option value="networkidle2" selected>Default Analyze </option>
+              <option value="networkidle0">Slow Analyze</option>
+            </select>
+          </div>
+          <span class="time"></span>
+          <div class="small">
             <input type="text" name="w" placeholder="1280">
           </div>
           <span class="time">x</span>
-          <div>
+          <div class="small">
             <input type="text" name="h" placeholder="900">
           </div>
         </div>
       </div>
       <div class="row">
         <label class="checkbox">
-          <input type="checkbox" name="m">
+          <input type="checkbox" name="mobile">
           <span>UserAgent for Mobile Device</span>
         </label>
       </div>
       <div class="row">
         <button type="submit" name="submit">Analyze</button>
+        <div id="wait" class="wait">
+        </div>
       </div>
       <div id="log" class="log">
       </div>
     </form>
     <script>
-      var socket = io()
+      var socket;
+      var formData = {};
+      var disconnect = 0;
+      var progressing = false;
 
-      socket.on('analyze_progress', function(msg) {
-        console.log(msg)
-        var div = document.createElement('div')
-        div.innerHTML = msg.info + (msg.time ? (' [' + msg.time + 'ms]') : '')
+      window.addEventListener('load', function() {
+        socket = io();
+        var form = document.getElementById('form');
+        var log = document.getElementById('log');
+        var wait = document.getElementById('wait');
 
-        log.appendChild(div)
-      })
+        var appendLog = function(msg) {
+          var div = document.createElement('div');
+          div.innerHTML = msg.info + (msg.time ? (' [' + msg.time + 'ms]') : '');
 
-      socket.on('analyze_complete', function(msg) {
-        setTimeout(function() {
-          window.location.href = msg.reportLink
-        }, 3e3)
-      })
+          log.appendChild(div);
+          log.scrollTop = log.scrollHeight;
+        };
 
-      var form = document.getElementById('form')
-      var log = document.getElementById('log')
+        var disableInputs = function(disabled) {
+          var value = !!disabled || progressing;
 
-      form.addEventListener('submit', function(event) {
-        event.preventDefault()
+          console.log('disableInputs', value);
 
-        const formData = {
-          url: form.elements.url.value,
-          delay: form.elements.delay.value,
-          w: form.elements.w.value,
-          h: form.elements.h.value,
-          m: form.elements.m.checked
-        }
+          [ 'url', 'w', 'h', 'mode', 'mobile', 'submit' ].forEach(function(input) {
+            form.elements[input].disabled = value;
+          });
+        };
 
-        socket.emit('request_analyze', formData)
+        disableInputs(true);
 
-        form.elements.url.disabled = true
-        form.elements.delay.disabled = true
-        form.elements.w.disabled = true
-        form.elements.h.disabled = true
-        form.elements.m.disabled = true
-        form.elements.submit.disabled = true
-      })
+        socket.on('disconnect', function() {
+          disconnect = Date.now();
+          disableInputs(true);
+
+          appendLog({
+            info: 'Disconnected with server! Reconnect...'
+          });
+        });
+
+        socket.on('connect', function() {
+          if (!disconnect) {
+            appendLog({
+              info: 'Connect... done'
+            });
+          } else {
+            appendLog({
+              info: 'Reconnect... done',
+              time: Date.now() - disconnect
+            });
+
+            appendLog({
+              info: 'Some logs may be missing when you are disconnected'
+            });
+          }
+
+          disableInputs(false);
+        });
+
+        socket.on('accept_analyze_request', function(msg) {
+          formData.url = msg.url;
+          formData.tag = msg.tag;
+
+          socket.emit('subscribe_analyze', formData);
+        });
+
+        socket.on('analyze_progress', function(msg) {
+          if (msg.tag !== formData.tag) {
+            return;
+          }
+
+          console.log(msg);
+          appendLog(msg);
+        });
+
+        socket.on('analyze_complete', function(msg) {
+          if (msg.tag !== formData.tag) {
+            return;
+          }
+
+          progressing = false;
+          wait.classList.remove('shown');
+
+          setTimeout(function() {
+            window.location.href = msg.reportLink;
+          }, 2e3);
+        });
+
+        socket.on('analyze_error', function(msg) {
+          if (msg.tag !== formData.tag) {
+            return;
+          }
+
+          progressing = false;
+          wait.classList.remove('shown');
+
+          appendLog({
+            info: 'An error occurs when analyze the given URL, please try again with [Quick Analyze] mode'
+          });
+
+          disableInputs(false);
+        });
+
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          formData = {
+            url: form.elements.url.value,
+            w: form.elements.w.value,
+            h: form.elements.h.value,
+            mode: form.elements.mode.value,
+            mobile: form.elements.mobile.checked
+          };
+
+          if (!formData.url) {
+            appendLog({
+              info: 'Invalid parameters: URL should not be empty!'
+            });
+
+            return;
+          }
+
+          socket.emit('request_analyze', formData);
+
+          progressing = true;
+          disableInputs(true);
+
+          wait.classList.add('shown');
+        });
+      });
     </script>
   </body>
 </html>
