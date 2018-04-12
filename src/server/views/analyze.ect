@@ -135,7 +135,7 @@
                 <span><%= @prettyTotalOptimizedSize %></span>
               </td>
               <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
-                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+                <%= (@percent - 100).toFixed(1) %>%
               </td>
             </tr>
             <% for img, index in @imgs : %>
@@ -167,7 +167,7 @@
                   <a href="<%= img.optimizedPath %>" target="_blank"><%= img.prettyOptimizedSize %></a>
                 </td>
                 <td class="nowrap <%= (img.percent < 100) && 'highlighted' || '' %>">
-                  <%= (100 - img.percent) > 0 && '-' || '' %><%= (100 - img.percent).toFixed(1) %>%
+                  <%= (img.percent - 100).toFixed(1) %>%
                 </td>
               </tr>
             <% end %>
@@ -182,7 +182,7 @@
                 <span><%= @prettyTotalOptimizedSize %></span>
               </td>
               <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
-                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+                <%= (@percent - 100).toFixed(1) %>%
               </td>
             </tr>
           </tbody>
