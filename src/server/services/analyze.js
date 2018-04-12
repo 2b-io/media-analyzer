@@ -53,6 +53,10 @@ const analyze = async (data, progress) => {
 
     const page = await browser.newPage()
 
+    // config headless-chrome-page
+    await page.setViewport(viewport)
+    await page.setUserAgent(ua)
+
     await page._client.on('Network.dataReceived', async (event) => {
       const req = page._networkManager._requestIdToRequest.get(event.requestId)
 
@@ -93,10 +97,8 @@ const analyze = async (data, progress) => {
         .split(';').shift()
     })
 
-    await page.setViewport(viewport)
-    await page.setUserAgent(ua)
     const response = await page.goto(url, {
-      waitUntil: boolean(data.q) ? 'networkidle2' : 'networkidle0',
+      waitUntil: 'load', //boolean(data.q) ? 'networkidle2' : 'networkidle0',
       timeout: 2 * 60 * 1000 // 2 minutes
     })
 

@@ -9,6 +9,7 @@ import socket from 'socket.io'
 import analyze from 'services/analyze'
 import reportService from 'services/report'
 
+const PORT = process.env.PORT || 3006
 const app = express()
 
 const viewDir = path.join(__dirname, './views')
@@ -30,6 +31,24 @@ app.use('/img', express.static(path.join(__dirname, '../../assets/img')))
 const server = http.Server(app)
 const io = socket(server)
 const reports = {}
+
+const log = (tag) => {
+  let anchor
+
+  return (info, finish) => {
+    if (!finish) {
+      anchor = Date.now()
+    }
+
+    console.log(info, finish ? `${Date.now() - anchor}ms` : '')
+
+    io.emit('analyze_progress', {
+      tag,
+      info: info,
+      time: finish ? Date.now() - anchor : null
+    })
+  }
+}
 
 io.on('connection', async (socket) => {
   console.log('[socket.io] an user connected')
@@ -88,22 +107,4 @@ app.get('/reports/:tag', async (req, res) => {
     res.redirect('/')
 })
 
-server.listen(3005, () => console.log('App started at: 3005'))
-
-const log = (tag) => {
-  let anchor
-
-  return (info, finish) => {
-    if (!finish) {
-      anchor = Date.now()
-    }
-
-    console.log(info, finish ? `${Date.now() - anchor}ms` : '')
-
-    io.emit('analyze_progress', {
-      tag,
-      info: info,
-      time: finish ? Date.now() - anchor : null
-    })
-  }
-}
+server.listen(PORT, () => console.log(`App started at: ${PORT}`))

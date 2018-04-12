@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
       * {
         padding: 0;
         margin: 0;
         font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+        font-size: 12px;
       }
 
       html {
@@ -20,6 +21,7 @@
         margin-top: 50px;
         margin-right: auto;
         margin-left: auto;
+        margin-bottom: 20px;
         border: 1px solid #666;
         width: 90vw;
         padding: 10px;
@@ -32,17 +34,27 @@
         align-items: center;
       }
 
-      input[type="text"] {
+      input[type="text"], select {
         width: 100%;
         -webkit-appearance: none;
       }
 
-      input, button {
+      select {
+        background-image: url(/img/expand-arrow.png);
+        background-repeat: no-repeat;
+        background-position: right 5px center;
+      }
+
+      input, button, select {
         height: 30px;
-        padding: 5px;
+        padding: 5px 10px;
         border: 1px solid #999;
-        background: white;
+        background-color: white;
         border-radius: 0;
+      }
+
+      .small {
+        width: 150px;
       }
 
       .checkbox {
@@ -106,20 +118,25 @@
       </div>
       <div class="row">
         <div class="inline">
-          <div>
+          <div class="small">
             <input type="text" name="w" placeholder="1280">
           </div>
           <span class="time">x</span>
-          <div>
+          <div class="small">
             <input type="text" name="h" placeholder="900">
           </div>
         </div>
       </div>
       <div class="row">
-        <label class="checkbox">
-          <input type="checkbox" name="q">
-          <span>Quick Analyze</span>
-        </label>
+        <div class="inline">
+          <div>
+            <select name="m" class="small">
+              <option value="load">Quick Analyze</option>
+              <option value="networkidle2" selected>Default Analyze </option>
+              <option value="networkidle0">Slow Analyze</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="row">
         <label class="checkbox">
@@ -160,7 +177,7 @@
 
           console.log('disableInputs', value);
 
-          [ 'url', 'w', 'h', 'm', 'q', 'submit' ].forEach(function(input) {
+          [ 'url', 'w', 'h', 'm', 'm', 'submit' ].forEach(function(input) {
             form.elements[input].disabled = value;
           });
         };

@@ -7,6 +7,7 @@
         padding: 0;
         margin: 0;
         font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+        font-size: 12px;
       }
 
       html {
@@ -127,9 +128,15 @@
               <td colspan="4">
                 <strong>Total</strong>
               </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
+              <td>
+                <span><%= @prettyTotalSize %></span>
+              </td>
+              <td>
+                <span><%= @prettyTotalOptimizedSize %></span>
+              </td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
+                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+              </td>
             </tr>
             <% for img, index in @imgs : %>
               <tr class="<%= img.canOptimized && 'highlighted' %>">
@@ -160,7 +167,7 @@
                   <a href="<%= img.optimizedPath %>" target="_blank"><%= img.prettyOptimizedSize %></a>
                 </td>
                 <td class="nowrap <%= (img.percent < 100) && 'highlighted' || '' %>">
-                  <%= img.percent.toFixed(1) %>%
+                  <%= (100 - img.percent) > 0 && '-' || '' %><%= (100 - img.percent).toFixed(1) %>%
                 </td>
               </tr>
             <% end %>
@@ -168,9 +175,15 @@
               <td colspan="4">
                 <strong>Total</strong>
               </td>
-              <td><%= @prettyTotalSize %></td>
-              <td><%= @prettyTotalOptimizedSize %></td>
-              <td class="<%= (@percent < 100) && 'highlighted' || '' %>"><%= @percent.toFixed(1) %>%</td>
+              <td>
+                <span><%= @prettyTotalSize %></span>
+              </td>
+              <td>
+                <span><%= @prettyTotalOptimizedSize %></span>
+              </td>
+              <td class="<%= (@percent < 100) && 'highlighted' || '' %>">
+                <%= (100 - @percent) > 0 && '-' || '' %><%= (100 - @percent).toFixed(1) %>%
+              </td>
             </tr>
           </tbody>
         </table>
