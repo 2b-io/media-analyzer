@@ -9,15 +9,8 @@ services:
         - /usr/src/node_modules
       ports:
         - "3006:3006"
-      depends_on:
-        - dynamodb
       networks:
         - infra_cdn
-
-  dynamodb:
-    image: dwmkerr/dynamodb
-    ports:
-      - "8000:8000"
 
 networks:
   infra_cdn:

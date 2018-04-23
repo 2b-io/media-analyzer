@@ -1,6 +1,10 @@
-const reports = {}
+import Report from 'models/Report'
 
 export default {
-  get: tag => reports[tag],
-  set: (tag, report) => reports[tag] = report
+  get: async (tag) =>  await Report.findOne({ tag }).lean(),
+  set: async (tag, values) => await Report.findOneAndUpdate(
+    { tag },
+    { tag, values },
+    { upsert: true }
+  )
 }

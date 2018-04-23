@@ -104,7 +104,7 @@ app.get('/reports/:tag', async (req, res) => {
   const report = await reportService.get(req.params.tag)
 
   return report ?
-    res.render('analyze', report) :
+    res.render('analyze', report.values) :
     res.redirect('/')
 })
 

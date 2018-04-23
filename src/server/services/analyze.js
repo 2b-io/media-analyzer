@@ -208,6 +208,7 @@ const analyze = async (data, progress) => {
     await reportService.set(reportTag, {
       resources,
       imgs,
+      url: url,
       screenshot: `/s/${screenshot}`,
       prettyTotalSize: pretty(totalSize || 0),
       prettyTotalOptimizedSize: pretty(totalOptimizedSize || 0),

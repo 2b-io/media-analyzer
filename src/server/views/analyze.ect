@@ -70,6 +70,10 @@
         text-overflow: ellipsis;
         overflow: hidden;
       }
+      .trim.double {
+        max-width: 400px;
+        margin: 0 auto;
+      }
 
       .header {
         background: black;
@@ -102,6 +106,13 @@
       <div class="col">
         <table>
           <thead>
+            <tr>
+              <th colspan="7">
+                <div class="trim double">
+                  <a href="<%= @url %>"><%= @url %></a>
+                </div>
+              </th>
+            </tr>
             <tr>
               <th colspan="2">
                 <span>Images</span>
