@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Crawl a URL, discover its media, then calculate how much download time and data reduced if those media is served by MediaNetwork CDN.",
   "main": "src/index.js",
-  "repository": "git@github.com:media-network/media-crawler.git",
+  "repository": "git@github.com:media-network/media-analyze.git",
   "author": "LongLH <d@dapps.me>",
   "license": "MIT",
   "devDependencies": {
