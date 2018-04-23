@@ -22,11 +22,11 @@ const analyze = async (data, progress) => {
 
   const report = await reportService.get(reportTag)
 
-  if (report && report.created + (5 * 60e3) > Date.now()) {
-    progress('Cache hit')
+  // if (report && report.created + (5 * 60e3) > Date.now()) {
+  //   progress('Cache hit')
 
-    return `/reports/${reportTag}`
-  }
+  //   return `/reports/${reportTag}`
+  // }
 
   const viewport = {
     // width: 375,

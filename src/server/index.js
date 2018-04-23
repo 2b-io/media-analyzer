@@ -6,10 +6,11 @@ import path from 'path'
 import shortHash from 'shorthash'
 import socket from 'socket.io'
 
+import config from 'infrastructure/config'
 import analyze from 'services/analyze'
 import reportService from 'services/report'
 
-const PORT = process.env.PORT || 3006
+const { port } = config
 const app = express()
 
 const viewDir = path.join(__dirname, './views')
@@ -107,4 +108,4 @@ app.get('/reports/:tag', async (req, res) => {
     res.redirect('/')
 })
 
-server.listen(PORT, () => console.log(`App started at: ${PORT}`))
+server.listen(port, () => console.log(`App started at: ${port}`))
