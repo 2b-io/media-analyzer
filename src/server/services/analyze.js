@@ -206,7 +206,7 @@ const analyze = async (data, progress) => {
     })
 
     await reportService.set(reportTag, {
-      resources,
+      // resources,
       imgs,
       url: url,
       screenshot: `/s/${screenshot}`,
