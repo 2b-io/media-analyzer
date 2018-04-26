@@ -10,7 +10,7 @@ import config from 'infrastructure/config'
 import analyze from 'services/analyze'
 import reportService from 'services/report'
 
-const { port } = config
+const { server: { port, url } } = config
 const app = express()
 
 const viewDir = path.join(__dirname, './views')
@@ -96,11 +96,20 @@ io.on('connection', async (socket) => {
   })
 })
 
-app.get('/', (req, res, next) => {
+const injectGlobalValues = (req, res, next) => {
+  res.locals = {
+    base: url,
+    path: `${url}${req.url}`
+  }
+
+  next()
+}
+
+app.get('/', injectGlobalValues, (req, res, next) => {
   res.render('index')
 })
 
-app.get('/reports/:tag', async (req, res) => {
+app.get('/reports/:tag', injectGlobalValues, async (req, res) => {
   const report = await reportService.get(req.params.tag)
 
   return report ?

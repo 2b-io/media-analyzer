@@ -1,6 +1,11 @@
 <!doctype html>
-<html>
+<html prefix="og: http://ogp.me/ns#">
   <head>
+    <title>Report for <%= @url %></title>
+    <meta property="og:title" content="Report for <%= @url %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= @path %>" />
+    <meta property="og:image" content="<%= @base %><%= @screenshot %>" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       * {
@@ -13,9 +18,11 @@
       html {
         box-sizing: border-box;
       }
+
       *, *:before, *:after {
         box-sizing: inherit;
       }
+
       table {
         border-collapse: collapse;
         width: 100%;

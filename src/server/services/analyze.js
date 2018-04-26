@@ -220,7 +220,11 @@ const analyze = async (data, progress) => {
     return `/reports/${reportTag}`
   } finally {
     if (browser) {
+      progress(`Close browser...`)
+
       await browser.close()
+
+      progress(`Close browser... done`, true)
     }
   }
 }
