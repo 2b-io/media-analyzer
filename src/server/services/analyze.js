@@ -1,4 +1,6 @@
 import boolean from 'boolean'
+import cheerio from 'cheerio'
+import fs from 'fs-extra'
 import mimeMatch from 'mime-match'
 import mkdirp from 'mkdirp'
 import path from 'path'
@@ -13,7 +15,9 @@ const DESKTOP_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
 
 const screenshotDir = path.join(__dirname, '../../../screenshot')
+const pageContentDir = path.join(__dirname, '../../../page-content')
 mkdirp.sync(screenshotDir)
+mkdirp.sync(pageContentDir)
 
 const analyze = async (data, progress) => {
   const { tag:reportTag, url } = data
@@ -127,12 +131,24 @@ const analyze = async (data, progress) => {
 
     const normalize = normalizeUrl(location.protocol, location.hostname)
 
+    const html = await page.evaluate(() => {
+      return document.querySelector('html').innerHTML
+    })
+    const $ = cheerio.load(html)
+    // domain http://stain-manhandle-91.media-cdn-test.net:3002
+
+    $('img').each((i, elem) => {
+      let newSrc = `${ config.domain }/u?url=${ $(elem).attr('src') }`
+      $(elem).attr('src', newSrc);
+    })
+
+    await fs.outputFile(path.join(pageContentDir, `${reportTag}.html`), $.html())
     // get size of displayed images (<img />)
     const imgTags = (
       await page.evaluate(() => {
         const imgs = document.querySelectorAll('img')
 
-        return [].slice.call(imgs).map(function(img) {
+        return [].slice.call(imgs).map((img) => {
           return {
             natural:{
               width: img.naturalWidth,
