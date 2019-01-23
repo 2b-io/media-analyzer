@@ -1,6 +1,4 @@
 import boolean from 'boolean'
-import cheerio from 'cheerio'
-import fs from 'fs-extra'
 import mimeMatch from 'mime-match'
 import mkdirp from 'mkdirp'
 import path from 'path'
@@ -10,6 +8,7 @@ import puppeteer from 'puppeteer'
 import normalizeUrl from 'services/normalize-url'
 import optimize from 'services/optimize'
 import reportService from 'services/report'
+import implement from 'services/implement-page'
 
 const DESKTOP_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
@@ -17,7 +16,6 @@ const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleW
 const screenshotDir = path.join(__dirname, '../../../screenshot')
 const pageContentDir = path.join(__dirname, '../../../page-content')
 mkdirp.sync(screenshotDir)
-mkdirp.sync(pageContentDir)
 
 const analyze = async (data, progress) => {
   const { tag:reportTag, url } = data
@@ -134,15 +132,19 @@ const analyze = async (data, progress) => {
     const html = await page.evaluate(() => {
       return document.querySelector('html').innerHTML
     })
-    const $ = cheerio.load(html)
-    // domain http://stain-manhandle-91.media-cdn-test.net:3002
 
-    $('img').each((i, elem) => {
-      let newSrc = `${ config.domain }/u?url=${ $(elem).attr('src') }`
-      $(elem).attr('src', newSrc);
-    })
+    await implement(html, reportTag, normalize)
 
-    await fs.outputFile(path.join(pageContentDir, `${reportTag}.html`), $.html())
+    const getMetrics = await page.metrics()
+    console.log('Task duration origin page',getMetrics.TaskDuration)
+    console.log('Timestamp origin page',getMetrics.Timestamp)
+
+    await page.goto(`file://${ pageContentDir }/${ reportTag }.html`)
+    const getMetricsOptimaze = await page.metrics()
+
+    console.log('Task duration page optimize', getMetricsOptimaze.TaskDuration)
+    console.log('Timestamp page optimize', getMetricsOptimaze.Timestamp)
+
     // get size of displayed images (<img />)
     const imgTags = (
       await page.evaluate(() => {
