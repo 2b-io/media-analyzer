@@ -1,17 +1,18 @@
 version: '3'
 services:
-  web:
-      build: .
-      container_name: media.crawler
-      command: bash -c "yarn && tail -f /dev/null"
-      volumes:
-        - .:/usr/src
-        - /usr/src/node_modules
-      ports:
-        - "3006:3006"
-      networks:
-        - infra_cdn
+  analyzer:
+    build: .
+    container_name: media.analyzer
+    command: bash -c "tail -f /dev/null"
+    volumes:
+      - .:/usr/analyzer
+      - /usr/analyzer/node_modules
+    ports:
+      - "3006:3006"
 
-networks:
-  infra_cdn:
-    external: true
+  mongo:
+    image: mongo:3.6
+    volumes:
+      - ./data/mongo:/data/db
+    ports:
+      - "27018:27017"
