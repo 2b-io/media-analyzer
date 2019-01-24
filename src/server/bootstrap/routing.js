@@ -1,5 +1,5 @@
+import * as controllers from 'controllers'
+
 export default (app) => {
-  app.get('/', (req, res, next) => {
-    res.render('pages/home')
-  })
+  app.get('/', controllers.home.get)
 }

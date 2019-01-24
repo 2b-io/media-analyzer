@@ -59,8 +59,8 @@
   },
   "scripts": {
     "start": "concurrently --raw \"npm run dev-server\" \"wait-on http://localhost:3006/alive && npm run server\"",
-    "dev-server": "run.env nodemon internals/dev-server --exec babel-node --watch internals/dev-server/** --watch internals/webpack.config.babel.js",
-    "server": "run.env nodemon src/server --exec babel-node --watch src/server/** --watch data/dist/manifest.json",
+    "dev-server": "run.env nodemon internals/dev-server --exec babel-node --watch ./internals",
+    "server": "run.env nodemon ./src/server --exec babel-node --watch ./src/server --watch ./data/dist/manifest.json",
     "clean": "rm -rf build",
     "build": "babel ./src/server -d ./build/server && cp -r ./src/server/views ./build/server",
     "webpack": "webpack --config internals/webpack.config.babel.js"
