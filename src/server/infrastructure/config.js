@@ -1,5 +1,10 @@
-import config from 'recursive-config'
+import path from 'path'
 
-export default config.load({
-  defaults: {}
-})
+const rootDir = path.join(__dirname, '..')
+
+export default {
+  _root: rootDir,
+  devMode: process.env.PORT !== 'production',
+  port: process.env.PORT,
+  mongodb: process.env.MONGODB
+}
