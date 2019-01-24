@@ -1,5 +1,3 @@
-import config from 'recursive-config'
-
-export default config.load({
-  defaults: {}
-})
+export default {
+  port: process.env.PORT
+}

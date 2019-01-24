@@ -8,6 +8,7 @@ services:
       - .:/usr/analyzer
       - /usr/analyzer/node_modules
     ports:
+      - "3005:3005"
       - "3006:3006"
 
   mongo:
