@@ -27,7 +27,11 @@ const compiler = webpack({
       ]
     }),
     {}
-  )
+  ),
+  plugins: [
+    ...webpackConfig.plugins,
+    new webpack.HotModuleReplacementPlugin()
+  ]
 })
 
 app.get('/alive', (req, res) => res.sendStatus(204))

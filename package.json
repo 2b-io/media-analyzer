@@ -40,6 +40,8 @@
     "delay": "4.1.0",
     "ect": "0.5.9",
     "express": "4.16.4",
+    "express-slash": "2.0.1",
+    "fs-extra": "7.0.1",
     "kouto-swiss": "1.1.0",
     "mime": "2.4.0",
     "mime-match": "1.0.2",
@@ -58,7 +60,7 @@
   "scripts": {
     "start": "concurrently --raw \"npm run dev-server\" \"wait-on http://localhost:3006/alive && npm run server\"",
     "dev-server": "run.env nodemon internals/dev-server --exec babel-node --watch internals/dev-server/** --watch internals/webpack.config.babel.js",
-    "server": "run.env nodemon src/server --exec babel-node --watch src/server/**",
+    "server": "run.env nodemon src/server --exec babel-node --watch src/server/** --watch data/dist/manifest.json",
     "clean": "rm -rf build",
     "build": "babel ./src/server -d ./build/server && cp -r ./src/server/views ./build/server",
     "webpack": "webpack --config internals/webpack.config.babel.js"
