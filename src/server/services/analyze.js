@@ -6,9 +6,10 @@ import pretty from 'pretty-bytes'
 import puppeteer from 'puppeteer'
 
 import normalizeUrl from 'services/normalize-url'
+import implement from 'services/implement-page'
 import optimize from 'services/optimize'
 import reportService from 'services/report'
-import implement from 'services/implement-page'
+import timingMetrics from 'services/timing-metrics'
 
 const DESKTOP_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
@@ -133,18 +134,6 @@ const analyze = async (data, progress) => {
       return document.querySelector('html').innerHTML
     })
 
-    await implement(html, reportTag, normalize)
-
-    const getMetrics = await page.metrics()
-    console.log('Task duration origin page',getMetrics.TaskDuration)
-    console.log('Timestamp origin page',getMetrics.Timestamp)
-
-    await page.goto(`file://${ pageContentDir }/${ reportTag }.html`)
-    const getMetricsOptimaze = await page.metrics()
-
-    console.log('Task duration page optimize', getMetricsOptimaze.TaskDuration)
-    console.log('Timestamp page optimize', getMetricsOptimaze.Timestamp)
-
     // get size of displayed images (<img />)
     const imgTags = (
       await page.evaluate(() => {
@@ -234,6 +223,28 @@ const analyze = async (data, progress) => {
        (totalOptimizedSize / totalSize) * 100 : 100,
       created: Date.now()
     })
+
+    const rawMetrics = await page.evaluate(() => {
+      return JSON.stringify(window.performance.timing)
+    })
+
+    const metrics = JSON.parse(rawMetrics)
+
+    const { fullTimeLoad: fullTimeLoadOriginPage } = timingMetrics(metrics)
+    console.log('Result load origin page', fullTimeLoadOriginPage)
+
+    await implement(html, reportTag, normalize)
+
+    await page.goto(`file://${ pageContentDir }/${ reportTag }.html`)
+
+    const rawMetricsOptimize = await page.evaluate(() => {
+      return JSON.stringify(window.performance.timing)
+    })
+
+    const metricsOptimize = JSON.parse(rawMetricsOptimize)
+
+    const { htmlLoadTime, fullTimeLoad: fullTimeLoadOptimizePage } = timingMetrics(metricsOptimize)
+    console.log('Result load optimize page', htmlLoadTime + fullTimeLoadOptimizePage)
 
     return `/reports/${reportTag}`
   } finally {
