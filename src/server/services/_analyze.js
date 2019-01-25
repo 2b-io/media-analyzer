@@ -5,6 +5,7 @@ import path from 'path'
 import pretty from 'pretty-bytes'
 import puppeteer from 'puppeteer'
 
+import config from 'infrastructure/config'
 import normalizeUrl from 'services/normalize-url'
 import implement from 'services/implement-page'
 import optimize from 'services/optimize'
@@ -233,9 +234,49 @@ const analyze = async (data, progress) => {
     const { fullTimeLoad: fullTimeLoadOriginPage } = timingMetrics(metrics)
     console.log('Result load origin page', fullTimeLoadOriginPage)
 
-    await implement(html, reportTag, normalize)
+    // await implement(html, reportTag, normalize)
 
-    await page.goto(`file://${ pageContentDir }/${ reportTag }.html`)
+    // await page.goto(`file://${ pageContentDir }/${ reportTag }.html`)
+    await page.setRequestInterception(true)
+
+    page.on('request', (interceptedRequest) => {
+
+      if (interceptedRequest.resourceType() === 'image') {
+        const url = interceptedRequest.url()
+
+        const imgTag = imgTags[ url ] { displaySize, originSize }
+
+        if (imgTag) {
+          interceptedRequest.continue({
+            url: `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displaySize.width }&...`
+          })
+        } else {
+          // css background-image
+          interceptedRequest.continue({
+            url: `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
+          })
+        }
+
+        const newUrl = `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
+
+
+        return
+      }
+
+      // Don't override other requests
+      interceptedRequest.continue()
+    })
+
+    console.log('Go to 1')
+    const OptimizePageResponse = await page.goto(url)
+
+    if (OptimizePageResponse) {
+      console.log('Go to 2')
+      await page.goto(url)
+    }
+
+    console.log('Go to 3')
+    await page.goto(url)
 
     const rawMetricsOptimize = await page.evaluate(() => {
       return JSON.stringify(window.performance.timing)
@@ -244,7 +285,7 @@ const analyze = async (data, progress) => {
     const metricsOptimize = JSON.parse(rawMetricsOptimize)
 
     const { htmlLoadTime, fullTimeLoad: fullTimeLoadOptimizePage } = timingMetrics(metricsOptimize)
-    console.log('Result load optimize page', htmlLoadTime + fullTimeLoadOptimizePage)
+    console.log('Result load optimize page', fullTimeLoadOptimizePage)
 
     return `/reports/${reportTag}`
   } finally {
