@@ -1,0 +1,6 @@
+<h1>Hello world, <%= @__asset('home.js') %></h1>
+
+
+<% if @__asset('home.js') :%>
+  <script src="<%= @__asset('home.js') %>" defer></script>
+<% end %>
