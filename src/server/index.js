@@ -1,18 +1,19 @@
-import express from 'express'
-import slash from 'express-slash'
-import morgan from 'morgan'
+import http from 'http'
 
+import createExpressServer from 'express-server'
+import createSocketServer from 'socket-server'
 import config from 'infrastructure/config'
-import bootstrap from 'bootstrap'
 
-const app = express()
+const main = () => {
+  const app = createExpressServer()
+  const httpServer = http.Server(app)
 
-app.enable('strict routing')
-app.enable('trust proxy')
-app.disable('x-powered-by')
+  // integrate with socket.io
+  createSocketServer(httpServer)
 
-app.use(morgan('dev'), slash())
+  httpServer.listen(config.port, () => {
+    console.log(`App started at :${ config.port }`)
+  })
+}
 
-bootstrap(app)
-
-app.listen(config.port, () => console.log(`server started at ${ config.port }`))
+main()

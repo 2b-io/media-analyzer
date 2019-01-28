@@ -18,6 +18,9 @@ export default {
   entry: {
     home: glob.sync(
       path.join(resourceDir, 'pages/home/index.*')
+    ),
+    report: glob.sync(
+      path.join(resourceDir, 'pages/report/index.*')
     )
   },
   output: {

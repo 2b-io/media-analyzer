@@ -1,7 +1,7 @@
 import mongoose from 'infrastructure/mongoose'
 
 const schema = mongoose.Schema({
-  tag: {
+  identifier: {
     type: String,
     required: true,
     unique: true
