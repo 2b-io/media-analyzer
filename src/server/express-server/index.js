@@ -6,19 +6,25 @@ import initAsset from './asset'
 import initRoutes from './routing'
 import initViewEngine from './view-engine'
 
+const state = {}
+
 export default () => {
-  const app = express()
+  if (!state.app) {
+    const app = express()
 
-  app.enable('strict routing')
-  app.enable('trust proxy')
-  app.disable('x-powered-by')
+    app.enable('strict routing')
+    app.enable('trust proxy')
+    app.disable('x-powered-by')
 
-  app.use(morgan('dev'), slash())
+    app.use(morgan('dev'), slash())
 
-  initAsset(app)
-  initViewEngine(app)
+    initAsset(app)
+    initViewEngine(app)
 
-  initRoutes(app)
+    initRoutes(app)
 
-  return app
+    state.app = app
+  }
+
+  return state.app
 }

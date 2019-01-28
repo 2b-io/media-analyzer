@@ -1,7 +1,13 @@
 import socket from 'socket.io'
 
-export default (server) => {
-  const io = socket(server)
+const state = {
+  socketServer: null
+}
 
-  return io
+export default (server) => {
+  if (!state.socketServer) {
+    state.socketServer = socket(server)
+  }
+
+  return state.socketServer
 }
