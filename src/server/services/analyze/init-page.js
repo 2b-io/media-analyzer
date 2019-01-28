@@ -1,33 +1,18 @@
 import boolean from 'boolean'
-import puppeteer from 'puppeteer'
 
 const DESKTOP_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
 
-const loadPage = async (params, progress) => {
-  const { url } = params
+const initPage = async (browser, params) => {
+  const resources = {}
 
   const viewport = {
-    // width: 375,
     width: parseInt(params.w || 1280, 10),
     height: parseInt(params.h || 900, 10),
     isMobile: boolean(params.mobile)
   }
 
   const ua = boolean(params.mobile) ? MOBILE_UA : DESKTOP_UA
-
-  // collector
-  const resources = {}
-
-  progress(`[${params.mode}] GET ${url} ...`)
-
-  let browser
-
-  browser = await puppeteer.launch({
-    // headless: f,
-    args: [ '--no-sandbox', '--disable-dev-shm-usage' ],
-    ignoreHTTPSErrors: true
-  })
 
   const page = await browser.newPage()
 
@@ -78,4 +63,4 @@ const loadPage = async (params, progress) => {
   return page
 }
 
-export default loadPage
+export default initPage

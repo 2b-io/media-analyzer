@@ -1,4 +1,4 @@
-import normalizeUrl from 'services/normalize-url'
+import normalizeUrl from 'services/analyze/normalize-url'
 
 const imgTags = async (page) => {
   const location = await page.evaluate(() => ({

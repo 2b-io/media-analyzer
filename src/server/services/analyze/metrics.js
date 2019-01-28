@@ -13,7 +13,7 @@ const metrics = async (page) => {
   const fullTimeLoad = (metrics.loadEventEnd - metrics.navigationStart)/1000
   const htmlLoadTime = (dnsLookup + tcpConnect + request + response) / 1000
 
-  return {
+  const result = {
     dnsLookup,
     tcpConnect,
     htmlLoadTime,
@@ -21,6 +21,8 @@ const metrics = async (page) => {
     response,
     fullTimeLoad
   }
+  console.log('result', result)
+  return result
 }
 
 export default metrics
