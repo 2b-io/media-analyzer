@@ -1,7 +1,7 @@
 import path from 'path'
 
 const screenshot = async (page, reportTag, progress, screenshotDir, index) => {
-  progress(`Capture screenshot...`)
+  // progress(`Capture screenshot...`)
 
   const screenshot = `${ reportTag }-${ index }.jpeg`
 

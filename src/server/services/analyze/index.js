@@ -14,19 +14,22 @@ const screenshotDir = path.join(__dirname, '../../../../screenshot')
 mkdirp.sync(screenshotDir)
 
 const analyze = async (params, progress) => {
-  const { tag:reportTag, url } = params
+  const { tag: reportTag, url } = params
 
-  progress(`Analyze tag: ${reportTag}`)
+  // progress(`Analyze tag: ${reportTag}`)
 
   const browser = await initBrowser()
 
 // page origin
+  console.log('Init origin page ... ')
   const originPage = await initPage(browser, params)
 
   for (var i = 0; i < LOAD_PAGE_NUMBER; i++) {
     await loadPage(originPage, params, progress)
 
-    await screenshot(originPage, `${ params.tag }-optimize`, progress, screenshotDir, i)
+    console.log('Load page ....')
+
+    await screenshot(originPage, `${ params.tag }-origin`, progress, screenshotDir, i)
 
     await metrics(originPage)
   }
@@ -37,25 +40,30 @@ const analyze = async (params, progress) => {
 
 //page optimize
   const newPage = await initPage(browser, params)
+  console.log('Init optimize page ... ')
 
   const optimizePage = await intepreceptionRequest(newPage, originImgTags)
 
   for (var i = 0; i < LOAD_PAGE_NUMBER; i++) {
     await loadPage(optimizePage, params, progress, screenshotDir, i)
 
+    console.log('Load optimize page ....')
+
     await screenshot(optimizePage, `${ params.tag }-optimize`, progress, screenshotDir, i)
 
     await metrics(optimizePage)
   }
 
-  await optimizePage.Close()
+  await optimizePage.close()
 
-  progress(`Close browser...`)
+  console.log('Close browser...')
+
+  // progress(`Close browser...`)
 
   await browser.close()
 
-  progress(`Close browser... done`, true)
-
+  // progress(`Close browser... done`, true)
+  console.log('browser close done')
   // TODO:  save report
 }
 

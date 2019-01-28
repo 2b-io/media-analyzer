@@ -1,5 +1,5 @@
 const loadPage = async (page, params, progress) => {
-  progress(`[${params.mode}] GET ${params.url} ...`)
+  // progress(`[${params.mode}] GET ${params.url} ...`)
 
   await page.goto(params.url, {
     waitUntil: params.mode || 'load',
