@@ -1,6 +1,6 @@
 import config from 'infrastructure/config'
 
-const redirectedRequest = async (page, imgTags) => {
+const intepreceptionRequest = async (page, imgTags) => {
   await page.setRequestInterception(true)
 
   page.on('request', (interceptedRequest) => {
@@ -31,4 +31,4 @@ const redirectedRequest = async (page, imgTags) => {
   return page
 }
 
-export default redirectedRequest
+export default intepreceptionRequest
