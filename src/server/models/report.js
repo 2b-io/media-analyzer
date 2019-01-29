@@ -6,10 +6,14 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  values: {
-    type: Object,
-    required: true
-  }
+  origin: [ String ],
+  optimize: [ String ],
+  images: [ {
+    originUrl: String,
+    originSize: String,
+    optimizeUrl: String,
+    optimizeSize: String
+  } ],
 }, {
   timestamp: true
 })
