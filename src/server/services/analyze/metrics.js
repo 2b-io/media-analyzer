@@ -1,4 +1,4 @@
-const metrics = async (page, pageSize) => {
+const metrics = async (page) => {
   const rawMetrics = await page.evaluate(() => {
     return JSON.stringify(window.performance.timing)
   })
@@ -19,10 +19,9 @@ const metrics = async (page, pageSize) => {
     htmlLoadTime,
     request,
     response,
-    fullTimeLoad,
-    pageSize
+    fullTimeLoad
   }
-  console.log('result', result)
+
   return result
 }
 

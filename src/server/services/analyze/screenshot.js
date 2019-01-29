@@ -11,6 +11,8 @@ const screenshot = async (page, reportTag, progress, screenshotDir, index) => {
     type: 'jpeg',
     quality: 100
   })
+
+  return path.join(screenshotDir, screenshot)
 }
 
 export default screenshot
