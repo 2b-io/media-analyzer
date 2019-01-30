@@ -36,6 +36,7 @@
     "webpack-hot-middleware": "2.24.3"
   },
   "dependencies": {
+    "body-parser": "1.18.3",
     "boolean": "0.2.0",
     "delay": "4.1.0",
     "ect": "0.5.9",
@@ -50,6 +51,7 @@
     "mkdirp": "0.5.1",
     "mongoose": "5.4.6",
     "morgan": "1.9.1",
+    "ms": "2.1.1",
     "normalize-url": "4.1.0",
     "pretty-bytes": "5.1.0",
     "puppeteer": "1.11.0",

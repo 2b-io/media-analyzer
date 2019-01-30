@@ -7,8 +7,8 @@
   <body>
     <h1>Test a website's performance</h1>
     <form id="form" method="post" action="/reports">
-      <input type="text" name="url" placeholder="Enter a Website URL">
-      <input type="submit">START TEST</input>
+      <input type="text" name="url" placeholder="Enter a Website URL" value="https://duongtrongtan.com">
+      <button type="submit">START TEST</button>
     </form>
     <% if @__asset('home.js') :%>
       <script src="<%= @__asset('home.js') %>" defer></script>
