@@ -1,7 +1,7 @@
 import ReportModel from 'models/report'
 import { getSocketServer } from 'socket-server'
 
-const createOrUpdate = async (identifier, data) => {
+const create = async (identifier, data = { origin: [], optimzed: [] }) => {
   return await ReportModel.findOneAndUpdate({
     identifier
   }, data, {
@@ -38,7 +38,40 @@ const updateProgress = async (identifier, message) => {
   return report
 }
 
+
+
+const updateReportOriginPage = async (identifier, data) => {
+  const report = await ReportModel.findOneAndUpdate({
+    identifier
+  }, {
+    $push: {
+      origin: data
+    }
+  }, {
+    new: true
+  }).lean()
+
+  return report
+}
+
+const updateReportOptimizePage = async (identifier, data) => {
+  const report = await ReportModel.findOneAndUpdate({
+    identifier
+  }, {
+    $push: {
+      optimize: data
+    }
+  }, {
+    new: true
+  }).lean()
+
+  return report
+}
+
 export default {
-  createOrUpdate,
-  get
+  create,
+  get,
+  updateReportOriginPage,
+  updateReportOptimizePage,
+  updateProgress
 }

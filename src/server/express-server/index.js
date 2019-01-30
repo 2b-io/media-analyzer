@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser'
 import express from 'express'
 import slash from 'express-slash'
 import morgan from 'morgan'
@@ -17,7 +18,8 @@ export default () => {
     app.disable('x-powered-by')
 
     app.use(morgan('dev'), slash())
-
+    app.use(bodyParser.json())
+    app.use(bodyParser.urlencoded({ extended: true }))
     initAsset(app)
     initViewEngine(app)
 
