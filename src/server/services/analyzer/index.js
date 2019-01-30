@@ -19,7 +19,8 @@ const initBrowser = async (params) => {
   const browser = await puppeteer.launch({
     args: [
       '--no-sandbox',
-      '--disable-dev-shm-usage',
+      // '--disable-dev-shm-usage',
+      '--shm-size=1gb',
       '--window-size=1440,900'
     ],
     ignoreHTTPSErrors: true
@@ -80,7 +81,7 @@ export const analyze = async (params) => {
       const imgTag = await originPage.evaluate(() => {
         const tags = document.querySelectorAll('img')
 
-        return Array.from(tags).map(
+        return Array.from(tags || []).map(
           (tag) => ({
             natural: {
               width: tag.naturalWidth,
@@ -95,7 +96,7 @@ export const analyze = async (params) => {
         )
       })
 
-      imgTag.forEach((image) => {
+      (imgTag || []).forEach((image) => {
         const url = normalize(image.src)
 
         state.images[url] = {
@@ -104,9 +105,9 @@ export const analyze = async (params) => {
         }
       })
 
-      console.log(state.images)
+      // console.log(state.images)
 
-      return
+      // return
 
       // reload origin page (respect browser's cache)
       console.log('Reload origin page')
@@ -147,7 +148,9 @@ export const analyze = async (params) => {
 
             const { displayed } = state.images[url]
 
-            state.images[url].optimizedUrl = `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${  displayed.height }`
+            state.images[url].optimizedUrl = displayed ?
+              `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${  displayed.height }` :
+              `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
           } else {
             state.images[url] = {
               src: url,
