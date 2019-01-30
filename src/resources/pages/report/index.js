@@ -23,4 +23,8 @@ window.addEventListener('load', () => {
         return
     }
   })
+
+  socket.on('progress', (data) => {
+    document.getElementById('log-screen').innerHTML = data.payload.message
+  })
 })

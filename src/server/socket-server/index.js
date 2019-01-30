@@ -42,3 +42,5 @@ export default (server) => {
 
   return state.socketServer
 }
+
+export const getSocketServer = () => state.socketServer

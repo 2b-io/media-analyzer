@@ -7,6 +7,8 @@ export default (app) => {
 
   app.get('/reports/:identifier', controllers.report.get)
 
+  app.post('/reports', controllers.report.post)
+
   app.use((req, res, next) => {
     res.sendStatus(NOT_FOUND)
   })
