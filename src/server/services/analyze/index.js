@@ -20,90 +20,72 @@ mkdirp.sync(screenshotDir)
 
 const analyze = async (params, progress) => {
   const { tag: reportTag, url } = params
+  // create Report
 
-  const identifier = shortHash.unique(`${ originPage.url() }-${ Date.now() }`)
   // progress(`Analyze tag: ${reportTag}`)
 
   const browser = await initBrowser()
 
-// page origin
+  // page origin
   console.log('Init origin page ... ')
-  const originPage = await initPage(browser, params)
+  // report.updateProgress(tag, 'Loading page ...')
 
-  const originData = await receivedData(originPage)
-
-  const originResources = await responsePage(originPage, originData)
+  let originImgTags
 
   for (var i = 0; i < LOAD_PAGE_NUMBER; i++) {
-    let originPageSize = 0
+    const originPage = await initPage(browser, params)
+
+    const originData = await receivedData(originPage)
+
+    const originResources = await responsePage(originPage, originData)
 
     await loadPage(originPage, params, progress)
 
-    console.log('Load page ....')
+    console.log('Load page ...')
 
-    Object.values(originResources).map(({ size }) => {
-      if (!isNaN(size)) {
-        originPageSize = originPageSize + size
-      }
-    })
+    const originPageSize = Object.values(originResources)
+      .map(({ size }) => size || 0)
+      .reduce((sum, size) => sum + size, 0)
 
+    console.log('size page origin ', originPageSize)
     const originScreenshotPath = await screenshot(originPage, `${ params.tag }-origin`, progress, screenshotDir, i)
 
     const originMetrics = await metrics(originPage)
 
-    await report.createOrUpdate(
-      identifier,
-      { origin: [
-          originMetrics,
-          { screenshot: originScreenshotPath },
-          { pageSize: originPageSize }
-        ]
-      }
-    )
+    if (i === 0) {
+      originImgTags = await getImageTag(originPage)
+    }
+
+    // TODO:  save to mongo
+
+    await originPage.close()
   }
 
-  const originImgTags = await getImageTag(originPage)
-
-  await originPage.close()
-
 //page optimize
-  const newPage = await initPage(browser, params)
-  console.log('Init optimize page ... ')
-  const optimizeData = await receivedData(newPage)
-
-  const optimizeResources = await responsePage(newPage, optimizeData)
-
-  const optimizePage = await intepreceptionRequest(newPage, originImgTags)
-
   for (var i = 0; i < LOAD_PAGE_NUMBER; i++) {
-    let optimizePageSize = 0
+    const newPage = await initPage(browser, params)
+    console.log('Init optimize page ... ')
+    const optimizeData = await receivedData(newPage)
+
+    const optimizeResources = await responsePage(newPage, optimizeData)
+
+    const optimizePage = await intepreceptionRequest(newPage, originImgTags)
 
     await loadPage(optimizePage, params, progress, screenshotDir, i)
 
     console.log('Load optimize page ....')
 
-    Object.values(optimizeResources).map(({ size }) => {
-      if (!isNaN(size)) {
-        optimizePageSize = optimizePageSize + size
-      }
-    })
+    const optimizePageSize = Object.values(optimizeResources)
+      .map(({ size }) => size || 0)
+      .reduce((sum, size) => sum + size, 0)
 
     const optimizeScreenshotPath = await screenshot(optimizePage, `${ params.tag }-optimize`, progress, screenshotDir, i)
 
     const optimizeMetrics = await metrics(optimizePage, optimizePageSize)
-
-    await report.createOrUpdate(
-      identifier,
-      { optimzed: [
-          optimizeMetrics,
-          { screenshot: optimizeScreenshotPath },
-          { pageSize: optimizePageSize }
-        ]
-      }
-    )
+    console.log('size page optimize ', optimizePageSize)
+    // TODO:  save to mongo
+    await optimizePage.close()
   }
-
-  await optimizePage.close()
 
   console.log('Close browser...')
 

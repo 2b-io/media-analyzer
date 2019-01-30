@@ -19,7 +19,7 @@ const receivedData = async (page) => {
       resources[url] = { url }
     }
 
-    resources[url].size = length || 0
+    resources[url].size = (resources[url].size || 0) + length
   })
 
   return resources
