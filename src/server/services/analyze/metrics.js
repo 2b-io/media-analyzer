@@ -21,7 +21,7 @@ const metrics = async (page) => {
     response,
     fullTimeLoad
   }
-  console.log('result', result)
+
   return result
 }
 
