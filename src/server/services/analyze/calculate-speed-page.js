@@ -7,17 +7,17 @@ const calculateSpeedPage = async (page) => {
 
   const dnsLookup = (metrics.domainLookupEnd - metrics.domainLookupStart)/1000
   const tcpConnect = (metrics.connectEnd - metrics.connectStart)/1000
-  const request = (metrics.responseStart - metrics.requestStart)/1000
+  const timeToFirstByte  = (metrics.responseStart - metrics.requestStart)/1000
   const response = (metrics.responseEnd - metrics.responseStart)/1000
 
   const fullTimeLoad = (metrics.loadEventEnd - metrics.navigationStart)/1000
-  const htmlLoadTime = (dnsLookup + tcpConnect + request + response) / 1000
+  const htmlLoadTime = dnsLookup + tcpConnect + timeToFirstByte + response
 
   const result = {
     dnsLookup,
     tcpConnect,
     htmlLoadTime,
-    request,
+    timeToFirstByte,
     response,
     fullTimeLoad
   }

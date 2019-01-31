@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
       dnsLookup,
       tcpConnect,
       htmlLoadTime,
-      request,
+      timeToFirstByte,
       response,
       fullTimeLoad
     } = optimizeMetrics
@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
     document.getElementById('dnsLookup-optimized').innerHTML = `${ dnsLookup } s`
     document.getElementById('tcpConnect-optimized').innerHTML = `${ tcpConnect } s`
     document.getElementById('htmlLoadTime-optimized').innerHTML = `${ htmlLoadTime } s`
-    document.getElementById('request-optimized').innerHTML = `${ request } s`
+    document.getElementById('timeToFirstByte-optimized').innerHTML = `${ timeToFirstByte } s`
     document.getElementById('response-optimized').innerHTML = `${ response } s`
     document.getElementById('fullTimeLoad-optimized').innerHTML = `${ fullTimeLoad } s`
   })
@@ -58,7 +58,7 @@ window.addEventListener('load', () => {
       dnsLookup,
       tcpConnect,
       htmlLoadTime,
-      request,
+      timeToFirstByte,
       response,
       fullTimeLoad
     } = originMetrics
@@ -68,7 +68,7 @@ window.addEventListener('load', () => {
     document.getElementById('dnsLookup-origin').innerHTML = `${ dnsLookup } s`
     document.getElementById('tcpConnect-origin').innerHTML = `${ tcpConnect } s`
     document.getElementById('htmlLoadTime-origin').innerHTML = `${htmlLoadTime } s`
-    document.getElementById('request-origin').innerHTML = `${ request } s`
+    document.getElementById('timeToFirstByte-origin').innerHTML = `${ timeToFirstByte } s`
     document.getElementById('response-origin').innerHTML = `${response } s`
     document.getElementById('fullTimeLoad-origin').innerHTML = `${ fullTimeLoad } s`
   })
