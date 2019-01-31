@@ -1,8 +1,8 @@
 import fs from 'fs-extra'
 import ms from 'ms'
+import fetch from 'node-fetch'
 import path from 'path'
 import puppeteer from 'puppeteer'
-import request from 'superagent'
 
 import config from 'infrastructure/config'
 import reportService from 'services/report'
@@ -194,16 +194,36 @@ export const analyze = async (params) => {
         )
       })
 
+      // index imgTags
+      const imagesInHTML = imgTags.reduce(
+        (all, img) => {
+          if (!img.src) {
+            return all
+          }
+
+          const url = normalize(img.src.trim())
+
+          return {
+            ...all,
+            [url]: img
+          }
+        },
+        {}
+      )
+
       // populate optimize urls
-      imgTags.forEach((image) => {
-        const url = normalize(image.src.trim())
-        const { displayed } = image
+      Object.values(state.images).forEach((image) => {
+        const url = image.url
+
+        const img = imagesInHTML[url] || {}
+
+        const { displayed } = img
 
         state.images[url] = {
           ...state.images[url],
-          ...image,
+          ...img,
           optimizedUrl: displayed ?
-            `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${  displayed.height }` :
+            `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${ displayed.height }` :
             `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
         }
       })
@@ -223,7 +243,7 @@ export const analyze = async (params) => {
     try {
       await Promise.all(
         Object.values(state.images).map(
-          ({ optimizedUrl }) => request.get(optimizedUrl)
+          ({ optimizedUrl }) => fetch(optimizedUrl)
         )
       )
     } catch (e) {

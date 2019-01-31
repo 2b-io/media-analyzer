@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import prettyBytes from 'pretty-bytes'
 
 window.addEventListener('load', () => {
   const socket = io.connect()
@@ -41,13 +42,13 @@ window.addEventListener('load', () => {
     } = optimizeMetrics
 
     document.getElementById('screenshot-optimized').src = optimizeScreenshotPath
-    document.getElementById('optimizePageSize').innerHTML = optimizePageSize
-    document.getElementById('dnsLookup-optimized').innerHTML = dnsLookup
-    document.getElementById('tcpConnect-optimized').innerHTML = tcpConnect
-    document.getElementById('htmlLoadTime-optimized').innerHTML = htmlLoadTime
-    document.getElementById('request-optimized').innerHTML = request
-    document.getElementById('response-optimized').innerHTML = response
-    document.getElementById('fullTimeLoad-optimized').innerHTML = fullTimeLoad
+    document.getElementById('optimizePageSize').innerHTML = prettyBytes(optimizePageSize)
+    document.getElementById('dnsLookup-optimized').innerHTML = `${ dnsLookup } s`
+    document.getElementById('tcpConnect-optimized').innerHTML = `${ tcpConnect } s`
+    document.getElementById('htmlLoadTime-optimized').innerHTML = `${ htmlLoadTime } s`
+    document.getElementById('request-optimized').innerHTML = `${ request } s`
+    document.getElementById('response-optimized').innerHTML = `${ response } s`
+    document.getElementById('fullTimeLoad-optimized').innerHTML = `${ fullTimeLoad } s`
   })
 
   socket.on('report origin', (data) => {
@@ -63,12 +64,12 @@ window.addEventListener('load', () => {
     } = originMetrics
 
     document.getElementById('screenshot-origin').src = originScreenshotPath
-    document.getElementById('originPageSize').innerHTML = originPageSize
-    document.getElementById('dnsLookup-origin').innerHTML = dnsLookup
-    document.getElementById('tcpConnect-origin').innerHTML = tcpConnect
-    document.getElementById('htmlLoadTime-origin').innerHTML = htmlLoadTime
-    document.getElementById('request-origin').innerHTML = request
-    document.getElementById('response-origin').innerHTML = response
-    document.getElementById('fullTimeLoad-origin').innerHTML = fullTimeLoad
+    document.getElementById('originPageSize').innerHTML = prettyBytes(originPageSize)
+    document.getElementById('dnsLookup-origin').innerHTML = `${ dnsLookup } s`
+    document.getElementById('tcpConnect-origin').innerHTML = `${ tcpConnect } s`
+    document.getElementById('htmlLoadTime-origin').innerHTML = `${htmlLoadTime } s`
+    document.getElementById('request-origin').innerHTML = `${ request } s`
+    document.getElementById('response-origin').innerHTML = `${response } s`
+    document.getElementById('fullTimeLoad-origin').innerHTML = `${ fullTimeLoad } s`
   })
 })

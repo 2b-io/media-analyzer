@@ -17,20 +17,29 @@ export default {
   post: [
     bodyParser.urlencoded({ extended: true }),
     async (req, res, next) => {
-      const body = req.body
-      const values = await joi.validate(body, SCHEMA)
+      try {
+        const body = req.body
+        const values = await joi.validate(body, SCHEMA)
 
-      const time = Date.now()
-      const identifier = shortHash.unique(`${ values.url }-${ time }`)
+        const time = Date.now()
+        const identifier = shortHash.unique(`${ values.url }-${ time }`)
 
-      res.redirect(`/reports/${ identifier }`)
+        res.redirect(`/reports/${ identifier }`)
 
-      // res.redirect('/')
+        // res.redirect('/')
 
-      await analyze({
-        url: values.url,
-        identifier
-      })
+        try {
+          await analyze({
+            url: values.url,
+            identifier
+          })
+        } catch (e) {
+          console.error(e)
+        }
+
+      } catch (e) {
+        return res.sendStatus(500)
+      }
     }
   ]
 
