@@ -53,6 +53,7 @@
     "mongoose": "5.4.6",
     "morgan": "1.9.1",
     "ms": "2.1.1",
+    "node-fetch": "2.3.0",
     "normalize-url": "4.1.0",
     "pretty-bytes": "5.1.0",
     "puppeteer": "1.11.0",
