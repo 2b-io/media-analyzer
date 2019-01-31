@@ -1,5 +1,12 @@
 version: '3'
 services:
+  mongo:
+    image: mongo:3.6
+    volumes:
+      - ./data/mongo:/data/db
+    ports:
+      - "27018:27017"
+
   analyzer:
     build: .
     container_name: media.analyzer
@@ -10,10 +17,3 @@ services:
     ports:
       - "3005:3005"
       - "3006:3006"
-
-  mongo:
-    image: mongo:3.6
-    volumes:
-      - ./data/mongo:/data/db
-    ports:
-      - "27018:27017"
