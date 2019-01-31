@@ -1,5 +1,104 @@
-<h1>Report</h1>
-
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Report Performance Website</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-left-content">
+        Media Network - Report Performance Website
+      </div>
+      <div class="navbar-center-content">
+        <p id="url"></p>
+      </div>
+    </nav>
+    <div class="report-form">
+      <div>
+        <div class="split left">
+          <p id="content-origin" class="metric-title">Metric origin website</p>
+          <div class="table-report">
+            <table id="metric">
+              <tr>
+                <th>Metric</th>
+                <th>Speed</th>
+              </tr>
+              <tr>
+                <td>DNS Look up</td>
+                <td id="dnsLookup-origin"></td>
+              </tr>
+              <tr>
+                <td>TCP Connect</td>
+                <td id="tcpConnect-origin"></td>
+              </tr>
+              <tr>
+                <td>HTML Load Time</td>
+                <td id="htmlLoadTime-origin"></td>
+              </tr>
+              <tr>
+                <td>Request</td>
+                <td id="request-origin"></td>
+              </tr>
+              <tr>
+                <td>Response</td>
+                <td id="response-origin"></td>
+              </tr>
+              <tr>
+                <td>Full Time Load</td>
+                <td id="fullTimeLoad-origin"></td>
+              </tr>
+              <tr>
+                <td>Optimize Page Size</td>
+                <td id="originPageSize"></td>
+              </tr>
+            </table>
+          </div>
+          <img id="screenshot-origin"/>
+          </div>
+        </div>
+        <div class="split right">
+          <p id="content-optimized" class="metric-title">Metric optimized website</p>
+          <div class="table-report">
+            <table id="metric">
+              <tr>
+                <th>Metric</th>
+                <th>Speed</th>
+              </tr>
+              <tr>
+                <td>DNS Look up</td>
+                <td id="dnsLookup-optimized"></td>
+              </tr>
+              <tr>
+                <td>TCP Connect</td>
+                <td id="tcpConnect-optimized"></td>
+              </tr>
+              <tr>
+                <td>HTML Load Time</td>
+                <td id="htmlLoadTime-optimized"></td>
+              </tr>
+              <tr>
+                <td>Request</td>
+                <td id="request-optimized"></td>
+              </tr>
+              <tr>
+                <td>Response</td>
+                <td id="response-optimized"></td>
+              </tr>
+              <tr>
+                <td>Full Time Load</td>
+                <td id="fullTimeLoad-optimized"></td>
+              </tr>
+              <tr>
+                <td>Optimize Page Size</td>
+                <td id="optimizePageSize"></td>
+              </tr>
+            </table>
+          </div>
+          <img id="screenshot-optimized"/>
+        </div>
+      </div>
+  </body>
+</html>
 
 <% if @__asset('report.js') :%>
   <script src="<%= @__asset('report.js') %>" defer></script>

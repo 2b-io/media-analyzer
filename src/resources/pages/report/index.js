@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 window.addEventListener('load', () => {
-  const socket = io()
+  const socket = io.connect()
 
   socket.on('connect', () => {
     console.log('connected')
@@ -25,6 +25,12 @@ window.addEventListener('load', () => {
   })
 
   socket.on('progress', (data) => {
-    document.getElementById('log-screen').innerHTML = data.payload.message
+    // document.getElementById('log-screen').innerHTML = data.payload.message
+  })
+
+  socket.on('report optimized', (data) => {
+    console.log('data', data)
+    document.getElementById('content-optimized').innerHTML = data.payload.message.
+    document.getElementById('screenshot-optimized').src = data.payload.message.optimizeScreenshotPath
   })
 })
