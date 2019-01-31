@@ -30,7 +30,7 @@ const updateProgress = async (identifier, message) => {
 
   const socketServer = getSocketServer()
 
-  socketServer.to(identifier).emit('progress', {
+  socketServer.emit('progress', {
     payload: {
       message
     }
@@ -38,8 +38,6 @@ const updateProgress = async (identifier, message) => {
 
   return report
 }
-
-
 
 const updateReportOriginPage = async (identifier, data) => {
   const report = await ReportModel.findOneAndUpdate({
@@ -52,6 +50,14 @@ const updateReportOriginPage = async (identifier, data) => {
     new: true,
     safe: true
   }).lean()
+
+  const socketServer = getSocketServer()
+
+  socketServer.emit('report origin', {
+    payload: {
+      message: data
+    }
+  })
 
   return report
 }
@@ -67,6 +73,14 @@ const updateReportOptimizePage = async (identifier, data) => {
     new: true,
     safe: true
   }).lean()
+
+  const socketServer = getSocketServer()
+
+  socketServer.emit('report optimize', {
+    payload: {
+      message: data
+    }
+  })
 
   return report
 }
