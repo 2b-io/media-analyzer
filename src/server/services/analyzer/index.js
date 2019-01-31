@@ -1,7 +1,47 @@
+import delay from 'delay'
 import ms from 'ms'
 import puppeteer from 'puppeteer'
 
 import config from 'infrastructure/config'
+
+const loadPage = async (page, mode, url) => {
+  if (url) {
+    await page.goto(url, {
+      waitUntil: mode,
+      timeout: ms('5m')
+    })
+  } else {
+    await page.reload({
+      waitUntil: mode,
+      timeout: ms('5m')
+    })
+  }
+
+  const rawMetrics = await page.evaluate(() => {
+    return JSON.stringify(window.performance.timing)
+  })
+
+  const metrics = JSON.parse(rawMetrics)
+
+  const dnsLookup = (metrics.domainLookupEnd - metrics.domainLookupStart)/1000
+  const tcpConnect = (metrics.connectEnd - metrics.connectStart)/1000
+  const request = (metrics.responseStart - metrics.requestStart)/1000
+  const response = (metrics.responseEnd - metrics.responseStart)/1000
+
+  const fullTimeLoad = (metrics.loadEventEnd - metrics.navigationStart)/1000
+  const htmlLoadTime = (dnsLookup + tcpConnect + request + response) / 1000
+
+  const result = {
+    dnsLookup,
+    tcpConnect,
+    htmlLoadTime,
+    request,
+    response,
+    fullTimeLoad
+  }
+
+  return result
+}
 
 const normalizeUrl = (protocol, domain) => (url) => {
   if (url.indexOf('/') === 0) {
@@ -17,10 +57,12 @@ const normalizeUrl = (protocol, domain) => (url) => {
 
 const initBrowser = async (params) => {
   const browser = await puppeteer.launch({
+    executablePath: 'google-chrome-unstable',
     args: [
       '--no-sandbox',
-      // '--disable-dev-shm-usage',
-      '--shm-size=1gb',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      // '--shm-size=1gb',
       '--window-size=1440,900'
     ],
     ignoreHTTPSErrors: true
@@ -78,7 +120,7 @@ export const analyze = async (params) => {
       const normalize = normalizeUrl(location.protocol, location.hostname)
 
       // collection <img> tags
-      const imgTag = await originPage.evaluate(() => {
+      const imgTags = await originPage.evaluate(() => {
         const tags = document.querySelectorAll('img')
 
         return Array.from(tags || []).map(
@@ -96,7 +138,7 @@ export const analyze = async (params) => {
         )
       })
 
-      (imgTag || []).forEach((image) => {
+      imgTags.forEach((image) => {
         const url = normalize(image.src)
 
         state.images[url] = {
@@ -105,10 +147,7 @@ export const analyze = async (params) => {
         }
       })
 
-      // console.log(state.images)
-
-      // return
-
+      await delay(ms('1s'))
       // reload origin page (respect browser's cache)
       console.log('Reload origin page')
       console.time('Reload origin page')
@@ -120,10 +159,24 @@ export const analyze = async (params) => {
 
       console.timeEnd('Reload origin page')
 
+      await delay(ms('1s'))
+
+      console.log('Reload origin page 2')
+      console.time('Reload origin page 2')
+
+      await originPage.reload({
+        waitUntil: mode,
+        timeout: ms('5m')
+      })
+
+      console.timeEnd('Reload origin page 2')
+
     } catch (e) {
       throw e
     } finally {
       await originPage.close()
+
+      console.log('Origin page closed')
     }
 
     // warm up optimized content
@@ -167,6 +220,8 @@ export const analyze = async (params) => {
         request.continue()
       })
 
+      await delay(ms('1s'))
+
       // load optimized page
       console.log('Load optimized page')
       console.time('Load optimize page')
@@ -178,21 +233,37 @@ export const analyze = async (params) => {
 
       console.timeEnd('Load optimize page')
 
+      await delay(ms('1s'))
+
       // reload optimized page (respect browser's cache)
       console.log('Reload optimized page')
       console.time('Reload optimize page')
 
-      await optimizedPage.reload(url, {
+      await optimizedPage.reload({
         waitUntil: mode,
         timeout: ms('5m')
       })
 
       console.timeEnd('Reload optimize page')
 
+      await delay(ms('1s'))
+
+      console.log('Reload optimized page 2')
+      console.time('Reload optimize page 2')
+
+      await optimizedPage.reload({
+        waitUntil: mode,
+        timeout: ms('5m')
+      })
+
+      console.timeEnd('Reload optimize page 2')
+
     } catch (e) {
       throw e
     } finally {
       await optimizedPage.close()
+
+      console.log('Optimized page closed')
     }
     // summary report
 
@@ -200,8 +271,8 @@ export const analyze = async (params) => {
   } catch (e) {
     throw e
   } finally {
-    console.log('Browser close')
-
     await browser.close()
+
+    console.log('Browser closed')
   }
 }
