@@ -1,6 +1,6 @@
 import config from 'infrastructure/config'
 
-const intepreceptionRequest = async (page, imgTags) => {
+const setRequestPage = async (page, imgTags) => {
   await page.setRequestInterception(true)
 
   page.on('request', (interceptedRequest) => {
@@ -31,4 +31,4 @@ const intepreceptionRequest = async (page, imgTags) => {
   return page
 }
 
-export default intepreceptionRequest
+export default setRequestPage
