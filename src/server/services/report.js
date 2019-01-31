@@ -34,7 +34,7 @@ const updateProgress = async (identifier, message) => {
 
   const socketServer = getSocketServer()
 
-  socketServer.emit('progress', {
+  socketServer.to(identifier).emit('progress', {
     payload: {
       message
     }

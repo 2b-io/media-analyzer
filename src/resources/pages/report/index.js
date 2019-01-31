@@ -17,7 +17,7 @@ window.addEventListener('load', () => {
         return socket.emit('data', {
           message: 'SUBSCRIBE_REPORT',
           payload: {
-            identifier: Date.now()
+            identifier: REPORT.identifier
           }
         })
 

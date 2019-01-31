@@ -170,12 +170,13 @@ export const analyze = async (params) => {
 
       const location = await originPage.evaluate(() => ({
         hostname: location.hostname,
-        protocol: location.protocol
+        protocol: location.protocol,
+        href: location.href
       }))
 
       const normalize = normalizeUrl(location.protocol, location.hostname)
 
-      state.url = normalize('/')
+      state.url = location.href
       state.original = result
 
       // collection <img> tags
