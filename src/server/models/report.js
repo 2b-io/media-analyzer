@@ -17,7 +17,7 @@ const schema = mongoose.Schema({
   progress: [ String ],
   finish: Boolean
 }, {
-  timestamp: true
+  timestamps: true
 })
 
 export default mongoose.model('Report', schema)

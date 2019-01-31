@@ -1,36 +1,75 @@
-import cloneBuffer from 'clone-buffer'
-import delay from 'delay'
 import fs from 'fs-extra'
 import ms from 'ms'
 import path from 'path'
 import puppeteer from 'puppeteer'
 import request from 'superagent'
-import treeify from 'treeify'
 
 import config from 'infrastructure/config'
+import reportService from 'services/report'
 
 const screenshotDir = path.join(config._root, '../../data/screenshots')
 
-console.log(screenshotDir)
+// load page & collect downloadedBytes and loadTime
+const loadPage = async (page, params = {}) => {
+  const {
+    url,
+    screenshot,
+    width = 1440,
+    height = 900,
+    mode = 'load',
+    timeout = '5m'
+  } = params
 
-const loadPage = async (page, url, mode = 'load') => {
-  await page._client.send('Performance.enable')
+  // await page._client.send('Performance.enable')
+  await page.setViewport({
+    width,
+    height
+  })
+
+  const resources = {}
+
+  page._client.on('Network.dataReceived', (event) => {
+    const req = page._networkManager._requestIdToRequest.get(event.requestId)
+
+    if (!req) {
+      return
+    }
+
+    const url = req.url()
+
+    if (url.startsWith('data:')) {
+      return
+    }
+
+    const length = event.dataLength
+
+    if (!resources[url]) {
+      resources[url] = { size: 0 }
+    }
+
+    resources[url].size += length
+  })
 
   if (url) {
     await page.goto(url, {
       waitUntil: mode,
-      timeout: ms('5m')
+      timeout: ms(timeout)
     })
   } else {
     await page.reload({
       waitUntil: mode,
-      timeout: ms('5m')
+      timeout: timeout
     })
   }
 
-  // const metrics = await page.metrics()
+  if (screenshot) {
+    await fs.ensureDir(screenshotDir)
 
-  // return metrics
+    await page.screenshot({
+      path: screenshot,
+      fullPage: true
+    })
+  }
 
   const performance = JSON.parse(await page.evaluate(
     () => JSON.stringify(window.performance)
@@ -40,35 +79,14 @@ const loadPage = async (page, url, mode = 'load') => {
     (max, [ key, value ]) => max.value > value ? max : { key, value }, { value: 0 }
   )
 
-  console.log(latestTiming)
+  const downloadedBytes = Object.values(resources).reduce(
+    (sum, { size }) => sum + (size || 0), 0
+  )
 
   return {
-    // _: performance,
-    fullTimeLoad: latestTiming.value - performance.timing.navigationStart
+    loadTime: latestTiming.value - performance.timing.navigationStart,
+    downloadedBytes
   }
-
-  return performance
-
-  const timingMetric = JSON.parse(rawTimingMetric)
-
-  const dnsLookup = timingMetric.domainLookupEnd - timingMetric.domainLookupStart
-  const tcpConnect = timingMetric.connectEnd - timingMetric.connectStart
-  const request = timingMetric.responseStart - timingMetric.requestStart
-  const response = timingMetric.responseEnd - timingMetric.responseStart
-
-  const fullTimeLoad = timingMetric.loadEventEnd - timingMetric.navigationStart
-  const htmlLoadTime = dnsLookup + tcpConnect + request + response
-
-  const result = {
-    dnsLookup,
-    tcpConnect,
-    htmlLoadTime,
-    request,
-    response,
-    fullTimeLoad
-  }
-
-  return result
 }
 
 const normalizeUrl = (protocol, domain) => (url) => {
@@ -91,7 +109,6 @@ const initBrowser = async (params) => {
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
-      // '--shm-size=1gb',
       '--window-size=1440,900',
       '--proxy-server="direct://"',
       '--proxy-bypass-list=*'
@@ -123,6 +140,7 @@ export const analyze = async (params) => {
 
     try {
       // load origin page
+      await reportService.updateProgress(identifier, 'Load origin page...')
       console.log('Load origin page')
       console.time('Load origin page')
 
@@ -139,19 +157,16 @@ export const analyze = async (params) => {
         request.continue()
       })
 
-      const first = await loadPage(originPage, url)
-
-      console.timeEnd('Load origin page')
-      console.log(first)
-
-      await fs.ensureDir(screenshotDir)
-
-      await originPage.screenshot({
-        path: path.join(screenshotDir, `${ identifier }-origin.jpeg`),
-        fullPage: true
+      const first = await loadPage(originPage, {
+        url,
+        screenshot: path.join(screenshotDir, `${ identifier }-origin.jpeg`)
       })
 
-      state.inspect = true
+      await reportService.updateProgress(identifier, 'Load origin page... done')
+
+      console.timeEnd('Load origin page')
+
+      console.log(first)
 
       const location = await originPage.evaluate(() => ({
         hostname: location.hostname,
@@ -179,6 +194,7 @@ export const analyze = async (params) => {
         )
       })
 
+      // populate optimize urls
       imgTags.forEach((image) => {
         const url = normalize(image.src.trim())
         const { displayed } = image
@@ -191,42 +207,6 @@ export const analyze = async (params) => {
             `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
         }
       })
-
-      // console.log(treeify.asTree(state.images, true))
-
-      // await delay(ms('1s'))
-      // // reload origin page (respect browser's cache)
-      // console.log('Reload origin page')
-      // console.time('Reload origin page')
-
-      // state.cache = {}
-
-      // await originPage.on('response', async (response) => {
-      //   console.log(`${ response.url() } - cache: ${ response.fromCache() }`)
-
-      //   if (response.fromCache()) {
-      //     const buffer = await response.buffer()
-
-      //     state.cache[response.url()] = response
-      //     state.cache[response.url()].buffer = cloneBuffer(buffer)
-      //   }
-      // })
-
-      // const second = await loadPage(originPage)
-
-      // console.timeEnd('Reload origin page')
-      // console.log(second)
-
-      // await delay(ms('1s'))
-
-      // console.log('Reload origin page 2')
-      // console.time('Reload origin page 2')
-
-      // const third = await loadPage(originPage)
-
-      // console.timeEnd('Reload origin page 2')
-      // console.log(third)
-
     } catch (e) {
       throw e
     } finally {
@@ -238,6 +218,8 @@ export const analyze = async (params) => {
     // warm up optimized content
     console.time('Warm up cache')
 
+    await reportService.updateProgress(identifier, 'Warm up cache...')
+
     try {
       await Promise.all(
         Object.values(state.images).map(
@@ -248,6 +230,8 @@ export const analyze = async (params) => {
       // skip
     } finally {
       console.timeEnd('Warm up cache')
+
+      await reportService.updateProgress(identifier, 'Warm up cache... done')
     }
 
     const optimizedPage = await incognitoContext.newPage()
@@ -275,51 +259,22 @@ export const analyze = async (params) => {
         request.continue()
       })
 
-      await delay(ms('1s'))
-
       // load optimized page
       console.log('Load optimized page')
       console.time('Load optimize page')
 
-      // console.log(Object.keys(state.cache))
+      await reportService.updateProgress(identifier, 'Load optimized page...')
 
-      const first = await loadPage(optimizedPage, url)
-
-      console.timeEnd('Load optimize page')
-      console.log(first)
-
-      await fs.ensureDir(screenshotDir)
-
-      await optimizedPage.screenshot({
-        path: path.join(screenshotDir, `${ identifier }-optimized.jpeg`),
-        fullPage: true
+      const first = await loadPage(optimizedPage, {
+        url,
+        screenshot: path.join(screenshotDir, `${ identifier }-optimized.jpeg`)
       })
 
-      // await delay(ms('1s'))
+      console.timeEnd('Load optimize page')
 
-      // // reload optimized page (respect browser's cache)
-      // console.log('Reload optimized page')
-      // console.time('Reload optimize page')
+      await reportService.updateProgress(identifier, 'Load optimized page... done')
 
-      // // await optimizedPage.on('response', (response) => {
-      // //   console.log(`${ response.url() } - cache: ${ response.fromCache() }`)
-      // // })
-
-      // const second = await loadPage(optimizedPage)
-
-      // console.timeEnd('Reload optimize page')
-      // console.log(second)
-
-      // await delay(ms('1s'))
-
-      // console.log('Reload optimized page 2')
-      // console.time('Reload optimize page 2')
-
-      // const third = await loadPage(optimizedPage)
-
-      // console.timeEnd('Reload optimize page 2')
-      // console.log(third)
-
+      console.log(first)
     } catch (e) {
       throw e
     } finally {
@@ -329,7 +284,7 @@ export const analyze = async (params) => {
     }
     // summary report
 
-
+    await reportService.updateProgress(identifier, 'Finished!')
   } catch (e) {
     throw e
   } finally {

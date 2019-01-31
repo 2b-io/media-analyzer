@@ -24,6 +24,7 @@ const updateProgress = async (identifier, message) => {
       progress: message
     }
   }, {
+    upsert: true,
     new: true
   }).lean()
 
@@ -48,6 +49,7 @@ const updateReportOriginPage = async (identifier, data) => {
       origin: data
     }
   }, {
+    upsert: true,
     new: true
   }).lean()
 
@@ -62,6 +64,7 @@ const updateReportOptimizePage = async (identifier, data) => {
       optimize: data
     }
   }, {
+    upsert: true,
     new: true
   }).lean()
 
