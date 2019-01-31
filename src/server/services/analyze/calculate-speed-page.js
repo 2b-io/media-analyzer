@@ -1,4 +1,4 @@
-const metricsSpeedPage = async (page) => {
+const calculateSpeedPage = async (page) => {
   const rawMetrics = await page.evaluate(() => {
     return JSON.stringify(window.performance.timing)
   })
@@ -25,4 +25,4 @@ const metricsSpeedPage = async (page) => {
   return result
 }
 
-export default metricsSpeedPage
+export default calculateSpeedPage

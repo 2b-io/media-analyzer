@@ -5,7 +5,7 @@ import getImageTags from 'services/analyze/get-image-tags'
 import initBrowser from 'services/analyze/init-browser'
 import initPage from 'services/analyze/init-page'
 import setRequestPage from 'services/analyze/set-request-page'
-import metricsSpeedPage from 'services/analyze/metrics-speed-page'
+import calculateSpeedPage from 'services/analyze/calculate-speed-page'
 import loadPage from 'services/analyze/load-page'
 import receivedData from 'services/analyze/received-data'
 import responsePage from 'services/analyze/response-page'
@@ -54,7 +54,7 @@ const analyze = async (params, progress) => {
 
     const originScreenshotPath = await screenshot(originPage, `${ identifier }-origin`, progress, screenshotDir, i)
 
-    const originMetrics = await metricsSpeedPage(originPage)
+    const originMetrics = await calculateSpeedPage(originPage)
 
     if (i === 0) {
       originImgTags = await getImageTags(originPage)
@@ -96,7 +96,7 @@ const analyze = async (params, progress) => {
 
     const optimizeScreenshotPath = await screenshot(optimizePage, `${ identifier }-optimize`, progress, screenshotDir, i)
 
-    const optimizeMetrics = await metricsSpeedPage(optimizePage, optimizePageSize)
+    const optimizeMetrics = await calculateSpeedPage(optimizePage, optimizePageSize)
     console.log('Calculate size page optimize', optimizePageSize)
     await report.updateProgress(identifier, 'Calculate size page optimize ...')
 
