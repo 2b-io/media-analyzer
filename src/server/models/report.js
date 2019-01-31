@@ -6,8 +6,8 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  origins: [ mongoose.Schema.Types.Mixed ],
-  optimize: [ mongoose.Schema.Types.Mixed ],
+  original: mongoose.Schema.Types.Mixed,
+  optimized: mongoose.Schema.Types.Mixed,
   images: [ {
     originUrl: String,
     originSize: String,
@@ -15,7 +15,8 @@ const schema = mongoose.Schema({
     optimizeSize: String
   } ],
   progress: [ String ],
-  finish: Boolean
+  finish: Boolean,
+  url: String
 }, {
   timestamps: true
 })

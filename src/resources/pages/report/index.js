@@ -1,6 +1,10 @@
 import io from 'socket.io-client'
 
 window.addEventListener('load', () => {
+  if (REPORT.finish) {
+    return
+  }
+
   const socket = io.connect()
 
   socket.on('connect', () => {
@@ -25,12 +29,15 @@ window.addEventListener('load', () => {
   })
 
   socket.on('progress', (data) => {
-    // document.getElementById('log-screen').innerHTML = data.payload.message
-  })
+    const message = data.payload.message
+    const dom = document.createElement('div')
 
-  socket.on('report optimized', (data) => {
-    console.log('data', data)
-    document.getElementById('content-optimized').innerHTML = data.payload.message.
-    document.getElementById('screenshot-optimized').src = data.payload.message.optimizeScreenshotPath
+    dom.innerHTML = message
+    dom.classList.add('progress-message')
+    document.getElementById('progress').appendChild(dom)
+
+    if (message === 'Finished!') {
+      location.reload()
+    }
   })
 })

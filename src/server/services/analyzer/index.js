@@ -157,16 +157,16 @@ export const analyze = async (params) => {
         request.continue()
       })
 
-      const first = await loadPage(originPage, {
+      const result = await loadPage(originPage, {
         url,
-        screenshot: path.join(screenshotDir, `${ identifier }-origin.jpeg`)
+        screenshot: path.join(screenshotDir, `${ identifier }-original.jpeg`)
       })
 
       await reportService.updateProgress(identifier, 'Load origin page... done')
 
       console.timeEnd('Load origin page')
 
-      console.log(first)
+      console.log(result)
 
       const location = await originPage.evaluate(() => ({
         hostname: location.hostname,
@@ -174,6 +174,9 @@ export const analyze = async (params) => {
       }))
 
       const normalize = normalizeUrl(location.protocol, location.hostname)
+
+      state.url = normalize('/')
+      state.original = result
 
       // collection <img> tags
       const imgTags = await originPage.evaluate(() => {
@@ -285,7 +288,7 @@ export const analyze = async (params) => {
 
       await reportService.updateProgress(identifier, 'Load optimized page...')
 
-      const first = await loadPage(optimizedPage, {
+      const result = await loadPage(optimizedPage, {
         url,
         screenshot: path.join(screenshotDir, `${ identifier }-optimized.jpeg`)
       })
@@ -294,7 +297,9 @@ export const analyze = async (params) => {
 
       await reportService.updateProgress(identifier, 'Load optimized page... done')
 
-      console.log(first)
+      console.log(result)
+
+      state.optimized = result
     } catch (e) {
       throw e
     } finally {
@@ -303,6 +308,13 @@ export const analyze = async (params) => {
       console.log('Optimized page closed')
     }
     // summary report
+
+    await reportService.update(identifier, {
+      original: state.original,
+      optimized: state.optimized,
+      url: state.url,
+      finish: true
+    })
 
     await reportService.updateProgress(identifier, 'Finished!')
   } catch (e) {

@@ -7,99 +7,125 @@
   <body>
     <nav class="navbar">
       <div class="navbar-left-content">
-        Media Network - Report Performance Website
+        <a href="/">Media Network</a> - Report for <a href="<%= @report.url %>"><%= @report.url %></a> - <%= @report.createdAt.toISOString() %>
       </div>
       <div class="navbar-center-content">
         <p id="url"></p>
       </div>
     </nav>
-    <div class="report-form">
-      <div>
-        <div class="split left">
-          <p id="content-origin" class="metric-title">Metric origin website</p>
-          <div class="table-report">
-            <table id="metric">
-              <tr>
-                <th>Metric</th>
-                <th>Speed</th>
-              </tr>
-              <tr>
-                <td>DNS Look up</td>
-                <td id="dnsLookup-origin"></td>
-              </tr>
-              <tr>
-                <td>TCP Connect</td>
-                <td id="tcpConnect-origin"></td>
-              </tr>
-              <tr>
-                <td>HTML Load Time</td>
-                <td id="htmlLoadTime-origin"></td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="request-origin"></td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-origin"></td>
-              </tr>
-              <tr>
-                <td>Full Time Load</td>
-                <td id="fullTimeLoad-origin"></td>
-              </tr>
-              <tr>
-                <td>Optimize Page Size</td>
-                <td id="originPageSize"></td>
-              </tr>
-            </table>
+    <div class="wrapper">
+      <% if @report.finish :%>
+        <div class="report">
+          <div class="split left">
+            <p id="content-origin" class="metric-title">Original</p>
+            <div class="table-report">
+              <table class="metric">
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                </tr>
+                <tr>
+                  <td>DNS Look Up</td>
+                  <td id="dnsLookup-origin"></td>
+                </tr>
+                <tr>
+                  <td>TCP Connect</td>
+                  <td id="tcpConnect-origin"></td>
+                </tr>
+                <tr>
+                  <td>HTML Load Time</td>
+                  <td id="htmlLoadTime-origin"></td>
+                </tr>
+                <tr>
+                  <td>Request</td>
+                  <td id="request-origin"></td>
+                </tr>
+                <tr>
+                  <td>Response</td>
+                  <td id="response-origin"></td>
+                </tr>
+                <tr>
+                  <td>Load Time</td>
+                  <td id="fullTimeLoad-origin">
+                    <%= @prettyMs(@report.original.loadTime) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Page Size</td>
+                  <td id="originPageSize">
+                    <%= @prettyBytes(@report.original.downloadedBytes) %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="screenshot">
+              <img src="/screenshots/<%= @report.identifier %>-original.jpeg">
+            </div>
           </div>
-          <img id="screenshot-origin"/>
+          <div class="split right">
+            <p id="content-optimized" class="metric-title">Optimized</p>
+            <div class="table-report">
+              <table class="metric">
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                </tr>
+                <tr>
+                  <td>DNS Look Up</td>
+                  <td id="dnsLookup-optimized"></td>
+                </tr>
+                <tr>
+                  <td>TCP Connect</td>
+                  <td id="tcpConnect-optimized"></td>
+                </tr>
+                <tr>
+                  <td>HTML Load Time</td>
+                  <td id="htmlLoadTime-optimized"></td>
+                </tr>
+                <tr>
+                  <td>Request</td>
+                  <td id="request-optimized"></td>
+                </tr>
+                <tr>
+                  <td>Response</td>
+                  <td id="response-optimized"></td>
+                </tr>
+                <tr>
+                  <td>Load Time</td>
+                  <td id="fullTimeLoad-optimized">
+                    <%= @prettyMs(@report.optimized.loadTime) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Page Size</td>
+                  <td id="optimizePageSize">
+                    <%= @prettyBytes(@report.optimized.downloadedBytes) %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="screenshot">
+              <img src="/screenshots/<%= @report.identifier %>-optimized.jpeg">
+            </div>
           </div>
         </div>
-        <div class="split right">
-          <p id="content-optimized" class="metric-title">Metric optimized website</p>
-          <div class="table-report">
-            <table id="metric">
-              <tr>
-                <th>Metric</th>
-                <th>Speed</th>
-              </tr>
-              <tr>
-                <td>DNS Look up</td>
-                <td id="dnsLookup-optimized"></td>
-              </tr>
-              <tr>
-                <td>TCP Connect</td>
-                <td id="tcpConnect-optimized"></td>
-              </tr>
-              <tr>
-                <td>HTML Load Time</td>
-                <td id="htmlLoadTime-optimized"></td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="request-optimized"></td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-optimized"></td>
-              </tr>
-              <tr>
-                <td>Full Time Load</td>
-                <td id="fullTimeLoad-optimized"></td>
-              </tr>
-              <tr>
-                <td>Optimize Page Size</td>
-                <td id="optimizePageSize"></td>
-              </tr>
-            </table>
-          </div>
-          <img id="screenshot-optimized"/>
+      <% else :%>
+        <div id="progress">
+          <% for message in @report.progress :%>
+            <div class="progress-message"><%= message %></div>
+          <% end %>
         </div>
-      </div>
+      <% end %>
+    </div>
+    <% if @__asset('report.js') :%>
+      <script src="<%= @__asset('report.js') %>" defer></script>
+    <% end %>
+    <script>
+      <!--
+      var REPORT = <%- JSON.stringify(@report) %>;
+      -->
+    </script>
   </body>
 </html>
 
-<% if @__asset('report.js') :%>
-  <script src="<%= @__asset('report.js') %>" defer></script>
-<% end %>
+
