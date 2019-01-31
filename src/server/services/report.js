@@ -24,8 +24,8 @@ const updateProgress = async (identifier, message) => {
       progress: message
     }
   }, {
-    new: true,
-    safe: true
+    upsert: true,
+    new: true
   }).lean()
 
   const socketServer = getSocketServer()
@@ -47,8 +47,8 @@ const updateReportOriginPage = async (identifier, data) => {
       origins: data
     }
   }, {
-    new: true,
-    safe: true
+    upsert: true,
+    new: true
   }).lean()
 
   const socketServer = getSocketServer()
@@ -70,8 +70,8 @@ const updateReportOptimizePage = async (identifier, data) => {
       optimize: data
     }
   }, {
-    new: true,
-    safe: true
+    upsert: true,
+    new: true
   }).lean()
 
   const socketServer = getSocketServer()
