@@ -24,7 +24,8 @@ const updateProgress = async (identifier, message) => {
       progress: message
     }
   }, {
-    new: true
+    new: true,
+    safe: true
   }).lean()
 
   const socketServer = getSocketServer()
@@ -45,10 +46,11 @@ const updateReportOriginPage = async (identifier, data) => {
     identifier
   }, {
     $push: {
-      origin: data
+      origins: data
     }
   }, {
-    new: true
+    new: true,
+    safe: true
   }).lean()
 
   return report
@@ -62,7 +64,8 @@ const updateReportOptimizePage = async (identifier, data) => {
       optimize: data
     }
   }, {
-    new: true
+    new: true,
+    safe: true
   }).lean()
 
   return report

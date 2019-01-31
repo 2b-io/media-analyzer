@@ -6,7 +6,7 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  origin: [ mongoose.Schema.Types.Mixed ],
+  origins: [ mongoose.Schema.Types.Mixed ],
   optimize: [ mongoose.Schema.Types.Mixed ],
   images: [ {
     originUrl: String,
