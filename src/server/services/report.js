@@ -76,7 +76,7 @@ const updateReportOptimizePage = async (identifier, data) => {
 
   const socketServer = getSocketServer()
 
-  socketServer.emit('report optimize', {
+  socketServer.emit('report optimized', {
     payload: {
       message: data
     }

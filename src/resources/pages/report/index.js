@@ -29,8 +29,46 @@ window.addEventListener('load', () => {
   })
 
   socket.on('report optimized', (data) => {
-    console.log('data', data)
-    document.getElementById('content-optimized').innerHTML = data.payload.message.
-    document.getElementById('screenshot-optimized').src = data.payload.message.optimizeScreenshotPath
+    const { message } = data.payload
+    const { optimizePageSize, optimizeMetrics, optimizeScreenshotPath } = message
+    const {
+      dnsLookup,
+      tcpConnect,
+      htmlLoadTime,
+      request,
+      response,
+      fullTimeLoad
+    } = optimizeMetrics
+
+    document.getElementById('screenshot-optimized').src = optimizeScreenshotPath
+    document.getElementById('optimizePageSize').innerHTML = optimizePageSize
+    document.getElementById('dnsLookup-optimized').innerHTML = dnsLookup
+    document.getElementById('tcpConnect-optimized').innerHTML = tcpConnect
+    document.getElementById('htmlLoadTime-optimized').innerHTML = htmlLoadTime
+    document.getElementById('request-optimized').innerHTML = request
+    document.getElementById('response-optimized').innerHTML = response
+    document.getElementById('fullTimeLoad-optimized').innerHTML = fullTimeLoad
+  })
+
+  socket.on('report origin', (data) => {
+    const { message } = data.payload
+    const { originPageSize, originMetrics, originScreenshotPath } = message
+    const {
+      dnsLookup,
+      tcpConnect,
+      htmlLoadTime,
+      request,
+      response,
+      fullTimeLoad
+    } = originMetrics
+
+    document.getElementById('screenshot-origin').src = originScreenshotPath
+    document.getElementById('originPageSize').innerHTML = originPageSize
+    document.getElementById('dnsLookup-origin').innerHTML = dnsLookup
+    document.getElementById('tcpConnect-origin').innerHTML = tcpConnect
+    document.getElementById('htmlLoadTime-origin').innerHTML = htmlLoadTime
+    document.getElementById('request-origin').innerHTML = request
+    document.getElementById('response-origin').innerHTML = response
+    document.getElementById('fullTimeLoad-origin').innerHTML = fullTimeLoad
   })
 })

@@ -4,7 +4,7 @@ import joi from 'joi'
 import shortHash from 'shorthash'
 
 import Report from 'models/report'
-import { analyze } from 'services/analyzer'
+import analyze from 'services/analyze'
 
 const SCHEMA = joi.object().keys({
   url: joi.string().trim().required()
@@ -23,9 +23,9 @@ export default {
       const time = Date.now()
       const identifier = shortHash.unique(`${ values.url }-${ time }`)
 
-      // res.redirect(`/reports/${ identifier }`)
+      res.redirect(`/reports/${ identifier }`)
 
-      res.redirect('/')
+      // res.redirect('/')
 
       await analyze({
         url: values.url,
