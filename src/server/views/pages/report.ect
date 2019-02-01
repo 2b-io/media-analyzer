@@ -113,6 +113,9 @@
           </div>
         </div>
       <% else :%>
+        <div class="loading-icon">
+          <img src="/img/loading.gif">
+        </div>
         <div id="progress">
           <% for message in @report.progress :%>
             <div class="progress-message"><%= message %></div>
@@ -130,5 +133,3 @@
     </script>
   </body>
 </html>
-
-
