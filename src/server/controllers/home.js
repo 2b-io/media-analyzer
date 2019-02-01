@@ -21,7 +21,8 @@ export default {
         },
         optimized: {
           $ne: null
-        }
+        },
+        finish: true
       }, null, {
         limit: 20
       })
