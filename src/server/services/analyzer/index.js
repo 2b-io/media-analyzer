@@ -81,8 +81,22 @@ const loadPage = async (page, params = {}) => {
     (sum, { size }) => sum + (size || 0), 0
   )
 
+  const dnsLookup = performance.timing.domainLookupEnd - performance.timing.domainLookupStart
+  const timeToFirstByte = performance.timing.responseStart - performance.timing.requestStart
+  const response = performance.timing.responseEnd - performance.timing.responseStart
+  const tcpConnect = performance.timing.connectEnd - performance.timing.connectStart
+
+  // refer
+  // https://marketing.adobe.com/resources/help/fr_FR/sc/implement/performanceTiming.html
+  // https://developer.mozilla.org/en-US/docs/Web/API/Navigation_timing_API
+
   return {
     loadTime: latestTiming.value - performance.timing.navigationStart,
+    dnsLookup,
+    timeToFirstByte,
+    response,
+    tcpConnect,
+    htmlLoadTime: dnsLookup + tcpConnect + timeToFirstByte + response,
     downloadedBytes
   }
 }

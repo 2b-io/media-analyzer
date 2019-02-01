@@ -26,23 +26,33 @@
                 </tr>
                 <tr>
                   <td>DNS Look Up</td>
-                  <td id="dnsLookup-origin"></td>
+                  <td id="dnsLookup-origin">
+                    <%= @prettyMs(@report.original.dnsLookup) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>TCP Connect</td>
-                  <td id="tcpConnect-origin"></td>
+                  <td id="tcpConnect-origin">
+                    <%= @prettyMs(@report.original.tcpConnect) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>HTML Load Time</td>
-                  <td id="htmlLoadTime-origin"></td>
+                  <td id="htmlLoadTime-origin">
+                    <%= @prettyMs(@report.original.htmlLoadTime) %>
+                  </td>
                 </tr>
                 <tr>
-                  <td>Request</td>
-                  <td id="request-origin"></td>
+                  <td>Time To First Byte</td>
+                  <td id="request-origin">
+                    <%= @prettyMs(@report.original.timeToFirstByte) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>Response</td>
-                  <td id="response-origin"></td>
+                  <td id="response-origin">
+                    <%= @prettyMs(@report.original.response) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>Load Time</td>
@@ -72,23 +82,33 @@
                 </tr>
                 <tr>
                   <td>DNS Look Up</td>
-                  <td id="dnsLookup-optimized"></td>
+                  <td id="dnsLookup-optimized">
+                    <%= @prettyMs(@report.optimized.dnsLookup) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>TCP Connect</td>
-                  <td id="tcpConnect-optimized"></td>
+                  <td id="tcpConnect-optimized">
+                    <%= @prettyMs(@report.optimized.tcpConnect) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>HTML Load Time</td>
-                  <td id="htmlLoadTime-optimized"></td>
+                  <td id="htmlLoadTime-optimized">
+                    <%= @prettyMs(@report.optimized.htmlLoadTime) %>
+                  </td>
                 </tr>
                 <tr>
-                  <td>Request</td>
-                  <td id="request-optimized"></td>
+                  <td>Time To First Byte</td>
+                  <td id="request-optimized">
+                    <%= @prettyMs(@report.optimized.timeToFirstByte) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>Response</td>
-                  <td id="response-optimized"></td>
+                  <td id="response-optimized">
+                    <%= @prettyMs(@report.optimized.response) %>
+                  </td>
                 </tr>
                 <tr>
                   <td>Load Time</td>
