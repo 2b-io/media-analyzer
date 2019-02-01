@@ -7,8 +7,6 @@ import puppeteer from 'puppeteer'
 import config from 'infrastructure/config'
 import reportService from 'services/report'
 
-const screenshotDir = path.join(config._root, '../../data/screenshots')
-
 // load page & collect downloadedBytes and loadTime
 const loadPage = async (page, params = {}) => {
   const {
@@ -63,7 +61,7 @@ const loadPage = async (page, params = {}) => {
   }
 
   if (screenshot) {
-    await fs.ensureDir(screenshotDir)
+    await fs.ensureDir(path.dirname(screenshot))
 
     await page.screenshot({
       path: screenshot,
@@ -159,7 +157,7 @@ export const analyze = async (params) => {
 
       const result = await loadPage(originPage, {
         url,
-        screenshot: path.join(screenshotDir, `${ identifier }-original.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-original.jpeg`)
       })
 
       await reportService.updateProgress(identifier, 'Load origin page... done')
@@ -227,8 +225,8 @@ export const analyze = async (params) => {
           ...state.images[url],
           ...img,
           optimizedUrl: displayed ?
-            `${ config.endpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${ displayed.height }` :
-            `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
+            `${ config.optimizerEndpoint }/u?url=${ encodeURIComponent(url) }&w=${ displayed.width }&h=${ displayed.height }` :
+            `${ config.optimizerEndpoint }/u?url=${ encodeURIComponent(url) }`
         }
       })
     } catch (e) {
@@ -291,7 +289,7 @@ export const analyze = async (params) => {
 
       const result = await loadPage(optimizedPage, {
         url,
-        screenshot: path.join(screenshotDir, `${ identifier }-optimized.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-optimized.jpeg`)
       })
 
       console.timeEnd('Load optimize page')

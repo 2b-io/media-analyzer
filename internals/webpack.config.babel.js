@@ -11,7 +11,7 @@ const resourceDir = path.join(rootDir, './src/resources')
 const outDir = path.join(rootDir, 'data/dist/assets')
 
 const devMode = process.env.NODE_ENV !== 'production'
-const cdn = process.env.HOST
+const cdn = process.env.ASSET_ENDPOINT
 
 export default {
   mode: 'production',

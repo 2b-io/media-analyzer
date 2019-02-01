@@ -3,9 +3,13 @@ import path from 'path'
 const rootDir = path.join(__dirname, '..')
 
 export default {
+  // dir
   _root: rootDir,
+  screenshotDir: path.join(rootDir, '../../data/screenshot'),
+  // env
   devMode: process.env.PORT !== 'production',
   port: process.env.PORT,
   mongodb: process.env.MONGODB,
-  endpoint: 'https://viscous-shelter-71.media-cdn.io'
+  assetEndpoint: process.env.ASSET_ENDPOINT,
+  optimizerEndpoint: process.env.OPTIMIZER_ENDPOINT
 }

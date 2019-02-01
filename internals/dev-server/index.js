@@ -10,7 +10,7 @@ import webpackConfig from '../webpack.config.babel'
 const app = express()
 const port = 3006
 
-const devServer = 'http://localhost:3006'
+const devServer = process.env.ASSET_ENDPOINT
 const state = {
   isStarted: false
 }

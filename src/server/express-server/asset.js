@@ -1,3 +1,4 @@
+import express from 'express'
 import fs from 'fs-extra'
 import path from 'path'
 
@@ -7,6 +8,8 @@ export default (app) => {
   const manifest = fs.readJsonSync(path.resolve(config._root, '../../data/dist/manifest.json'))
 
   app.locals.__asset = (file) => manifest[file]
+
+  app.use('/screenshots', express.static(config.screenshotDir))
 
   return app
 }
