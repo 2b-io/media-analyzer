@@ -1,3 +1,4 @@
+import delay from 'delay'
 import fs from 'fs-extra'
 import ms from 'ms'
 import fetch from 'node-fetch'
@@ -63,6 +64,8 @@ const loadPage = async (page, params = {}) => {
   if (screenshot) {
     await fs.ensureDir(path.dirname(screenshot))
 
+    await delay(ms('1s'))
+
     await page.screenshot({
       path: screenshot,
       fullPage: true
@@ -81,22 +84,21 @@ const loadPage = async (page, params = {}) => {
     (sum, { size }) => sum + (size || 0), 0
   )
 
-  const dnsLookup = performance.timing.domainLookupEnd - performance.timing.domainLookupStart
   const timeToFirstByte = performance.timing.responseStart - performance.timing.requestStart
+  const request = performance.timing.requestStart - performance.timing.connectEnd
   const response = performance.timing.responseEnd - performance.timing.responseStart
-  const tcpConnect = performance.timing.connectEnd - performance.timing.connectStart
+  const processing = performance.timing.loadEventStart - performance.timing.domLoading
 
   // refer
-  // https://marketing.adobe.com/resources/help/fr_FR/sc/implement/performanceTiming.html
+  // https://marketing.adobe.com/resources/help/en_US/sc/implement/performanceTiming.html
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigation_timing_API
 
   return {
     loadTime: latestTiming.value - performance.timing.navigationStart,
-    dnsLookup,
     timeToFirstByte,
+    request,
     response,
-    tcpConnect,
-    htmlLoadTime: dnsLookup + tcpConnect + timeToFirstByte + response,
+    processing,
     downloadedBytes
   }
 }
