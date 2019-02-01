@@ -10,7 +10,7 @@
   <body>
     <nav class="navbar">
       <div class="navbar-container">
-          Media Network - Analyze Performance Website
+        Media Network - Analyze Webpage Performance
       </div>
     </nav>
     <div class="center-form">
@@ -18,6 +18,9 @@
         <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" required>
         <button type="submit" class="analyze-button">Analyze</button>
       </form>
+      <p class="description">
+        Location: <i>US East (N. Virginia)</i> - Browser: <i>Google Chrome (72.0.3626.81)</i>
+      </p>
     </div>
     <% if @__asset('home.js') :%>
       <script src="<%= @__asset('home.js') %>" defer></script>
