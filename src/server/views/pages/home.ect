@@ -47,10 +47,18 @@
               <td>
                 <a href="<%= report.url %>"><%= report.url %></a>
               </td>
-              <td><%= @prettyMs(report.original.loadTime) %></td>
-              <td><%= @prettyBytes(report.original.downloadedBytes) %></td>
-              <td><%= @prettyMs(report.optimized.loadTime) %></td>
-              <td><%= @prettyBytes(report.optimized.downloadedBytes) %></td>
+              <td>
+                <%= @prettyMs(report.original.loadTime) %>
+              </td>
+              <td>
+                <%= @prettyBytes(report.original.downloadedBytes) %>
+              </td>
+              <td>
+                <%= @prettyMs(report.optimized.loadTime) %>
+              </td>
+              <td>
+                <%= @prettyBytes(report.optimized.downloadedBytes) %>
+              </td>
             </tr>
 
           <% end %>

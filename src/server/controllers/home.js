@@ -15,6 +15,12 @@ export default {
       const recentReports = await reportService.list({
         error: {
           $ne: true
+        },
+        original: {
+          $ne: null
+        },
+        optimized: {
+          $ne: null
         }
       }, null, {
         limit: 20
