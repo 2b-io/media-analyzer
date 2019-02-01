@@ -114,7 +114,7 @@
         </div>
       <% else :%>
         <div class="loading-icon">
-          <img src="/img/loading.gif">
+          <img src="<%= @__asset('img/loading.gif') %>">
         </div>
         <div id="progress">
           <% for message in @report.progress :%>
