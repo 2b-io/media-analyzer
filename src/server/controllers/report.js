@@ -1,8 +1,6 @@
 import bodyParser from 'body-parser'
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
-import prettyBytes from 'pretty-bytes'
-import prettyMs from 'pretty-ms'
 import serializeError from 'serialize-error'
 import shortHash from 'shorthash'
 
@@ -17,12 +15,6 @@ const SCHEMA = joi.object().keys({
 
 export default {
   get: [
-    (req, res, next) => {
-      res.locals.prettyBytes = prettyBytes
-      res.locals.prettyMs = prettyMs
-
-      next()
-    },
     async (req, res, next) => {
       const { identifier } = req.params
 

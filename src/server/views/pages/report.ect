@@ -20,42 +20,50 @@
             <p id="content-origin" class="metric-title">Original</p>
             <div class="table-report">
               <table class="metric">
-                <tr>
-                  <th>Metric</th>
-                  <th>Value</th>
-                </tr>
-                <tr>
-                  <td>DNS Look Up</td>
-                  <td id="dnsLookup-origin"></td>
-                </tr>
-                <tr>
-                  <td>TCP Connect</td>
-                  <td id="tcpConnect-origin"></td>
-                </tr>
-                <tr>
-                  <td>HTML Load Time</td>
-                  <td id="htmlLoadTime-origin"></td>
-                </tr>
-                <tr>
-                  <td>Request</td>
-                  <td id="request-origin"></td>
-                </tr>
-                <tr>
-                  <td>Response</td>
-                  <td id="response-origin"></td>
-                </tr>
-                <tr>
-                  <td>Load Time</td>
-                  <td id="fullTimeLoad-origin">
-                    <%= @prettyMs(@report.original.loadTime) %>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Page Size</td>
-                  <td id="originPageSize">
-                    <%= @prettyBytes(@report.original.downloadedBytes) %>
-                  </td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Time To First Byte</td>
+                    <td id="request-origin">
+                      <%= @prettyMs(@report.original.timeToFirstByte) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Request</td>
+                    <td id="response-origin">
+                      <%= @prettyMs(@report.original.request) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Response</td>
+                    <td id="response-origin">
+                      <%= @prettyMs(@report.original.response) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Processing</td>
+                    <td id="response-origin">
+                      <%= @prettyMs(@report.original.processing) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Load Time</td>
+                    <td id="fullTimeLoad-origin">
+                      <%= @prettyMs(@report.original.loadTime) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Page Size</td>
+                    <td id="originPageSize">
+                      <%= @prettyBytes(@report.original.downloadedBytes) %>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div class="screenshot">
@@ -66,42 +74,50 @@
             <p id="content-optimized" class="metric-title">Optimized</p>
             <div class="table-report">
               <table class="metric">
-                <tr>
-                  <th>Metric</th>
-                  <th>Value</th>
-                </tr>
-                <tr>
-                  <td>DNS Look Up</td>
-                  <td id="dnsLookup-optimized"></td>
-                </tr>
-                <tr>
-                  <td>TCP Connect</td>
-                  <td id="tcpConnect-optimized"></td>
-                </tr>
-                <tr>
-                  <td>HTML Load Time</td>
-                  <td id="htmlLoadTime-optimized"></td>
-                </tr>
-                <tr>
-                  <td>Request</td>
-                  <td id="request-optimized"></td>
-                </tr>
-                <tr>
-                  <td>Response</td>
-                  <td id="response-optimized"></td>
-                </tr>
-                <tr>
-                  <td>Load Time</td>
-                  <td id="fullTimeLoad-optimized">
-                    <%= @prettyMs(@report.optimized.loadTime) %>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Page Size</td>
-                  <td id="optimizePageSize">
-                    <%= @prettyBytes(@report.optimized.downloadedBytes) %>
-                  </td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Time To First Byte</td>
+                    <td id="request-optimized">
+                      <%= @prettyMs(@report.optimized.timeToFirstByte) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Request</td>
+                    <td id="response-optimized">
+                      <%= @prettyMs(@report.optimized.request) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Response</td>
+                    <td id="response-optimized">
+                      <%= @prettyMs(@report.optimized.response) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Processing</td>
+                    <td id="response-optimized">
+                      <%= @prettyMs(@report.optimized.processing) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Load Time</td>
+                    <td id="fullTimeLoad-optimized">
+                      <%= @prettyMs(@report.optimized.loadTime) %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Page Size</td>
+                    <td id="optimizePageSize">
+                      <%= @prettyBytes(@report.optimized.downloadedBytes) %>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div class="screenshot">
