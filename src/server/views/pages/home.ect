@@ -22,6 +22,41 @@
         Location: <i>US East (N. Virginia)</i> - Browser: <i>Google Chrome (72.0.3626.81)</i>
       </p>
     </div>
+    <div class="recent-reports">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">ID</th>
+            <th rowspan="2">URL</th>
+            <th colspan="2">Original</th>
+            <th colspan="2">Optimized</th>
+          </tr>
+          <tr>
+            <th>Load Time</th>
+            <th>Page Size</th>
+            <th>Load Time</th>
+            <th>Page Size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for report in @reports :%>
+            <tr>
+              <td>
+                <a href="/reports/<%= report.identifier %>"><%= report.identifier %></a>
+              </td>
+              <td>
+                <a href="<%= report.url %>"><%= report.url %></a>
+              </td>
+              <td><%= @prettyMs(report.original.loadTime) %></td>
+              <td><%= @prettyBytes(report.original.downloadedBytes) %></td>
+              <td><%= @prettyMs(report.optimized.loadTime) %></td>
+              <td><%= @prettyBytes(report.optimized.downloadedBytes) %></td>
+            </tr>
+
+          <% end %>
+        </tbody>
+      </table>
+    </div>
     <% if @__asset('home.js') :%>
       <script src="<%= @__asset('home.js') %>" defer></script>
     <% end %>

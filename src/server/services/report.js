@@ -14,6 +14,10 @@ const get = async (identifier) => {
   })
 }
 
+const list = async (...args) => {
+  return await ReportModel.find(...args).sort('-createdAt')
+}
+
 const update = async (identifier, data) => {
   return await ReportModel.findOneAndUpdate({
     identifier
@@ -92,6 +96,7 @@ const updateReportOptimizePage = async (identifier, data) => {
 export default {
   create,
   get,
+  list,
   update,
   updateReportOriginPage,
   updateReportOptimizePage,
