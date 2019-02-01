@@ -16,6 +16,7 @@ const schema = mongoose.Schema({
   } ],
   progress: [ String ],
   finish: Boolean,
+  error: Boolean,
   url: String
 }, {
   timestamps: true

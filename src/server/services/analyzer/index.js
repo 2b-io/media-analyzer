@@ -121,7 +121,7 @@ export const analyze = async (params) => {
   const {
     url,
     identifier,
-    mode = 'networkidle2'
+    timeout
   } = params
 
   const state = {
@@ -157,6 +157,7 @@ export const analyze = async (params) => {
 
       const result = await loadPage(originPage, {
         url,
+        timeout,
         screenshot: path.join(config.screenshotDir, `${ identifier }-original.jpeg`)
       })
 
@@ -289,6 +290,7 @@ export const analyze = async (params) => {
 
       const result = await loadPage(optimizedPage, {
         url,
+        timeout,
         screenshot: path.join(config.screenshotDir, `${ identifier }-optimized.jpeg`)
       })
 

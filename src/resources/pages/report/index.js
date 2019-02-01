@@ -28,7 +28,7 @@ window.addEventListener('load', () => {
     }
   })
 
-  socket.on('progress', (data) => {
+  socket.on('analyze:progress', (data) => {
     const message = data.payload.message
     const dom = document.createElement('div')
 
@@ -39,5 +39,13 @@ window.addEventListener('load', () => {
     if (message === 'Finished!') {
       location.reload()
     }
+  })
+
+  socket.on('analyze:failure', (data) => {
+    const dom = document.createElement('div')
+
+    dom.innerHTML = 'An error happens, please try again later...'
+    dom.classList.add('progress-message')
+    document.getElementById('progress').appendChild(dom)
   })
 })

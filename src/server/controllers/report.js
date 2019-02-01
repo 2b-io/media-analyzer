@@ -3,10 +3,13 @@ import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import prettyMs from 'pretty-ms'
+import serializeError from 'serialize-error'
 import shortHash from 'shorthash'
 
+import config from 'infrastructure/config'
 import { analyze } from 'services/analyzer'
 import reportService from 'services/report'
+import { getSocketServer } from 'socket-server'
 
 const SCHEMA = joi.object().keys({
   url: joi.string().trim().required()
@@ -25,7 +28,7 @@ export default {
 
       const report = await reportService.get(identifier)
 
-      if (!report) {
+      if (!report || report.error) {
         return res.sendStatus(NOT_FOUND)
       }
 
@@ -52,10 +55,23 @@ export default {
 
         try {
           await analyze({
+            identifier,
             url: values.url,
-            identifier
+            timeout: config.optimizerTimeout
           })
         } catch (e) {
+          await reportService.update(identifier, {
+            error: true
+          })
+
+          const socketServer = getSocketServer()
+
+          socketServer.to(identifier).emit('analyze:failure', {
+            payload: {
+              error: serializeError(e)
+            }
+          })
+
           console.error(e)
         }
 

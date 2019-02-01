@@ -11,5 +11,6 @@ export default {
   port: process.env.PORT,
   mongodb: process.env.MONGODB,
   assetEndpoint: process.env.ASSET_ENDPOINT,
-  optimizerEndpoint: process.env.OPTIMIZER_ENDPOINT
+  optimizerEndpoint: process.env.OPTIMIZER_ENDPOINT,
+  optimizerTimeout: process.env.OPTIMIZER_TIMEOUT
 }
