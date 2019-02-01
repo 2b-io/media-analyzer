@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>Report Performance Website</title>
+    <% if @__asset('report.css') :%>
+      <link rel="stylesheet" href="<%= @__asset('report.css') %>">
+    <% end %>
   </head>
   <body>
     <nav class="navbar">
