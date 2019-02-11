@@ -48,16 +48,16 @@
                 <a href="<%= report.url %>"><%= report.url %></a>
               </td>
               <td>
-                <%= @prettyMs(report.original.loadTime) %>
+                <%= @prettyMs(report.desktop.original.loadTime) %>
               </td>
               <td>
-                <%= @prettyBytes(report.original.downloadedBytes) %>
+                <%= @prettyBytes(report.desktop.original.downloadedBytes) %>
               </td>
               <td>
-                <%= @prettyMs(report.optimized.loadTime) %>
+                <%= @prettyMs(report.desktop.optimized.loadTime) %>
               </td>
               <td>
-                <%= @prettyBytes(report.optimized.downloadedBytes) %>
+                <%= @prettyBytes(report.desktop.optimized.downloadedBytes) %>
               </td>
             </tr>
 

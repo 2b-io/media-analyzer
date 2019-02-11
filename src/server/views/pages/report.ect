@@ -30,37 +30,37 @@
                   <tr>
                     <td>Time To First Byte</td>
                     <td id="request-origin">
-                      <%= @prettyMs(@report.original.timeToFirstByte) %>
+                      <%= @prettyMs(@report.desktop.original.timeToFirstByte) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Request</td>
                     <td id="response-origin">
-                      <%= @prettyMs(@report.original.request) %>
+                      <%= @prettyMs(@report.desktop.original.request) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Response</td>
                     <td id="response-origin">
-                      <%= @prettyMs(@report.original.response) %>
+                      <%= @prettyMs(@report.desktop.original.response) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Processing</td>
                     <td id="response-origin">
-                      <%= @prettyMs(@report.original.processing) %>
+                      <%= @prettyMs(@report.desktop.original.processing) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Load Time</td>
                     <td id="fullTimeLoad-origin">
-                      <%= @prettyMs(@report.original.loadTime) %>
+                      <%= @prettyMs(@report.desktop.original.loadTime) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Page Size</td>
                     <td id="originPageSize">
-                      <%= @prettyBytes(@report.original.downloadedBytes) %>
+                      <%= @prettyBytes(@report.desktop.original.downloadedBytes) %>
                     </td>
                   </tr>
                 </tbody>
@@ -84,37 +84,37 @@
                   <tr>
                     <td>Time To First Byte</td>
                     <td id="request-optimized">
-                      <%= @prettyMs(@report.optimized.timeToFirstByte) %>
+                      <%= @prettyMs(@report.desktop.optimized.timeToFirstByte) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Request</td>
                     <td id="response-optimized">
-                      <%= @prettyMs(@report.optimized.request) %>
+                      <%= @prettyMs(@report.desktop.optimized.request) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Response</td>
                     <td id="response-optimized">
-                      <%= @prettyMs(@report.optimized.response) %>
+                      <%= @prettyMs(@report.desktop.optimized.response) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Processing</td>
                     <td id="response-optimized">
-                      <%= @prettyMs(@report.optimized.processing) %>
+                      <%= @prettyMs(@report.desktop.optimized.processing) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Load Time</td>
                     <td id="fullTimeLoad-optimized">
-                      <%= @prettyMs(@report.optimized.loadTime) %>
+                      <%= @prettyMs(@report.desktop.optimized.loadTime) %>
                     </td>
                   </tr>
                   <tr>
                     <td>Page Size</td>
                     <td id="optimizePageSize">
-                      <%= @prettyBytes(@report.optimized.downloadedBytes) %>
+                      <%= @prettyBytes(@report.desktop.optimized.downloadedBytes) %>
                     </td>
                   </tr>
                 </tbody>

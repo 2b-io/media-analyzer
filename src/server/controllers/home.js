@@ -7,11 +7,21 @@ export default {
         error: {
           $ne: true
         },
-        original: {
-          $ne: null
+        desktop: {
+          original: {
+            $ne: null
+          },
+          optimized: {
+            $ne: null
+          }
         },
-        optimized: {
-          $ne: null
+        mobile: {
+          original: {
+            $ne: null
+          },
+          optimized: {
+            $ne: null
+          }
         },
         finish: true
       }, null, {

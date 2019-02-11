@@ -325,30 +325,50 @@ export const analyze = async (params) => {
 
       console.log('Optimized page closed')
     }
-    // summary report
 
-    await reportService.update(identifier, {
-      original: state.original,
-      optimized: state.optimized,
-      url: state.url
-    })
+    await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
 
-    await reportService.updateProgress(identifier, 'Run google page speed')
-
-    const googlePageSpeedData = await googlePageSpeedService(url)
+    const googlePageSpeedDesktopData = await googlePageSpeedService(url, { strategy: 'desktop' })
     const { lighthouseResult: {
       categories: {
          performance: {
-            score
+            score: scoreDesktop
           }
         }
       }
-    } = googlePageSpeedData
+    } = googlePageSpeedDesktopData
+
+    // summary report
 
     await reportService.update(identifier, {
-      originalLighthouseData: googlePageSpeedData,
-      originalPerformanceScore: score * 100,
-      optimizePerformanceScore: Math.ceil((100 - score) / 2 + score),
+      desktop: {
+        original: state.original,
+        optimized: state.optimized,
+        url: state.url,
+        originalLighthouseData: googlePageSpeedDesktopData,
+        originalPerformanceScore: scoreDesktop * 100,
+        optimizePerformanceScore: Math.ceil((100 - scoreDesktop) / 2 + scoreDesktop),
+      }
+    })
+
+    await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
+
+    const googlePageSpeedMobileData = await googlePageSpeedService(url, { strategy: 'mobile' })
+    const { lighthouseResult: {
+      categories: {
+         performance: {
+            score: scoreMobile
+          }
+        }
+      }
+    } = googlePageSpeedMobileData
+
+    await reportService.update(identifier, {
+      mobile: {
+        originalLighthouseData: googlePageSpeedMobileData,
+        originalPerformanceScore: scoreMobile * 100,
+        optimizePerformanceScore: Math.ceil((100 - scoreMobile) / 2 + scoreMobile),
+      },
       finish: true
     })
 
