@@ -6,6 +6,7 @@ import path from 'path'
 import puppeteer from 'puppeteer'
 
 import config from 'infrastructure/config'
+import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 
 // load page & collect downloadedBytes and loadTime
@@ -329,7 +330,15 @@ export const analyze = async (params) => {
     await reportService.update(identifier, {
       original: state.original,
       optimized: state.optimized,
-      url: state.url,
+      url: state.url
+    })
+
+    await reportService.updateProgress(identifier, 'Run google page speed')
+
+    const originalLighthouseData = await googlePageSpeedService(url)
+
+    await reportService.update(identifier, {
+      originalLighthouseData,
       finish: true
     })
 
