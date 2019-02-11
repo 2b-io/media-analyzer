@@ -335,10 +335,20 @@ export const analyze = async (params) => {
 
     await reportService.updateProgress(identifier, 'Run google page speed')
 
-    const originalLighthouseData = await googlePageSpeedService(url)
+    const googlePageSpeedData = await googlePageSpeedService(url)
+    const { lighthouseResult: {
+      categories: {
+         performance: {
+            score
+          }
+        }
+      }
+    } = googlePageSpeedData
 
     await reportService.update(identifier, {
-      originalLighthouseData,
+      originalLighthouseData: googlePageSpeedData,
+      originalPerformanceScore: score * 100,
+      optimizePerformanceScore: Math.ceil((100 - score) / 2 + score),
       finish: true
     })
 

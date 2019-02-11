@@ -9,6 +9,8 @@ const schema = mongoose.Schema({
   original: mongoose.Schema.Types.Mixed,
   optimized: mongoose.Schema.Types.Mixed,
   originalLighthouseData: mongoose.Schema.Types.Mixed,
+  originalPerformanceScore: Number,
+  optimizePerformanceScore: Number,
   images: [ {
     originUrl: String,
     originSize: String,
