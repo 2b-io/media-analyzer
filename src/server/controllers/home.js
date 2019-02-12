@@ -7,10 +7,10 @@ export default {
         error: {
           $ne: true
         },
-        original: {
+        desktop: {
           $ne: null
         },
-        optimized: {
+        mobile: {
           $ne: null
         },
         finish: true

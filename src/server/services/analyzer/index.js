@@ -6,6 +6,7 @@ import path from 'path'
 import puppeteer from 'puppeteer'
 
 import config from 'infrastructure/config'
+import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 
 // load page & collect downloadedBytes and loadTime
@@ -324,12 +325,50 @@ export const analyze = async (params) => {
 
       console.log('Optimized page closed')
     }
+
+    await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
+
+    const googlePageSpeedDesktopData = await googlePageSpeedService(url, { strategy: 'desktop' })
+    const { lighthouseResult: {
+      categories: {
+         performance: {
+            score: scoreDesktop
+          }
+        }
+      }
+    } = googlePageSpeedDesktopData
+
     // summary report
 
     await reportService.update(identifier, {
-      original: state.original,
-      optimized: state.optimized,
-      url: state.url,
+      desktop: {
+        original: state.original,
+        optimized: state.optimized,
+        url: state.url,
+        originalLighthouseData: googlePageSpeedDesktopData,
+        originalPerformanceScore: scoreDesktop * 100,
+        optimizePerformanceScore: Math.ceil((100 - scoreDesktop) / 2 + scoreDesktop),
+      }
+    })
+
+    await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
+
+    const googlePageSpeedMobileData = await googlePageSpeedService(url, { strategy: 'mobile' })
+    const { lighthouseResult: {
+      categories: {
+         performance: {
+            score: scoreMobile
+          }
+        }
+      }
+    } = googlePageSpeedMobileData
+
+    await reportService.update(identifier, {
+      mobile: {
+        originalLighthouseData: googlePageSpeedMobileData,
+        originalPerformanceScore: scoreMobile * 100,
+        optimizePerformanceScore: Math.ceil((100 - scoreMobile) / 2 + scoreMobile),
+      },
       finish: true
     })
 

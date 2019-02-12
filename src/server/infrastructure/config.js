@@ -13,5 +13,8 @@ export default {
   mongodb: process.env.MONGODB,
   assetEndpoint: process.env.ASSET_ENDPOINT,
   optimizerEndpoint: process.env.OPTIMIZER_ENDPOINT,
-  optimizerTimeout: process.env.OPTIMIZER_TIMEOUT
+  optimizerTimeout: process.env.OPTIMIZER_TIMEOUT,
+  // google page speed
+  googlePageSpeedApiKey: process.env.GOOGLE_PAGE_SPEED_API_KEY,
+  googlePageSpeedUrl: process.env.GOOGLE_PAGE_SPEED_URL
 }

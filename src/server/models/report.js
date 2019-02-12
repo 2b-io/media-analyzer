@@ -6,8 +6,20 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  original: mongoose.Schema.Types.Mixed,
-  optimized: mongoose.Schema.Types.Mixed,
+  desktop: {
+    original: mongoose.Schema.Types.Mixed,
+    optimized: mongoose.Schema.Types.Mixed,
+    originalLighthouseData: mongoose.Schema.Types.Mixed,
+    originalPerformanceScore: Number,
+    optimizePerformanceScore: Number
+  },
+  mobile: {
+    original: mongoose.Schema.Types.Mixed,
+    optimized: mongoose.Schema.Types.Mixed,
+    originalLighthouseData: mongoose.Schema.Types.Mixed,
+    originalPerformanceScore: Number,
+    optimizePerformanceScore: Number
+  },
   images: [ {
     originUrl: String,
     originSize: String,
