@@ -8,20 +8,10 @@ export default {
           $ne: true
         },
         desktop: {
-          original: {
-            $ne: null
-          },
-          optimized: {
-            $ne: null
-          }
+          $ne: null
         },
         mobile: {
-          original: {
-            $ne: null
-          },
-          optimized: {
-            $ne: null
-          }
+          $ne: null
         },
         finish: true
       }, null, {
