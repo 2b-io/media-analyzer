@@ -10,6 +10,27 @@ import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 
 // load page & collect downloadedBytes and loadTime
+const setRequestImage = (page, images) => {
+  page.on('request', async (request) => {
+    const url = request.url()
+
+    if (request.resourceType() === 'image') {
+      if (images[url] && images[url].optimizedUrl) {
+        return request.continue({
+          url: images[url].optimizedUrl
+        })
+      }
+
+      return request.continue({
+        optimizedUrl: `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
+      })
+    }
+
+    request.continue()
+  })
+
+  return page
+}
 const loadPage = async (page, params = {}) => {
   const {
     url,
@@ -17,13 +38,15 @@ const loadPage = async (page, params = {}) => {
     width = 1440,
     height = 900,
     mode = 'load',
-    timeout = '5m'
+    timeout = '5m',
+    isMobile = false
   } = params
 
   // await page._client.send('Performance.enable')
   await page.setViewport({
     width,
-    height
+    height,
+    isMobile
   })
 
   const resources = {}
@@ -143,7 +166,8 @@ export const analyze = async (params) => {
 
   const state = {
     inspect: false,
-    images: {}
+    images: {},
+    mobileImages: {}
   }
 
   const browser = await initBrowser(params)
@@ -151,18 +175,18 @@ export const analyze = async (params) => {
   try {
     // create a new incognito browser context
     const incognitoContext = await browser.createIncognitoBrowserContext()
-    const originPage = await incognitoContext.newPage()
+    const originDesktopPage = await incognitoContext.newPage()
 
     try {
       // load origin page
-      await reportService.updateProgress(identifier, 'Load origin page...')
-      console.log('Load origin page')
-      console.time('Load origin page')
+      await reportService.updateProgress(identifier, 'Load origin desktop page...')
+      console.log('Load origin desktop page')
+      console.time('Load origin desktop page')
 
       // set request interception
-      await originPage.setRequestInterception(true)
+      await originDesktopPage.setRequestInterception(true)
 
-      originPage.on('request', (request) => {
+      originDesktopPage.on('request', (request) => {
         if (!state.inspect && request.resourceType() === 'image') {
           const url = request.url()
 
@@ -172,19 +196,19 @@ export const analyze = async (params) => {
         request.continue()
       })
 
-      const result = await loadPage(originPage, {
+      const result = await loadPage(originDesktopPage, {
         url,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-original.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-original.jpeg`)
       })
 
-      await reportService.updateProgress(identifier, 'Load origin page... done')
+      await reportService.updateProgress(identifier, 'Load origin desktop page... done')
 
-      console.timeEnd('Load origin page')
+      console.timeEnd('Load origin desktop page')
 
       console.log(result)
 
-      const location = await originPage.evaluate(() => ({
+      const location = await originDesktopPage.evaluate(() => ({
         hostname: location.hostname,
         protocol: location.protocol,
         href: location.href
@@ -193,10 +217,10 @@ export const analyze = async (params) => {
       const normalize = normalizeUrl(location.protocol, location.hostname)
 
       state.url = location.href
-      state.original = result
+      state.desktopOriginal = result
 
       // collection <img> tags
-      const imgTags = await originPage.evaluate(() => {
+      const imgTags = await originDesktopPage.evaluate(() => {
         const tags = document.querySelectorAll('img')
 
         return Array.from(tags || []).map(
@@ -250,9 +274,9 @@ export const analyze = async (params) => {
     } catch (e) {
       throw e
     } finally {
-      await originPage.close()
+      await originDesktopPage.close()
 
-      console.log('Origin page closed')
+      console.log('Origin desktop page closed')
     }
 
     // warm up optimized content
@@ -274,65 +298,124 @@ export const analyze = async (params) => {
       await reportService.updateProgress(identifier, 'Warm up cache... done')
     }
 
-    const optimizedPage = await incognitoContext.newPage()
+    const optimizedDesktopPage = await incognitoContext.newPage()
 
     try {
       // add request interception
-      await optimizedPage.setRequestInterception(true)
+      await optimizedDesktopPage.setRequestInterception(true)
 
       // handle requests
-      optimizedPage.on('request', async (request) => {
-        const url = request.url()
-
-        if (request.resourceType() === 'image') {
-          if (state.images[url] && state.images[url].optimizedUrl) {
-            return request.continue({
-              url: state.images[url].optimizedUrl
-            })
-          }
-
-          return request.continue({
-            optimizedUrl: `${ config.endpoint }/u?url=${ encodeURIComponent(url) }`
-          })
-        }
-
-        request.continue()
-      })
+      setRequestImage(optimizedDesktopPage, state.images)
 
       // load optimized page
-      console.log('Load optimized page')
-      console.time('Load optimize page')
+      console.log('Load optimized desktop page')
+      console.time('Load optimize desktop page')
 
-      await reportService.updateProgress(identifier, 'Load optimized page...')
+      await reportService.updateProgress(identifier, 'Load optimized desktop page...')
 
-      const result = await loadPage(optimizedPage, {
+      const result = await loadPage(optimizedDesktopPage, {
         url,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-optimized.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`)
       })
 
-      console.timeEnd('Load optimize page')
+      console.timeEnd('Load optimize desktop page')
 
-      await reportService.updateProgress(identifier, 'Load optimized page... done')
+      await reportService.updateProgress(identifier, 'Load optimized desktop page... done')
 
       console.log(result)
 
-      state.optimized = result
+      state.desktopOtimized = result
     } catch (e) {
       throw e
     } finally {
-      await optimizedPage.close()
+      await optimizedDesktopPage.close()
 
-      console.log('Optimized page closed')
+      console.log('Optimized desktop page closed')
+    }
+
+    const originalMobilePage = await incognitoContext.newPage()
+
+    try {
+      await reportService.updateProgress(identifier, 'Load origin mobile page...')
+      console.log('Load origin mobile page')
+      console.time('Load origin mobile page')
+
+      await originalMobilePage.setRequestInterception(true)
+
+      originalMobilePage.on('request', (request) => {
+        request.continue()
+      })
+
+      const originalMobileResult = await loadPage(originalMobilePage, {
+        url,
+        timeout,
+        screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-original.jpeg`),
+        isMobile: true
+      })
+
+      await reportService.updateProgress(identifier, 'Load origin mobile page... done')
+
+      console.timeEnd('Load origin mobile page')
+
+      console.log(originalMobileResult)
+
+      state.mobileOriginal = originalMobileResult
+    } catch (e) {
+      throw e
+    } finally {
+      await originalMobilePage.close()
+    }
+
+    const optimizedMobilePage = await incognitoContext.newPage()
+
+    try {
+      await optimizedMobilePage.setRequestInterception(true)
+
+      setRequestImage(optimizedMobilePage, state.images)
+
+      // load mobile optimized page
+      console.log('Load optimized mobile page')
+      console.time('Load optimize mobile page')
+      await reportService.updateProgress(identifier, 'Load optimized mobile page...')
+
+      const resultMobileOtimized = await loadPage(optimizedMobilePage, {
+        url,
+        timeout,
+        screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-optimized.jpeg`),
+        isMobile: true
+      })
+
+      console.timeEnd('Load optimize mobile page')
+
+      await reportService.updateProgress(identifier, 'Load optimized mobile page... done')
+
+      console.log(resultMobileOtimized)
+
+      state.mobileOptimized = resultMobileOtimized
+
+    } catch (e) {
+      throw e
+    } finally {
+      await optimizedMobilePage.close()
+
+      console.log('Optimized mobile page closed')
     }
 
     await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
 
-    const googlePageSpeedDesktopData = await googlePageSpeedService(url, { strategy: 'desktop' })
-    const { lighthouseResult: {
-      categories: {
-         performance: {
-            score: scoreDesktop
+    const googlePageSpeedDesktopData = await googlePageSpeedService(
+      url,
+      { strategy: 'desktop' }
+    )
+
+    await reportService.updateProgress(identifier, 'Google page speed test desktop done')
+
+    const {
+      lighthouseResult: {
+        categories: {
+          performance: {
+            score: desktopScore
           }
         }
       }
@@ -342,32 +425,41 @@ export const analyze = async (params) => {
 
     await reportService.update(identifier, {
       desktop: {
-        original: state.original,
-        optimized: state.optimized,
+        original: state.desktopOriginal,
+        optimized: state.desktopOtimized,
         url: state.url,
         originalLighthouseData: googlePageSpeedDesktopData,
-        originalPerformanceScore: scoreDesktop * 100,
-        optimizePerformanceScore: Math.ceil((100 - scoreDesktop) / 2 + scoreDesktop),
+        originalPerformanceScore: desktopScore * 100,
+        optimizePerformanceScore: Math.ceil((100 - desktopScore) / 2 + desktopScore),
       }
     })
 
     await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
 
-    const googlePageSpeedMobileData = await googlePageSpeedService(url, { strategy: 'mobile' })
-    const { lighthouseResult: {
-      categories: {
-         performance: {
-            score: scoreMobile
+    const googlePageSpeedMobileData = await googlePageSpeedService(
+      url,
+      { strategy: 'mobile' }
+    )
+
+    const {
+      lighthouseResult: {
+        categories: {
+          performance: {
+            score: mobileScore
           }
         }
       }
     } = googlePageSpeedMobileData
 
+    await reportService.updateProgress(identifier, 'Google page speed test mobile done')
+
     await reportService.update(identifier, {
       mobile: {
+        original: state.mobileOriginal,
+        optimized: state.mobileOptimized,
         originalLighthouseData: googlePageSpeedMobileData,
-        originalPerformanceScore: scoreMobile * 100,
-        optimizePerformanceScore: Math.ceil((100 - scoreMobile) / 2 + scoreMobile),
+        originalPerformanceScore: mobileScore * 100,
+        optimizePerformanceScore: Math.ceil((100 - mobileScore) / 2 + mobileScore),
       },
       finish: true
     })
