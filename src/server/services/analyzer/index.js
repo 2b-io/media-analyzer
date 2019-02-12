@@ -1,3 +1,4 @@
+import boolean from 'boolean'
 import delay from 'delay'
 import fs from 'fs-extra'
 import ms from 'ms'
@@ -8,6 +9,7 @@ import puppeteer from 'puppeteer'
 import config from 'infrastructure/config'
 import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
+import devices from 'puppeteer/DeviceDescriptors'
 
 // load page & collect downloadedBytes and loadTime
 const setRequestImage = (page, images) => {
@@ -44,7 +46,7 @@ const loadPage = async (page, params = {}) => {
   await page.setViewport({
     width,
     height,
-    isMobile
+    isMobile,
   })
 
   const resources = {}
@@ -72,6 +74,11 @@ const loadPage = async (page, params = {}) => {
   })
 
   if (url) {
+    if (isMobile) {
+      const iPhone = devices['iPhone 8']
+      await page.emulate(iPhone)
+    }
+
     await page.goto(url, {
       waitUntil: mode,
       timeout: ms(timeout)
