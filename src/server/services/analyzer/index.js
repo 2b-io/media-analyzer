@@ -28,8 +28,6 @@ const setRequestImage = (page, images) => {
 
     request.continue()
   })
-
-  return page
 }
 const loadPage = async (page, params = {}) => {
   const {
@@ -166,8 +164,7 @@ export const analyze = async (params) => {
 
   const state = {
     inspect: false,
-    images: {},
-    mobileImages: {}
+    images: {}
   }
 
   const browser = await initBrowser(params)
