@@ -1,4 +1,3 @@
-import boolean from 'boolean'
 import delay from 'delay'
 import fs from 'fs-extra'
 import ms from 'ms'
