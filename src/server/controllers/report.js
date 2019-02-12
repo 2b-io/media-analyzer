@@ -1,8 +1,8 @@
+import hash from '@emotion/hash'
 import bodyParser from 'body-parser'
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
 import serializeError from 'serialize-error'
-import shortHash from 'shorthash'
 
 import config from 'infrastructure/config'
 import { analyze } from 'services/analyzer'
@@ -37,7 +37,7 @@ export default {
         const values = await joi.validate(body, SCHEMA)
 
         const time = Date.now()
-        const identifier = shortHash.unique(`${ values.url }-${ time }`)
+        const identifier = hash(`${ values.url }-${ time }`)
 
         await reportService.create(identifier, values.url)
 
