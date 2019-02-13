@@ -3,6 +3,8 @@
 @require '~elements/report-tab'
 @require '~elements/contact-form'
 @require '~elements/footer'
+@require '~elements/circle-chart'
+@require '~elements/table-report'
 
 body
   background-color: #ebebeb
@@ -11,6 +13,41 @@ a
   text-decoration: none
 
 .wrapper-content
-  max-width: 950px
+  max-width: 1100px
   margin: auto
-  margin-top: 30px
+  margin-top: 100px
+
+.report
+  display: grid
+  grid-template-columns: 2fr 2fr
+  grid-gap: 16px
+
+  .wrapper-table-report
+    position: relative
+    background-color: white
+    max-width: 650px
+    min-width: 500px
+    min-height: 350px
+
+  .title-report
+    font-size: 24px
+    font-weight: 500
+    color: #6c6c6c
+    padding-top: 100px
+    text-align: center
+    padding-bottom: 80px
+
+  .score-report
+    font-size: 26px
+    position: absolute
+    top: 0px
+    left: 50%
+    transform: translate(-50%, -50%)
+    text-align: center
+
+  .info-report
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-gap: 32px
+#report-desktop
+  display: none

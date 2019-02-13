@@ -1,0 +1,12 @@
+<div class="wrapper-table-report">
+  <div class="score-report">
+    <% include 'elements/circle-chart', { value: @score, info: @score }%>
+  </div>
+  <div class="title-report">
+    <h1><%= @titleReport %></h1>
+  </div>
+  <div class="info-report">
+    <% include 'elements/small-circle-chart', { value: @loadTimePercen, info: @loadTime+" s", titleReport: "Load Time" }%>
+    <% include 'elements/small-circle-chart', { value: @pageSizePercen, info: @pageSize+" Mb", titleReport: "Page Size" }%>
+  </div>
+</div>
