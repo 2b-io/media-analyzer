@@ -3,271 +3,32 @@
 <% block 'body-end' :%>
   <% if @__asset('report.js') :%>
     <script src="<%= @__asset('report.js') %>" defer></script>
-  <% end %>
-  <script>
-    var REPORT = <%- JSON.stringify(@report) %>;
+    <script>
+      <!--
+      var REPORT = <%- JSON.stringify(@report) %>;
+      function openTab(e, tabName) {
+        document.getElementById('report-desktop').style.display = "grid";
+        document.getElementById('report-mobile').style.display = "none";
+        document.getElementById('element-tab-desktop').className = "elements-tab-active";
+        document.getElementById('element-tab-mobile').className = "elements-tab";
 
-    function openTab(e, tabName) {
-      document.getElementById('report-desktop').style.display = "grid";
-      document.getElementById('report-mobile').style.display = "none";
-      document.getElementById('navbar-element-tab-desktop').className = "navbar-tab-active";
-      document.getElementById('navbar-element-tab-mobile').className = "";
-
-      if (tabName === 'report-mobile') {
-        document.getElementById('report-mobile').style.display = "grid";
-        document.getElementById('report-desktop').style.display = "none";
-        document.getElementById('navbar-element-tab-mobile').className = "navbar-tab-active";
-        document.getElementById('navbar-element-tab-desktop').className = "";
+        if (tabName === 'report-mobile') {
+          document.getElementById('report-mobile').style.display = "grid";
+          document.getElementById('report-desktop').style.display = "none";
+          document.getElementById('element-tab-mobile').className = "elements-tab-active";
+          document.getElementById('element-tab-desktop').className = "elements-tab";
+        }
       }
-    }
-  </script>
+    </script>
+  <% end %>
 <% end %>
-
 <% if @__asset('report.css') :%>
   <link rel="stylesheet" href="<%= @__asset('report.css') %>">
 <% end %>
 
-<nav class="navbar">
-  <div class="navbar-content">
-    <a href="/">Media Network</a> - Report for <a href="<%= @report.url %>"><%= @report.url %></a> - <%= @report.createdAt.toISOString() %>
+<% if @report.finish :%>
+  <div class="report" id="report-desktop">
   </div>
-  <% if @report.finish :%>
-    <div class="navbar-tab">
-      <span id="navbar-element-tab-desktop" class="navbar-tab-active" onclick="openTab(event, 'report-desktop')">Desktop</span>
-      <span id="navbar-element-tab-mobile" onclick="openTab(event, 'report-mobile')">Mobile</span>
-    </div>
-  <% end %>
-</nav>
-<div class="wrapper">
-  <% if @report.finish :%>
-    <div class="report" id="report-desktop">
-      <div class="split left">
-        <p id="content-origin" class="metric-title">Original</p>
-        <div class="table-report">
-          <table class="metric">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Time To First Byte</td>
-                <td id="request-origin">
-                  <%= @prettyMs(@report.desktop.original.timeToFirstByte) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.desktop.original.request) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.desktop.original.response) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Processing</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.desktop.original.processing) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Load Time</td>
-                <td id="fullTimeLoad-origin">
-                  <%= @prettyMs(@report.desktop.original.loadTime) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Page Size</td>
-                <td id="originPageSize">
-                  <%= @prettyBytes(@report.desktop.original.downloadedBytes) %>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="screenshot">
-          <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
-        </div>
-      </div>
-      <div class="split right">
-        <p id="content-optimized" class="metric-title">Optimized</p>
-        <div class="table-report">
-          <table class="metric">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Time To First Byte</td>
-                <td id="request-optimized">
-                  <%= @prettyMs(@report.desktop.optimized.timeToFirstByte) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.desktop.optimized.request) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.desktop.optimized.response) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Processing</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.desktop.optimized.processing) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Load Time</td>
-                <td id="fullTimeLoad-optimized">
-                  <%= @prettyMs(@report.desktop.optimized.loadTime) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Page Size</td>
-                <td id="optimizePageSize">
-                  <%= @prettyBytes(@report.desktop.optimized.downloadedBytes) %>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="screenshot">
-          <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
-        </div>
-      </div>
-    </div>
-    <div class="report" id="report-mobile">
-      <div class="split left">
-        <p id="content-origin" class="metric-title">Original</p>
-        <div class="table-report">
-          <table class="metric">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Time To First Byte</td>
-                <td id="request-origin">
-                  <%= @prettyMs(@report.mobile.original.timeToFirstByte) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.mobile.original.request) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.mobile.original.response) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Processing</td>
-                <td id="response-origin">
-                  <%= @prettyMs(@report.mobile.original.processing) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Load Time</td>
-                <td id="fullTimeLoad-origin">
-                  <%= @prettyMs(@report.mobile.original.loadTime) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Page Size</td>
-                <td id="originPageSize">
-                  <%= @prettyBytes(@report.mobile.original.downloadedBytes) %>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="screenshot">
-          <img src="/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
-        </div>
-      </div>
-      <div class="split right">
-        <p id="content-optimized" class="metric-title">Optimized</p>
-        <div class="table-report">
-          <table class="metric">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Time To First Byte</td>
-                <td id="request-optimized">
-                  <%= @prettyMs(@report.mobile.optimized.timeToFirstByte) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Request</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.mobile.optimized.request) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Response</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.mobile.optimized.response) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Processing</td>
-                <td id="response-optimized">
-                  <%= @prettyMs(@report.mobile.optimized.processing) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Load Time</td>
-                <td id="fullTimeLoad-optimized">
-                  <%= @prettyMs(@report.mobile.optimized.loadTime) %>
-                </td>
-              </tr>
-              <tr>
-                <td>Page Size</td>
-                <td id="optimizePageSize">
-                  <%= @prettyBytes(@report.mobile.optimized.downloadedBytes) %>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="screenshot">
-          <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
-        </div>
-      </div>
-    </div>
-  <% else :%>
-    <div class="loading-icon">
-      <img src="<%= @__asset('img/loading.gif') %>">
-    </div>
-    <div id="progress">
-      <% for message in @report.progress :%>
-        <div class="progress-message"><%= message %></div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+  <div class="report" id="report-mobile">
+  </div>
+<% end %>

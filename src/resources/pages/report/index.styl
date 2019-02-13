@@ -1,70 +1,16 @@
 @require '~style/base'
 @require '~elements/header'
+@require '~elements/report-tab'
 @require '~elements/contact-form'
 @require '~elements/footer'
 
-.navbar
-  appearance: none
-  overflow: hidden
-  background-color: #07f
-  color: white
-  text-align: center
+body
+  background-color: #ebebeb
+a
+  color: #1268b3
+  text-decoration: none
 
-.navbar-content {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.loading-icon
-  margin: 0 auto
-  text-align: center
-
-.navbar-tab {
-  font-size: 14px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 5px;
-  cursor: pointer;
-}
-
-.navbar-tab-active {
-  font-weight: bold;
-  border-bottom-color: white;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-}
-
-.report
-  display: grid
-  grid-template-columns: 1fr 1fr
-  grid-gap: 16px
-  padding: 16px
-
-  & > *
-    min-width: 0
-    min-height: 0
-
-  .metric-title
-    text-align: center
-    padding: 8px
-    font-size: 14px
-
-  .metric
-    width: 100%
-    table-layout: fixed
-    border-collapse: collapse
-
-    td, th
-      border: 1px solid #07f
-      padding: 8px
-
-  .screenshot
-    padding-top: 16px
-
-    img
-      max-width: 100%
-
-.progress-message
-  padding: 8px
-  text-align: center
+.wrapper-content
+  max-width: 950px
+  margin: auto
+  margin-top: 30px
