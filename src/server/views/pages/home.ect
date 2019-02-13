@@ -9,19 +9,18 @@
   </head>
   <body>
     <nav class="navbar">
-      <div class="navbar-container">
-        Media Network - Analyze Webpage Performance
+      <div class="center-form">
+        <p class="title">Media Network - Analyze Webpage Performance</p>
+        <form id="form" method="post" action="/reports">
+          <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" required>
+          <button type="submit" class="analyze-button">Analyze</button>
+        </form>
+        <p class="description">
+          Location: US East (N. Virginia) - Browser: Google Chrome (72.0.3626.81)
+        </p>
       </div>
     </nav>
-    <div class="center-form">
-      <form id="form" method="post" action="/reports">
-        <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" required>
-        <button type="submit" class="analyze-button">Analyze</button>
-      </form>
-      <p class="description">
-        Location: <i>US East (N. Virginia)</i> - Browser: <i>Google Chrome (72.0.3626.81)</i>
-      </p>
-    </div>
+
     <div class="recent-reports">
       <table>
         <thead>
