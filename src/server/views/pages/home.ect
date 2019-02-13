@@ -20,50 +20,56 @@
         </p>
       </div>
     </nav>
+    <div class="wrapper-content">
+      <div class="introduction">
+        <div class="content">
+          <div class="title-content">
+            <h1>What's New</h1>
+          </div>
+          <div class="description-content">
+            <p>Read about the <a href="https://webmasters.googleblog.com/2018/01/using-page-speed-in-mobile-search.html">July 2018 Google Speed Update.</a></p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="title-content">
+            <h1>Web Performance</h1>
+          </div>
+          <div class="description-content">
+            <p>
+              Learn more about <a href="https://developers.google.com/speed/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">web performance tools at Google.</a>
+            </p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="title-content">
+            <h1>Give Feedback.</h1>
+          </div>
+          <div class="description-content">
+            <p>
+              Have specific, answerable questions about using PageSpeed Insights? Ask your question on <a href="https://stackoverflow.com/questions/tagged/pagespeed-insights">Stack Overflow</a>. For general feedback and discussion, start a thread in our <a href="https://groups.google.com/forum/#!forum/pagespeed-insights-discuss"> mailing list</a>.
+            </p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="title-content">
+            <h1>About PageSpeed Insights</p>
+          </div>
+          <div class="description-content">
+            <p>
+              PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster. <a href="https://developers.google.com/speed/docs/insights/about/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">Learn more.</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="get-in-touch">
 
-    <div class="recent-reports">
-      <table>
-        <thead>
-          <tr>
-            <th rowspan="2">ID</th>
-            <th rowspan="2">URL</th>
-            <th colspan="2">Original</th>
-            <th colspan="2">Optimized</th>
-          </tr>
-          <tr>
-            <th>Load Time</th>
-            <th>Page Size</th>
-            <th>Load Time</th>
-            <th>Page Size</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for report in @reports :%>
-            <tr>
-              <td>
-                <a href="/reports/<%= report.identifier %>"><%= report.identifier %></a>
-              </td>
-              <td>
-                <a href="<%= report.url %>"><%= report.url %></a>
-              </td>
-              <td>
-                <%= @prettyMs(report.desktop.original.loadTime) %>
-              </td>
-              <td>
-                <%= @prettyBytes(report.desktop.original.downloadedBytes) %>
-              </td>
-              <td>
-                <%= @prettyMs(report.desktop.optimized.loadTime) %>
-              </td>
-              <td>
-                <%= @prettyBytes(report.desktop.optimized.downloadedBytes) %>
-              </td>
-            </tr>
+      </div>
+      <div class="contact">
 
-          <% end %>
-        </tbody>
-      </table>
+      </div>
     </div>
+
+
     <% if @__asset('home.js') :%>
       <script src="<%= @__asset('home.js') %>" defer></script>
     <% end %>

@@ -1,6 +1,12 @@
 @require '~style/reset'
 @require '~style/typo'
 
+body
+  background-color: #ebebeb
+a
+  color: #1268b3
+  text-decoration: none
+
 .navbar
   appearance: none
   overflow: hidden
@@ -56,13 +62,17 @@
     justify-content: center
     font-weight: 500
 
-.recent-reports
-  padding: 16px
+.wrapper-content
+  max-width: 950px
+  margin: auto
+  margin-top: 30px
 
-  table
-    width: 100%
-    border-collapse: collapse
+  .introduction
+    display: grid
+    grid-template-columns: 2fr 2fr
+    grid-gap: 15px
+    color: #6c6c6c
 
-    th, td
-      border: 1px solid #07f
-      padding: 8px
+    .title-content
+      font-weight: 500
+      font-size: 14px
