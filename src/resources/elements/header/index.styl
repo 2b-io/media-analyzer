@@ -1,0 +1,57 @@
+@require '~style/reset'
+@require '~style/typo'
+
+.navbar
+  appearance: none
+  overflow: hidden
+  background-color: #1268b3
+  color: white
+  text-align: center
+
+.navbar-container {
+  padding: 16px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.center-form
+  max-width: 640px
+  margin: auto;
+  padding-top: 20px
+  padding-bottom: 40px
+
+  form
+    display: grid
+    grid-template-columns: 1fr 128px
+    grid-gap: 8px
+
+    .analyze-input
+      height: 40px
+      padding: 8px
+      border-radius: 40px
+      border: 2px solid white
+      color: #111111
+
+    .analyze-button
+      border: none
+      background: #074071
+      color: white
+      cursor: pointer
+      border-radius: 40px
+
+      &:hover
+        transition: opacity .3s
+        opacity: 0.8
+
+  .description
+    padding: 8px
+    line-height: 24px
+    text-align: center
+
+  .title
+    text-transform: uppercase
+    font-size: 24px
+    margin-top: 30px
+    display: flex
+    margin-bottom: 35px
+    justify-content: center
+    font-weight: 500
