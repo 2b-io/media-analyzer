@@ -1,10 +1,16 @@
 @require '~style/reset'
 @require '~style/typo'
 
+body
+  background-color: #ebebeb
+a
+  color: #1268b3
+  text-decoration: none
+
 .navbar
   appearance: none
   overflow: hidden
-  background-color: #07f
+  background-color: #1268b3
   color: white
   text-align: center
 
@@ -16,8 +22,8 @@
 .center-form
   max-width: 640px
   margin: auto;
-  padding-top: 256px
-  padding-bottom: 64px
+  padding-top: 20px
+  padding-bottom: 40px
 
   form
     display: grid
@@ -27,12 +33,16 @@
     .analyze-input
       height: 40px
       padding: 8px
+      border-radius: 40px
+      border: 2px solid white
+      color: #111111
 
     .analyze-button
       border: none
-      background: #07f
+      background: #074071
       color: white
       cursor: pointer
+      border-radius: 40px
 
       &:hover
         transition: opacity .3s
@@ -43,13 +53,26 @@
     line-height: 24px
     text-align: center
 
-.recent-reports
-  padding: 16px
+  .title
+    text-transform: uppercase
+    font-size: 24px
+    margin-top: 30px
+    display: flex
+    margin-bottom: 35px
+    justify-content: center
+    font-weight: 500
 
-  table
-    width: 100%
-    border-collapse: collapse
+.wrapper-content
+  max-width: 950px
+  margin: auto
+  margin-top: 30px
 
-    th, td
-      border: 1px solid #07f
-      padding: 8px
+  .introduction
+    display: grid
+    grid-template-columns: 2fr 2fr
+    grid-gap: 15px
+    color: #6c6c6c
+
+    .title-content
+      font-weight: 500
+      font-size: 14px
