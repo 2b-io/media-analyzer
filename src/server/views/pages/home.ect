@@ -1,77 +1,52 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Analyze Performance Website</title>
-    <% if @__asset('home.css') :%>
-      <link rel="stylesheet" href="<%= @__asset('home.css') %>">
-    <% end %>
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="center-form">
-        <p class="title">Media Network - Analyze Webpage Performance</p>
-        <form id="form" method="post" action="/reports">
-          <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" required>
-          <button type="submit" class="analyze-button">Analyze</button>
-        </form>
-        <p class="description">
-          Location: US East (N. Virginia) - Browser: Google Chrome (72.0.3626.81)
-        </p>
-      </div>
-    </nav>
-    <div class="wrapper-content">
-      <div class="introduction">
-        <div class="content">
-          <div class="title-content">
-            <h1>What's New</h1>
-          </div>
-          <div class="description-content">
-            <p>Read about the <a href="https://webmasters.googleblog.com/2018/01/using-page-speed-in-mobile-search.html">July 2018 Google Speed Update.</a></p>
-          </div>
-        </div>
-        <div class="content">
-          <div class="title-content">
-            <h1>Web Performance</h1>
-          </div>
-          <div class="description-content">
-            <p>
-              Learn more about <a href="https://developers.google.com/speed/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">web performance tools at Google.</a>
-            </p>
-          </div>
-        </div>
-        <div class="content">
-          <div class="title-content">
-            <h1>Give Feedback.</h1>
-          </div>
-          <div class="description-content">
-            <p>
-              Have specific, answerable questions about using PageSpeed Insights? Ask your question on <a href="https://stackoverflow.com/questions/tagged/pagespeed-insights">Stack Overflow</a>. For general feedback and discussion, start a thread in our <a href="https://groups.google.com/forum/#!forum/pagespeed-insights-discuss"> mailing list</a>.
-            </p>
-          </div>
-        </div>
-        <div class="content">
-          <div class="title-content">
-            <h1>About PageSpeed Insights</p>
-          </div>
-          <div class="description-content">
-            <p>
-              PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster. <a href="https://developers.google.com/speed/docs/insights/about/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">Learn more.</a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="get-in-touch">
+<% extend './layout' %>
 
-      </div>
-      <div class="contact">
-
-      </div>
+<% block 'body-end' :%>
+<% if @__asset('home.js') :%>
+  <script src="<%= @__asset('home.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('home.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('home.css') %>">
+<% end %>
+<div class="introduction">
+  <div class="content">
+    <div class="title-content">
+      <h1>What's New</h1>
     </div>
-
-
-    <% if @__asset('home.js') :%>
-      <script src="<%= @__asset('home.js') %>" defer></script>
-    <% end %>
-  </body>
-</html>
+    <div class="description-content">
+      <p>Read about the <a href="https://webmasters.googleblog.com/2018/01/using-page-speed-in-mobile-search.html">July 2018 Google Speed Update.</a></p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="title-content">
+      <h1>Web Performance</h1>
+    </div>
+    <div class="description-content">
+      <p>
+        Learn more about <a href="https://developers.google.com/speed/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">web performance tools at Google.</a>
+      </p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="title-content">
+      <h1>Give Feedback.</h1>
+    </div>
+    <div class="description-content">
+      <p>
+        Have specific, answerable questions about using PageSpeed Insights? Ask your question on <a href="https://stackoverflow.com/questions/tagged/pagespeed-insights">Stack Overflow</a>. For general feedback and discussion, start a thread in our
+        <a href="https://groups.google.com/forum/#!forum/pagespeed-insights-discuss"> mailing list</a>.
+      </p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="title-content">
+      <h1>About PageSpeed Insights</p>
+    </div>
+    <div class="description-content">
+      <p>
+        PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster. <a href="https://developers.google.com/speed/docs/insights/about/?hl=en-US&utm_source=PSI&utm_medium=incoming-link&utm_campaign=PSI">Learn
+          more.</a>
+      </p>
+    </div>
+  </div>
+</div>

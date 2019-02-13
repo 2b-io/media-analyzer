@@ -14,11 +14,12 @@ body
   font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace
   font-size: 12px
   line-height: 24px
+  background-color: #ebebeb
 
 .navbar
   appearance: none
   overflow: hidden
-  background-color: #07f
+  background-color: #1268b3
   color: white
   text-align: center
 
@@ -52,6 +53,7 @@ body
   grid-template-columns: 1fr 1fr
   grid-gap: 16px
   padding: 16px
+  background-color: white
 
   & > *
     min-width: 0
@@ -68,8 +70,11 @@ body
     border-collapse: collapse
 
     td, th
-      border: 1px solid #07f
+      border-bottom: 1px solid #ebebeb
       padding: 8px
+
+  .td-metric-value
+    text-align: right;
 
   .screenshot
     padding-top: 16px
@@ -80,3 +85,58 @@ body
 .progress-message
   padding: 8px
   text-align: center
+
+.flex-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.single-chart {
+  width: 33%;
+  justify-content: space-around ;
+}
+
+.circular-chart {
+  display: block;
+  margin: 10px auto;
+  max-width: 80%;
+  max-height: 170px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 2.5;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.circular-chart.orange .circle {
+  stroke: #ff9f00;
+}
+
+.circular-chart.green .circle {
+  stroke: #4CC790;
+}
+
+.circular-chart.blue .circle {
+  stroke: #3c9ee5;
+}
+
+.percentage {
+  fill: #ff9f00;
+  font-family: sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
+}
