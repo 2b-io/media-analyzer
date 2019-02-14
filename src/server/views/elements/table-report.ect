@@ -6,7 +6,15 @@
     <h1><%= @titleReport %></h1>
   </div>
   <div class="info-report">
-    <% include 'elements/small-circle-chart', { value: @loadTimePercen, info: @loadTime+" s", titleReport: "Load Time" }%>
-    <% include 'elements/small-circle-chart', { value: @pageSizePercen, info: @pageSize+" Mb", titleReport: "Page Size" }%>
+    <% include 'elements/small-circle-chart', {
+      value: @loadTimePercen,
+      info: @loadTime,
+      titleReport: "Load Time"
+    } %>
+    <% include 'elements/small-circle-chart', {
+      value: @pageSizePercen,
+      info: @pageSize,
+      titleReport: "Page Size"
+    } %>
   </div>
 </div>

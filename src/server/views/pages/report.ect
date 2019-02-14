@@ -21,14 +21,29 @@
     </script>
   <% end %>
 <% end %>
-<% if @__asset('report.css') :%>
-  <link rel="stylesheet" href="<%= @__asset('report.css') %>">
+
+<% block 'head-end' :%>
+  <% if @__asset('report.css') :%>
+    <link rel="stylesheet" href="<%= @__asset('report.css') %>">
+  <% end %>
 <% end %>
 
 <% if @report.finish :%>
   <div class="report" id="report-desktop">
-    <% include 'elements/table-report', { titleReport: "ORIGINAL", score: @report.desktop.originalPerformanceScore, loadTime: @report.desktop.original.loadTime, pageSize: @report.desktop.original.downloadedBytes }%>
-    <% include 'elements/table-report', { titleReport: "OPTIMIZED", score: @report.desktop.optimizePerformanceScore, loadTime: @report.desktop.optimized.loadTime, pageSize: @report.desktop.optimized.downloadedBytes, loadTimePercen: ((@report.desktop.optimized.loadTime * 100)/@report.desktop.original.loadTime)+",100", pageSizePercen: ((@report.desktop.optimized.downloadedBytes * 100)/@report.desktop.original.downloadedBytes)+",100" }%>
+    <% include 'elements/table-report', {
+      titleReport: "ORIGINAL",
+      score: @report.desktop.originalPerformanceScore,
+      loadTime: @prettyMs(@report.desktop.original.loadTime),
+      pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
+    } %>
+    <% include 'elements/table-report', {
+      titleReport: "OPTIMIZED",
+      score: @report.desktop.optimizePerformanceScore,
+      loadTime: @prettyMs(@report.desktop.optimized.loadTime),
+      pageSize: @prettyBytes(@report.desktop.optimized.downloadedBytes),
+      loadTimePercen: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ",100",
+      pageSizePercen: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ",100"
+    } %>
     <div class="screenshot">
       <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg" width="545px">
     </div>
@@ -37,8 +52,20 @@
     </div>
   </div>
   <div class="report" id="report-mobile">
-    <% include 'elements/table-report', { titleReport: "ORIGINAL", score: @report.mobile.originalPerformanceScore, loadTime: @report.mobile.original.loadTime, pageSize: @report.mobile.original.downloadedBytes }%>
-    <% include 'elements/table-report', { titleReport: "OPTIMIZED", score: @report.mobile.optimizePerformanceScore, loadTime: @report.mobile.optimized.loadTime, pageSize: @report.mobile.optimized.downloadedBytes, loadTimePercen: ((@report.mobile.optimized.loadTime * 100)/@report.mobile.original.loadTime)+",100", pageSizePercen: ((@report.mobile.optimized.downloadedBytes * 100)/@report.mobile.original.downloadedBytes)+",100" }%>
+    <% include 'elements/table-report', {
+      titleReport: "ORIGINAL",
+      score: @report.mobile.originalPerformanceScore,
+      loadTime: @prettyMs(@report.mobile.original.loadTime),
+      pageSize: @prettyBytes(@report.mobile.original.downloadedBytes)
+    } %>
+    <% include 'elements/table-report', {
+      titleReport: "OPTIMIZED",
+      score: @report.mobile.optimizePerformanceScore,
+      loadTime: @prettyMs(@report.mobile.optimized.loadTime),
+      pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
+      loadTimePercen: ((@report.mobile.optimized.loadTime * 100)/@report.mobile.original.loadTime)+",100",
+      pageSizePercen: ((@report.mobile.optimized.downloadedBytes * 100)/@report.mobile.original.downloadedBytes)+",100"
+    } %>
     <div class="screenshot">
       <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg" width="545px">
     </div>

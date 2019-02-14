@@ -10,6 +10,20 @@ import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 import devices from 'puppeteer/DeviceDescriptors'
 
+/*
+  - load origin page
+  - load optimized page
+  - ...
+*/
+
+
+const STEPS = {
+  'Load Origin Page': 1,
+  'Load Optimized Page': 2
+}
+
+const TOTAL_STEPS = Object.keys(STEPS).length
+
 // load page & collect downloadedBytes and loadTime
 const setRequestImage = (page, images) => {
   page.on('request', async (request) => {
@@ -95,8 +109,8 @@ const loadPage = async (page, params = {}) => {
     await delay(ms('1s'))
 
     await page.screenshot({
-      path: screenshot,
-      fullPage: true
+      path: screenshot
+      // fullPage: true
     })
   }
 
@@ -433,7 +447,7 @@ export const analyze = async (params) => {
         url: state.url,
         originalLighthouseData: googlePageSpeedDesktopData,
         originalPerformanceScore: desktopScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - desktopScore) / 2 + desktopScore),
+        optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100),
       }
     })
 
@@ -454,6 +468,12 @@ export const analyze = async (params) => {
       }
     } = googlePageSpeedMobileData
 
+    // await reportService.updateProgress(identifier, {
+    //   step: STEPS['Google page speed test mobile done'],
+    //   total: TOTAL_STEPS,
+    //   message: 'Google page speed test mobile done'
+    // })
+
     await reportService.updateProgress(identifier, 'Google page speed test mobile done')
 
     await reportService.update(identifier, {
@@ -462,7 +482,7 @@ export const analyze = async (params) => {
         optimized: state.mobileOptimized,
         originalLighthouseData: googlePageSpeedMobileData,
         originalPerformanceScore: mobileScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - mobileScore) / 2 + mobileScore),
+        optimizePerformanceScore: Math.ceil((100 - mobileScore * 100) / 2 + mobileScore * 100),
       },
       finish: true
     })
