@@ -27,7 +27,14 @@
     <link rel="stylesheet" href="<%= @__asset('report.css') %>">
   <% end %>
 <% end %>
-
+<% if !@report.finish :%>
+  <div>
+    <div class="progress-description">
+        Analyzing... <%= @progressPercent %>% complete
+    </div>
+    <% include 'elements/progress-bar',{ progressPercent: @report.progressPercent } %>
+  </div>
+<% end %>
 <% if @report.finish :%>
   <div class="summary-domain">
     <div class="summary-description">

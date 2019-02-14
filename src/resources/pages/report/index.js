@@ -30,11 +30,6 @@ window.addEventListener('load', () => {
 
   socket.on('analyze:progress', (data) => {
     const message = data.payload.message
-    const dom = document.createElement('div')
-
-    dom.innerHTML = message
-    dom.classList.add('progress-message')
-    document.getElementById('progress').appendChild(dom)
 
     if (message === 'Finished!') {
       location.reload()
