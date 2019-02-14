@@ -35,14 +35,16 @@
       score: @report.desktop.originalPerformanceScore,
       loadTime: @prettyMs(@report.desktop.original.loadTime),
       pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
+      loadTimePercent: "100, 100",
+      pageSizePercent: "100, 100"
     } %>
     <% include 'elements/table-report', {
       titleReport: "OPTIMIZED",
       score: @report.desktop.optimizePerformanceScore,
       loadTime: @prettyMs(@report.desktop.optimized.loadTime),
       pageSize: @prettyBytes(@report.desktop.optimized.downloadedBytes),
-      loadTimePercen: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ",100",
-      pageSizePercen: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ",100"
+      loadTimePercent: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ",100",
+      pageSizePercent: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ",100"
     } %>
     <div class="screenshot">
       <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg" width="545px">
@@ -56,15 +58,17 @@
       titleReport: "ORIGINAL",
       score: @report.mobile.originalPerformanceScore,
       loadTime: @prettyMs(@report.mobile.original.loadTime),
-      pageSize: @prettyBytes(@report.mobile.original.downloadedBytes)
+      pageSize: @prettyBytes(@report.mobile.original.downloadedBytes),
+      loadTimePercent: "100, 100",
+      pageSizePercent: "100, 100"
     } %>
     <% include 'elements/table-report', {
       titleReport: "OPTIMIZED",
       score: @report.mobile.optimizePerformanceScore,
       loadTime: @prettyMs(@report.mobile.optimized.loadTime),
       pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
-      loadTimePercen: ((@report.mobile.optimized.loadTime * 100)/@report.mobile.original.loadTime)+",100",
-      pageSizePercen: ((@report.mobile.optimized.downloadedBytes * 100)/@report.mobile.original.downloadedBytes)+",100"
+      loadTimePercent: ((@report.mobile.optimized.loadTime * 100)/@report.mobile.original.loadTime)+",100",
+      pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100)/@report.mobile.original.downloadedBytes)+",100"
     } %>
     <div class="screenshot">
       <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg" width="545px">
