@@ -18,8 +18,9 @@ a
   margin-top: 100px
 
 .report
+  padding-top: 120px
   display: grid
-  grid-template-columns: 2fr 2fr
+  grid-template-columns: 1fr 1fr
   grid-gap: 16px
 
   .wrapper-table-report
@@ -51,3 +52,40 @@ a
     grid-gap: 32px
 #report-desktop
   display: none
+
+.summary-domain
+  position: absolute
+
+  .summary-description
+    left: 50%
+    position: relative
+    transform: translate(50%, -50%)
+
+  .audited-url
+    text-align: center
+    text-transform: uppercase
+    font-size: 18px
+    padding-bottom: 20px
+    color: #1268b3
+    font-weight: 500
+
+  .summary-message
+    color: #6c6c6c
+  .gauge-scale
+    color: #6c6c6c
+    .range::before
+      content: ''
+      width: 16px;
+      height: 8px
+      border-radius: 4px
+      display: inline-block
+      margin: 0px 8px
+
+    .range.fast::before
+     background-color: #178239
+
+    .range.average::before
+     background-color: #e67700
+
+    .range.slow::before
+     background-color: #c7221f
