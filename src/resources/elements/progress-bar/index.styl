@@ -1,0 +1,32 @@
+body {
+  background: #eef1f3;
+}
+
+@keyframes loader
+  0%
+   width: 0
+
+.progress-bar
+  border-radius: 60px
+  overflow: hidden
+  width: 100%
+
+  span
+    display: block
+
+.bar
+  background: rgba(0, 0, 0, 0.075)
+
+.progress
+  animation: loader 2s ease
+  background: $color__catalina-blue
+  color: #fff
+  padding: 5px
+  width: 0%
+  border-radius: 10px
+
+.progress-bar
+  left: 50%
+  max-width: 550px
+  position: relative
+  transform: translate3d(-50%, -50%, 0)
