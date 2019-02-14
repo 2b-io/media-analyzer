@@ -1,0 +1,19 @@
+<% extend './layout' %>
+
+<% block 'body-end' :%>
+<% if @__asset('home.js') :%>
+  <script src="<%= @__asset('home.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('home.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('home.css') %>">
+<% end %>
+<div class="notify-contact">
+  <h1>
+    Thank you for getting in touch!
+  </h1>
+  <p>
+    We appreciate you contacting us about. One of our colleagues will get back to you shortly.
+    Have a great day!
+  </p>
+</div>
