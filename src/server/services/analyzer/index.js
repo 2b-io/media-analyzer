@@ -10,26 +10,6 @@ import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 import devices from 'puppeteer/DeviceDescriptors'
 
-const STEPS = {
-  'Load origin desktop page...': 1,
-  'Load origin desktop page... done': 2,
-  'Warm up cache...': 3,
-  'Warm up cache... done': 4,
-  'Load optimized desktop page...': 5,
-  'Load optimized desktop page... done': 6,
-  'Load origin mobile page...': 7,
-  'Load origin mobile page... done': 8,
-  'Load optimized mobile page...': 9,
-  'Load optimized mobile page... done': 10,
-  'Google page speed test desktop mode...': 11,
-  'Google page speed test desktop... done': 12,
-  'Google page speed test mobile mode...': 13,
-  'Google page speed test mobile... done': 14,
-  'Finished!': 15
-}
-
-const TOTAL_STEPS = Object.keys(STEPS).length
-
 // load page & collect downloadedBytes and loadTime
 const setRequestImage = (page, images) => {
   page.on('request', async (request) => {
@@ -202,11 +182,7 @@ export const analyze = async (params) => {
 
     try {
       // load origin page
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load origin desktop page...'],
-        total: TOTAL_STEPS,
-        message: 'Load origin desktop page...'
-      })
+      await reportService.updateProgress(identifier, 'Load origin desktop page...')
       console.log('Load origin desktop page')
       console.time('Load origin desktop page')
 
@@ -229,11 +205,7 @@ export const analyze = async (params) => {
         screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-original.jpeg`)
       })
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load origin desktop page... done'],
-        total: TOTAL_STEPS,
-        message: 'Load origin desktop page... done'
-      })
+      await reportService.updateProgress(identifier, 'Load origin desktop page... done')
 
       console.timeEnd('Load origin desktop page')
 
@@ -313,11 +285,7 @@ export const analyze = async (params) => {
     // warm up optimized content
     console.time('Warm up cache')
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Warm up cache...'],
-      total: TOTAL_STEPS,
-      message: 'Warm up cache...'
-    })
+    await reportService.updateProgress(identifier, 'Warm up cache...')
 
     try {
       await Promise.all(
@@ -330,11 +298,7 @@ export const analyze = async (params) => {
     } finally {
       console.timeEnd('Warm up cache')
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Warm up cache... done'],
-        total: TOTAL_STEPS,
-        message: 'Warm up cache... done'
-      })
+      await reportService.updateProgress(identifier, 'Warm up cache... done')
     }
 
     const optimizedDesktopPage = await incognitoContext.newPage()
@@ -350,12 +314,7 @@ export const analyze = async (params) => {
       console.log('Load optimized desktop page')
       console.time('Load optimize desktop page')
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load optimized desktop page...'],
-        total: TOTAL_STEPS,
-        message: 'Load optimized desktop page...'
-      })
-
+      await reportService.updateProgress(identifier, 'Load optimized desktop page...')
 
       const result = await loadPage(optimizedDesktopPage, {
         url,
@@ -365,11 +324,7 @@ export const analyze = async (params) => {
 
       console.timeEnd('Load optimize desktop page')
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load optimized desktop page... done'],
-        total: TOTAL_STEPS,
-        message: 'Load optimized desktop page... done'
-      })
+      await reportService.updateProgress(identifier, 'Load optimized desktop page... done')
 
       console.log(result)
 
@@ -385,11 +340,7 @@ export const analyze = async (params) => {
     const originalMobilePage = await incognitoContext.newPage()
 
     try {
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load origin mobile page...'],
-        total: TOTAL_STEPS,
-        message: 'Load origin mobile page...'
-      })
+      await reportService.updateProgress(identifier, 'Load origin mobile page...')
       console.log('Load origin mobile page')
       console.time('Load origin mobile page')
 
@@ -406,11 +357,7 @@ export const analyze = async (params) => {
         isMobile: true
       })
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load origin mobile page... done'],
-        total: TOTAL_STEPS,
-        message: 'Load origin mobile page... done'
-      })
+      await reportService.updateProgress(identifier, 'Load origin mobile page... done')
 
       console.timeEnd('Load origin mobile page')
 
@@ -433,12 +380,7 @@ export const analyze = async (params) => {
       // load mobile optimized page
       console.log('Load optimized mobile page')
       console.time('Load optimize mobile page')
-
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load optimized mobile page...'],
-        total: TOTAL_STEPS,
-        message: 'Load optimized mobile page...'
-      })
+      await reportService.updateProgress(identifier, 'Load optimized mobile page...')
 
       const resultMobileOtimized = await loadPage(optimizedMobilePage, {
         url,
@@ -449,11 +391,7 @@ export const analyze = async (params) => {
 
       console.timeEnd('Load optimize mobile page')
 
-      await reportService.updateProgress(identifier, {
-        step: STEPS['Load optimized mobile page... done'],
-        total: TOTAL_STEPS,
-        message: 'Load optimized mobile page... done'
-      })
+      await reportService.updateProgress(identifier, 'Load optimized mobile page... done')
 
       console.log(resultMobileOtimized)
 
@@ -467,22 +405,14 @@ export const analyze = async (params) => {
       console.log('Optimized mobile page closed')
     }
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Google page speed test desktop mode...'],
-      total: TOTAL_STEPS,
-      message: 'Google page speed test desktop mode...'
-    })
+    await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
 
     const googlePageSpeedDesktopData = await googlePageSpeedService(
       url,
       { strategy: 'desktop' }
     )
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Google page speed test desktop... done'],
-      total: TOTAL_STEPS,
-      message: 'Google page speed test desktop... done'
-    })
+    await reportService.updateProgress(identifier, 'Google page speed test desktop... done')
 
     const {
       lighthouseResult: {
@@ -507,11 +437,7 @@ export const analyze = async (params) => {
       }
     })
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Google page speed test mobile mode...'],
-      total: TOTAL_STEPS,
-      message: 'Google page speed test mobile mode...'
-    })
+    await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
 
     const googlePageSpeedMobileData = await googlePageSpeedService(
       url,
@@ -528,11 +454,7 @@ export const analyze = async (params) => {
       }
     } = googlePageSpeedMobileData
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Google page speed test mobile... done'],
-      total: TOTAL_STEPS,
-      message: 'Google page speed test mobile... done'
-    })
+    await reportService.updateProgress(identifier, 'Google page speed test mobile... done')
 
     await reportService.update(identifier, {
       mobile: {
@@ -545,12 +467,7 @@ export const analyze = async (params) => {
       finish: true
     })
 
-    await reportService.updateProgress(identifier, {
-      step: STEPS['Finished!'],
-      total: TOTAL_STEPS,
-      message: 'Finished!'
-    })
-
+    await reportService.updateProgress(identifier, 'Finished!')
   } catch (e) {
     throw e
   } finally {
