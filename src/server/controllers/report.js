@@ -2,6 +2,7 @@ import hash from '@emotion/hash'
 import bodyParser from 'body-parser'
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
+import normalizeUrl from 'normalize-url'
 import serializeError from 'serialize-error'
 
 import config from 'infrastructure/config'
@@ -36,19 +37,20 @@ export default {
         const body = req.body
         const values = await joi.validate(body, SCHEMA)
 
+        const url = normalizeUrl(values.url, {
+          stripWWW: false
+        })
         const time = Date.now()
-        const identifier = hash(`${ values.url }-${ time }`)
+        const identifier = hash(`${ url }-${ time }`)
 
-        await reportService.create(identifier, values.url)
+        await reportService.create(identifier, url)
 
         res.redirect(`/reports/${ identifier }`)
-
-        // res.redirect('/')
 
         try {
           await analyze({
             identifier,
-            url: values.url,
+            url: url,
             timeout: config.optimizerTimeout
           })
         } catch (e) {
