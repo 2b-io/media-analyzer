@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import 'elements/contact-form/auto-height-textarea'
 
 window.addEventListener('load', () => {
   if (REPORT.finish) {
