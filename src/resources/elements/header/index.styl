@@ -3,15 +3,15 @@
 .navbar
   appearance: none
   overflow: hidden
-  background-color: #1268b3
-  color: white
+  background-color: $color__cornflower-blue
+  color: $color__white
   text-align: center
 
-.navbar-container {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: bold;
-}
+.navbar-container
+  padding: 16px
+  font-size: 14px
+  font-weight: bold
+
 .center-form
   max-width: 640px
   margin: auto;
@@ -24,18 +24,17 @@
     grid-gap: 8px
 
     .analyze-input
-      height: 40px
-      padding: 8px
+      padding: 8px 16px
       appearance: none
       outline: none
       border-radius: 40px
-      border: 2px solid white
-      color: #111111
+      border: none
+      color: $color__cod-gray
 
     .analyze-button
       border: none
       background: #074071
-      color: white
+      color: $color__white
       cursor: pointer
       border-radius: 40px
       appearance: none
