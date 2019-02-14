@@ -29,18 +29,18 @@ window.addEventListener('load', () => {
   })
 
   socket.on('analyze:progress', (data) => {
-    const message = data.payload.message
+    console.log('data.payload',  data.payload)
+    const { message, step, total } = data.payload.message
+    const percentProgress = (step * 100) / total
 
+    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
+    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
     if (message === 'Finished!') {
       location.reload()
     }
   })
 
   socket.on('analyze:failure', (data) => {
-    const dom = document.createElement('div')
-
-    dom.innerHTML = 'An error happens, please try again later...'
-    dom.classList.add('progress-message')
-    document.getElementById('progress').appendChild(dom)
+    document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
   })
 })
