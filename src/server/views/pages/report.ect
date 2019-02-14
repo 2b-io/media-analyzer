@@ -86,8 +86,8 @@
       score: @report.mobile.optimizePerformanceScore,
       loadTime: @prettyMs(@report.mobile.optimized.loadTime),
       pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
-      loadTimePercent: ((@report.mobile.optimized.loadTime * 100)/@report.mobile.original.loadTime)+",100",
-      pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100)/@report.mobile.original.downloadedBytes)+",100"
+      loadTimePercent: ((@report.mobile.optimized.loadTime * 100) / @report.mobile.original.loadTime)+",100",
+      pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100) / @report.mobile.original.downloadedBytes)+",100"
     } %>
     <div class="screenshot">
       <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg" width="545px">
