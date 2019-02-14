@@ -441,10 +441,10 @@ export const analyze = async (params) => {
     // summary report
 
     await reportService.update(identifier, {
+      url: state.url,
       desktop: {
         original: state.desktopOriginal,
         optimized: state.desktopOtimized,
-        url: state.url,
         originalLighthouseData: googlePageSpeedDesktopData,
         originalPerformanceScore: desktopScore * 100,
         optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100),

@@ -6,7 +6,9 @@
     <% content 'head-end' %>
   </head>
   <body>
-    <% include 'elements/header' %>
+    <% include 'elements/header', {
+      report: @report
+    } %>
     <div class="wrapper-content">
       <% content %>
     </div>

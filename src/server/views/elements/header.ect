@@ -2,7 +2,7 @@
   <div class="center-form">
     <p class="title">Media Network - Analyze Webpage Performance</p>
     <form id="form" method="post" action="/reports">
-      <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" required>
+      <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" value="<%= @report?.url %>" equired>
       <button type="submit" class="analyze-button">Analyze</button>
     </form>
     <p class="description">
