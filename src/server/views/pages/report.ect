@@ -30,9 +30,13 @@
 <% if !@report.finish :%>
   <div>
     <div class="progress-description">
-        Analyzing... <%= @progressPercent %>% complete
+      <p id="progress-message">
+        Analyzing...
+      </p>
     </div>
-    <% include 'elements/progress-bar',{ progressPercent: @report.progressPercent } %>
+    <% include 'elements/progress-bar',{
+      progressPercent: (@report.progress.step * 100) / @report.progress.total
+    } %>
   </div>
 <% end %>
 <% if @report.finish :%>

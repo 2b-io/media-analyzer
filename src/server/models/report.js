@@ -26,7 +26,7 @@ const schema = mongoose.Schema({
     optimizeUrl: String,
     optimizeSize: String
   } ],
-  progress: [ String ],
+  progress: [ mongoose.Schema.Types.Mixed ],
   finish: Boolean,
   error: Boolean,
   url: String
