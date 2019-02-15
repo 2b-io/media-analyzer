@@ -13,8 +13,6 @@ export default (server) => {
 
       socket.on('disconnect', () => {
         console.log('A socket disconnected')
-
-        console.log(socketServer.rooms)
       })
 
       socket.on('data', (data) => {
@@ -34,8 +32,6 @@ export default (server) => {
         message: 'CONNECTION_ACCEPTED'
       })
     })
-
-
 
     state.socketServer = socketServer
   }

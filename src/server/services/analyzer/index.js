@@ -426,6 +426,9 @@ export const analyze = async (params) => {
     } = googlePageSpeedDesktopData
 
     // summary report
+    // delete screenshots & thumbnails: DATA TOO LARGE
+    googlePageSpeedDesktopData.lighthouseResult.audits['screenshot-thumbnails'] = null
+    googlePageSpeedDesktopData.lighthouseResult.audits['final-screenshot'] = null
 
     await reportService.update(identifier, {
       url: state.url,
@@ -434,7 +437,7 @@ export const analyze = async (params) => {
         optimized: state.desktopOtimized,
         originalLighthouseData: googlePageSpeedDesktopData,
         originalPerformanceScore: desktopScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100),
+        // optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100)
       }
     })
 
@@ -455,6 +458,10 @@ export const analyze = async (params) => {
       }
     } = googlePageSpeedMobileData
 
+    // delete screenshots & thumbnails: DATA TOO LARGE
+    googlePageSpeedMobileData.lighthouseResult.audits['screenshot-thumbnails'] = null
+    googlePageSpeedMobileData.lighthouseResult.audits['final-screenshot'] = null
+
     await reportService.updateProgress(identifier, 'Google page speed test mobile... done')
 
     await reportService.update(identifier, {
@@ -463,7 +470,7 @@ export const analyze = async (params) => {
         optimized: state.mobileOptimized,
         originalLighthouseData: googlePageSpeedMobileData,
         originalPerformanceScore: mobileScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - mobileScore * 100) / 2 + mobileScore * 100),
+        // optimizePerformanceScore: Math.ceil((100 - mobileScore * 100) / 2 + mobileScore * 100)
       },
       finish: true
     })

@@ -31,7 +31,7 @@ const create = async (identifier, url) => {
 const get = async (identifier) => {
   return await ReportModel.findOne({
     identifier
-  })
+  }).lean()
 }
 
 const list = async (...args) => {
