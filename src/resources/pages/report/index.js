@@ -29,6 +29,14 @@ window.addEventListener('load', () => {
     }
   })
 
+  if (REPORT.progress.length) {
+    const { progress } = REPORT
+    const { message, step, total } = progress[ progress.length -1 ]
+    const percentProgress = (step * 100) / total
+    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
+    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
+  }
+
   socket.on('analyze:progress', (data) => {
     console.log('data.payload',  data.payload)
     const { message, step, total } = data.payload.message
