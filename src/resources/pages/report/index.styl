@@ -18,17 +18,17 @@
 
 .table-report
   position: relative
-  background-color: #fff
-  min-height: 360px
+  background-color: $color__white
   border-radius: 16px
+  padding: 16px
 
   .title-report
+    text-align: center
     font-size: 24px
     font-weight: 500
-    color: #6c6c6c
-    padding-top: 100px
-    text-align: center
-    padding-bottom: 80px
+    color: $color__dove-gray
+    padding-top: 96px
+    padding-bottom: 32px
 
   .score-report
     font-size: 26px
@@ -38,10 +38,14 @@
     transform: translate(-50%, -50%)
     text-align: center
 
-  .info-report
+  .report-info
     display: grid
     grid-template-columns: 1fr 1fr
-    grid-gap: 32px
+    grid-gap: 16px
+    padding: 32px 0 16px
+
+  .report-description
+    text-align: center
 
 #report-desktop
   display: none

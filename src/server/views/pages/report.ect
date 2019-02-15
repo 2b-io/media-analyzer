@@ -45,51 +45,54 @@
     <div class="summary-domain content small">
       <h2 class="audited-url"><%= @report.url %></h2>
       <div class="summary-description">
-        <p class="summary-message">The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</p>
         <p class="summary-message">Analysis time: <%= @report.createdAt %></p>
         <div class="gauge-scale"><span>Scale:</span><span class="range fast">90-100 (fast)</span><span class="range average">50-89 (average)</span><span class="range slow">0-49 (slow)</span></div>
       </div>
     </div>
     <div class="report content" id="report-desktop">
       <% include 'elements/table-report', {
-        titleReport: "ORIGINAL",
+        titleReport: 'ORIGINAL',
         score: @report.desktop.originalPerformanceScore,
         loadTime: @prettyMs(@report.desktop.original.loadTime),
         pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
-        loadTimePercent: "100,100",
-        pageSizePercent: "100,100"
+        loadTimePercent: '100,100',
+        pageSizePercent: '100,100',
+        scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
       } %>
       <% include 'elements/table-report', {
-        titleReport: "OPTIMIZED",
+        titleReport: 'OPTIMIZED',
         score: @report.desktop.optimizePerformanceScore,
         loadTime: @prettyMs(@report.desktop.optimized.loadTime),
         pageSize: @prettyBytes(@report.desktop.optimized.downloadedBytes),
-        loadTimePercent: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ",100",
-        pageSizePercent: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ",100"
+        loadTimePercent: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ',100',
+        pageSizePercent: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ',100',
+        scoreDescription: '<span>The speed core is estimated.</span>'
       } %>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg" width="545px">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
       </div>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg" width="545px">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
       </div>
     </div>
     <div class="report content" id="report-mobile">
       <% include 'elements/table-report', {
-        titleReport: "ORIGINAL",
+        titleReport: 'ORIGINAL',
         score: @report.mobile.originalPerformanceScore,
         loadTime: @prettyMs(@report.mobile.original.loadTime),
         pageSize: @prettyBytes(@report.mobile.original.downloadedBytes),
-        loadTimePercent: "100,100",
-        pageSizePercent: "100,100"
+        loadTimePercent: '100,100',
+        pageSizePercent: '100,100',
+        scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
       } %>
       <% include 'elements/table-report', {
-        titleReport: "OPTIMIZED",
+        titleReport: 'OPTIMIZED',
         score: @report.mobile.optimizePerformanceScore,
         loadTime: @prettyMs(@report.mobile.optimized.loadTime),
         pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
-        loadTimePercent: ((@report.mobile.optimized.loadTime * 100) / @report.mobile.original.loadTime)+",100",
-        pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100) / @report.mobile.original.downloadedBytes)+",100"
+        loadTimePercent: ((@report.mobile.optimized.loadTime * 100) / @report.mobile.original.loadTime)+ ',100',
+        pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100) / @report.mobile.original.downloadedBytes) + ',100',
+        scoreDescription: '<span>The speed core is estimated.</span>'
       } %>
       <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">

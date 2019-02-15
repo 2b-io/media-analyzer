@@ -1,12 +1,26 @@
 <div class="table-report">
   <div class="score-report">
-    <% include 'elements/circle-chart', { value:  Math.round(@score), info:  Math.round(@score) }%>
+    <% include 'elements/circle-chart', {
+      value:  Math.round(@score),
+      info:  Math.round(@score)
+    } %>
   </div>
   <div class="title-report">
     <h1><%= @titleReport %></h1>
   </div>
-  <div class="info-report">
-    <% include 'elements/small-circle-chart', { value: @loadTimePercent, info: @loadTime, titleReport: "Load Time" }%>
-    <% include 'elements/small-circle-chart', { value: @pageSizePercent, info: @pageSize, titleReport: "Page Size" }%>
+  <div class="report-description">
+    <%- @scoreDescription %>
+  </div>
+  <div class="report-info">
+    <% include 'elements/small-circle-chart', {
+      value: @loadTimePercent,
+      info: @loadTime,
+      titleReport: 'Load Time'
+    } %>
+    <% include 'elements/small-circle-chart', {
+      value: @pageSizePercent,
+      info: @pageSize,
+      titleReport: 'Page Size'
+    } %>
   </div>
 </div>
