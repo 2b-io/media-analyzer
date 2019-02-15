@@ -8,19 +8,18 @@
 @require '~elements/progress-bar'
 
 .report
-  max-width: 1150px
   display: grid
   grid-template-columns: 1fr 1fr
   grid-gap: 16px
   margin: auto
-  padding-top: 100px
+
+  &.content
+    padding-top: 96px
 
 .table-report
   position: relative
   background-color: #fff
-  max-width: 600px
-  min-width: 550px
-  min-height: 350px
+  min-height: 360px
   border-radius: 16px
 
   .title-report
@@ -43,41 +42,49 @@
     display: grid
     grid-template-columns: 1fr 1fr
     grid-gap: 32px
+
 #report-desktop
   display: none
 
 .summary-domain
-  max-width: 360px
-  margin: auto
+  text-align: center
+
 
   .audited-url
-    text-align: center
-    text-transform: uppercase
-    font-size: 18px
-    padding-bottom: 20px
+    font-size: 24px
+    line-height: 40px
+    padding-bottom: 24px
     color: #1268b3
     font-weight: 500
+    overflow: hidden
+    text-overflow: ellipsis
 
-  .summary-message
-    color: #6c6c6c
-  .gauge-scale
-    color: #6c6c6c
-    .range::before
-      content: ''
-      width: 16px;
-      height: 8px
-      border-radius: 4px
-      display: inline-block
-      margin: 0px 8px
+  .summary-description
+    display: inline-block
+    text-align: left
 
-    .range.fast::before
-     background-color: #178239
+    .summary-message
+      color: #6c6c6c
 
-    .range.average::before
-     background-color: #e67700
+    .gauge-scale
+      color: #6c6c6c
 
-    .range.slow::before
-     background-color: #c7221f
+      .range::before
+        content: ''
+        width: 16px;
+        height: 8px
+        border-radius: 4px
+        display: inline-block
+        margin: 0px 8px
+
+      .range.fast::before
+        background-color: #178239
+
+      .range.average::before
+        background-color: #e67700
+
+      .range.slow::before
+        background-color: #c7221f
 
 .progress-description
   font-size: 18px
