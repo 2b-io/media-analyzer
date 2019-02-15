@@ -7,30 +7,21 @@
 @require '~elements/table-report'
 @require '~elements/progress-bar'
 
-body
-  background-color: #ebebeb
-a
-  color: #1268b3
-  text-decoration: none
-
-.wrapper-content
-  max-width: 1100px
-  margin: auto
-  margin-top: 30px
-
 .report
-  padding-top: 120px
+  max-width: 1150px
   display: grid
   grid-template-columns: 1fr 1fr
   grid-gap: 16px
-  margin-top: 100px
+  margin: auto
+  padding-top: 100px
 
-  .wrapper-table-report
-    position: relative
-    background-color: white
-    max-width: 650px
-    min-width: 500px
-    min-height: 350px
+.table-report
+  position: relative
+  background-color: #fff
+  max-width: 600px
+  min-width: 550px
+  min-height: 350px
+  border-radius: 16px
 
   .title-report
     font-size: 24px
@@ -56,12 +47,8 @@ a
   display: none
 
 .summary-domain
-  position: absolute
-
-  .summary-description
-    left: 50%
-    position: relative
-    transform: translate(50%, -50%)
+  max-width: 360px
+  margin: auto
 
   .audited-url
     text-align: center

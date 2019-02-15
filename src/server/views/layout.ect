@@ -6,16 +6,18 @@
     <% content 'head-end' %>
   </head>
   <body>
-    <% include 'elements/header', {
-      report: @report
-    } %>
-    <div class="wrapper-content">
-      <% content %>
+    <div class="wrapper">
+      <% include 'elements/header', {
+        report: @report
+      } %>
+      <div class="wrapper-content">
+        <% content %>
+      </div>
+      <% include 'elements/contact-form' %>
+      <div class="wrapper-content">
+        <% include 'elements/footer' %>
+      </div>
+      <% content 'body-end' %>
     </div>
-    <% include 'elements/contact-form' %>
-    <div class="wrapper-content">
-      <% include 'elements/footer' %>
-    </div>
-    <% content 'body-end' %>
   </body>
 </html>

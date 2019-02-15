@@ -3,7 +3,7 @@
   border-bottom-color: #b3b3b3
   border-bottom-style: solid
   border-bottom-width: thin
-
+  min-width: 1150px
   .content-form
     max-width: 950px
     margin: auto
@@ -44,6 +44,8 @@
 
   &::placeholder
     color: #111111
+  &:focus
+    border-bottom: 1px solid $color__cornflower-blue
 
   &.multi-line
     resize: none

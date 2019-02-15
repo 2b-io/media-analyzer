@@ -1,23 +1,22 @@
-@require '~style/base'
-@require '~elements/header'
 @require '~elements/contact-form'
 @require '~elements/footer'
+@require '~elements/header'
+@require '~style/base'
+@require '~style/layout'
 
-.wrapper-content
-  max-width: 950px
+.introduction
+  display: grid
   margin: auto
-  margin-top: 30px
+  max-width: 1150px
+  min-width: 1150px
+  grid-template-columns: 1fr 1fr
+  grid-gap: 24px
+  color: #6c6c6c
 
-  .introduction
-    display: grid
-    grid-template-columns: 2fr 2fr
-    grid-gap: 24px
-    color: #6c6c6c
-
-    .title-content
-      font-weight: 500
-      font-size: 14px
-      color: #111111
+  .title-content
+    font-weight: 500
+    font-size: 14px
+    color: #111111
 
 .contact-form
   background-color: white
