@@ -133,8 +133,8 @@ export default {
       }
 
       const optimizedScore = {
-        desktop: Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize),
-        mobile: Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize),
+        desktop: Math.max(0, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
+        mobile: Math.max(0, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
       }
 
       // return res.json({
