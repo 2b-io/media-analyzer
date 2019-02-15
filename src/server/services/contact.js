@@ -1,4 +1,5 @@
 import hash from '@emotion/hash'
+
 import ContactModel from 'models/contact'
 
 const update = async (data) => {

@@ -35,14 +35,14 @@
       </p>
     </div>
     <% include 'elements/progress-bar',{
-      progressPercent: (@report.progress.step * 100) / @report.progress.total
+      progressPercent: "0%"
     } %>
   </div>
 <% end %>
 <% if @report.finish :%>
   <div class="summary-domain">
     <div class="summary-description">
-      <h1 class="audited-url"><%= @report.url %></h1>
+      <p class="audited-url"><%= @report.url %></p>
       <p class="summary-message">The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</p>
       <p class="summary-message">Analysis time: <%= @report.createdAt %></p>
       <div class="gauge-scale"><span>Scale:</span><span class="range fast">90-100 (fast)</span><span class="range average">50-89 (average)</span><span class="range slow">0-49 (slow)</span></div>
@@ -54,8 +54,8 @@
       score: @report.desktop.originalPerformanceScore,
       loadTime: @prettyMs(@report.desktop.original.loadTime),
       pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
-      loadTimePercent: "100, 100",
-      pageSizePercent: "100, 100"
+      loadTimePercent: "100,100",
+      pageSizePercent: "100,100"
     } %>
     <% include 'elements/table-report', {
       titleReport: "OPTIMIZED",
@@ -78,8 +78,8 @@
       score: @report.mobile.originalPerformanceScore,
       loadTime: @prettyMs(@report.mobile.original.loadTime),
       pageSize: @prettyBytes(@report.mobile.original.downloadedBytes),
-      loadTimePercent: "100, 100",
-      pageSizePercent: "100, 100"
+      loadTimePercent: "100,100",
+      pageSizePercent: "100,100"
     } %>
     <% include 'elements/table-report', {
       titleReport: "OPTIMIZED",
