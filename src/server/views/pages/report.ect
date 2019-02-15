@@ -66,7 +66,7 @@
         pageSize: @prettyBytes(@report.desktop.optimized.downloadedBytes),
         loadTimePercent: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ',100',
         pageSizePercent: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ',100',
-        scoreDescription: '<span>The speed core is estimated.</span>'
+        scoreDescription: '<span>The speed core is estimated by Mr. Rocket\'s simulator.</span>'
       } %>
       <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
@@ -92,7 +92,7 @@
         pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
         loadTimePercent: ((@report.mobile.optimized.loadTime * 100) / @report.mobile.original.loadTime)+ ',100',
         pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100) / @report.mobile.original.downloadedBytes) + ',100',
-        scoreDescription: '<span>The speed core is estimated.</span>'
+        scoreDescription: '<span>The speed core is estimated by Mr. Rocket\'s simulator.</span>'
       } %>
       <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
