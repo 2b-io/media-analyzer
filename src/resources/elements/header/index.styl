@@ -8,12 +8,11 @@
   text-align: center
 
   form
-    display: grid
-    grid-template-columns: 1fr 128px
-    grid-gap: 8px
+    position: relative
 
     .analyze-input
-      padding: 8px 16px
+      width: 100%
+      padding: 8px 144px 8px 16px
       appearance: none
       outline: none
       border-radius: 40px
@@ -21,6 +20,12 @@
       color: $color__cod-gray
 
     .analyze-button
+      position: absolute
+      right: 4px
+      top: 50%
+      transform: translateY(-50%)
+      width: 128px
+      height: 32px
       border: none
       background: #074071
       color: $color__white
