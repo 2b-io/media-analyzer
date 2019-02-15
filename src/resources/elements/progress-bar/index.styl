@@ -1,23 +1,20 @@
 .progress-bar
-  border-radius: 60px
   overflow: hidden
-  width: 100%
+  border-radius: 16px
 
-  span
+  .bar
     display: block
+    position: relative
+    height: 16px
+    background: $color__white
 
-.bar
-  background: rgba(0, 0, 0, 0.075)
-
-.progress
-  background: $color__catalina-blue
-  color: #fff
-  padding: 5px
-  width: 0%
-  border-radius: 10px
-
-.progress-bar
-  left: 50%
-  max-width: 550px
-  position: relative
-  transform: translate3d(-50%, -50%, 0)
+    .progress
+      position: absolute
+      top: 0
+      left: 0
+      bottom: 0
+      background: $color__denium
+      width: 0%
+      border-radius: 10px
+      min-width: 16px
+      transition: width .2s
