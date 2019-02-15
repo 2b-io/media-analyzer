@@ -1,18 +1,17 @@
 body
   background-color: $color__gallery
-  min-width: 1150px
 
 .wrapper
-  max-width: 1920px
-  margin: auto
-
-  .wrapper-content
-    min-width: 1150px
-    padding: 8px
+  & > .content
+    width: 1152px
+    padding: 32px 8px
     margin: auto
-    margin-top: 30px
 
-img {
-   height: auto
-   width:100%
-}
+    &.small
+      width: 960px
+
+img
+   max-width: 100%
+
+   &.full-width
+     width: 100%
