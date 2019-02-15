@@ -149,11 +149,11 @@ export default {
           ...report,
           desktop: {
             ...report.desktop,
-            optimizePerformanceScore: optimizedScore.desktop
+            optimizedPerformanceScore: optimizedScore.desktop
           },
           mobile: {
             ...report.mobile,
-            optimizePerformanceScore: optimizedScore.mobile
+            optimizedPerformanceScore: optimizedScore.mobile
           }
         }
       })
