@@ -4,11 +4,11 @@ import ms from 'ms'
 import fetch from 'node-fetch'
 import path from 'path'
 import puppeteer from 'puppeteer'
+import devices from 'puppeteer/DeviceDescriptors'
 
 import config from 'infrastructure/config'
 import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
-import devices from 'puppeteer/DeviceDescriptors'
 
 // load page & collect downloadedBytes and loadTime
 const setRequestImage = (page, images) => {
@@ -30,6 +30,7 @@ const setRequestImage = (page, images) => {
     request.continue()
   })
 }
+
 const loadPage = async (page, params = {}) => {
   const {
     url,
@@ -312,7 +313,7 @@ export const analyze = async (params) => {
 
       // load optimized page
       console.log('Load optimized desktop page')
-      console.time('Load optimize desktop page')
+      console.time('Load optimized desktop page')
 
       await reportService.updateProgress(identifier, 'Load optimized desktop page...')
 
@@ -322,7 +323,7 @@ export const analyze = async (params) => {
         screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`)
       })
 
-      console.timeEnd('Load optimize desktop page')
+      console.timeEnd('Load optimized desktop page')
 
       await reportService.updateProgress(identifier, 'Load optimized desktop page... done')
 
