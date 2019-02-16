@@ -16,5 +16,8 @@ export default {
   optimizerTimeout: process.env.OPTIMIZER_TIMEOUT,
   // google page speed
   googlePageSpeedApiKey: process.env.GOOGLE_PAGE_SPEED_API_KEY,
-  googlePageSpeedUrl: process.env.GOOGLE_PAGE_SPEED_URL
+  googlePageSpeedUrl: process.env.GOOGLE_PAGE_SPEED_URL,
+  // google recaptcha
+  googleGoogleRecaptchaApiKey: process.env.GOOGLE_RECAPTCHA_API_KEY,
+  googleRecaptchaUrl: process.env.GOOGLE_RECAPTCHA_URL
 }

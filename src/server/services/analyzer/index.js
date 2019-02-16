@@ -4,11 +4,11 @@ import ms from 'ms'
 import fetch from 'node-fetch'
 import path from 'path'
 import puppeteer from 'puppeteer'
+import devices from 'puppeteer/DeviceDescriptors'
 
 import config from 'infrastructure/config'
 import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
-import devices from 'puppeteer/DeviceDescriptors'
 
 // load page & collect downloadedBytes and loadTime
 const setRequestImage = (page, images) => {
@@ -30,6 +30,7 @@ const setRequestImage = (page, images) => {
     request.continue()
   })
 }
+
 const loadPage = async (page, params = {}) => {
   const {
     url,
@@ -95,8 +96,8 @@ const loadPage = async (page, params = {}) => {
     await delay(ms('1s'))
 
     await page.screenshot({
-      path: screenshot,
-      fullPage: true
+      path: screenshot
+      // fullPage: true
     })
   }
 
@@ -312,7 +313,7 @@ export const analyze = async (params) => {
 
       // load optimized page
       console.log('Load optimized desktop page')
-      console.time('Load optimize desktop page')
+      console.time('Load optimized desktop page')
 
       await reportService.updateProgress(identifier, 'Load optimized desktop page...')
 
@@ -322,7 +323,7 @@ export const analyze = async (params) => {
         screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`)
       })
 
-      console.timeEnd('Load optimize desktop page')
+      console.timeEnd('Load optimized desktop page')
 
       await reportService.updateProgress(identifier, 'Load optimized desktop page... done')
 
@@ -412,7 +413,7 @@ export const analyze = async (params) => {
       { strategy: 'desktop' }
     )
 
-    await reportService.updateProgress(identifier, 'Google page speed test desktop done')
+    await reportService.updateProgress(identifier, 'Google page speed test desktop... done')
 
     const {
       lighthouseResult: {
@@ -425,15 +426,18 @@ export const analyze = async (params) => {
     } = googlePageSpeedDesktopData
 
     // summary report
+    // delete screenshots & thumbnails: DATA TOO LARGE
+    googlePageSpeedDesktopData.lighthouseResult.audits['screenshot-thumbnails'] = null
+    googlePageSpeedDesktopData.lighthouseResult.audits['final-screenshot'] = null
 
     await reportService.update(identifier, {
+      url: state.url,
       desktop: {
         original: state.desktopOriginal,
         optimized: state.desktopOtimized,
-        url: state.url,
         originalLighthouseData: googlePageSpeedDesktopData,
         originalPerformanceScore: desktopScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - desktopScore) / 2 + desktopScore),
+        // optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100)
       }
     })
 
@@ -454,7 +458,11 @@ export const analyze = async (params) => {
       }
     } = googlePageSpeedMobileData
 
-    await reportService.updateProgress(identifier, 'Google page speed test mobile done')
+    // delete screenshots & thumbnails: DATA TOO LARGE
+    googlePageSpeedMobileData.lighthouseResult.audits['screenshot-thumbnails'] = null
+    googlePageSpeedMobileData.lighthouseResult.audits['final-screenshot'] = null
+
+    await reportService.updateProgress(identifier, 'Google page speed test mobile... done')
 
     await reportService.update(identifier, {
       mobile: {
@@ -462,7 +470,7 @@ export const analyze = async (params) => {
         optimized: state.mobileOptimized,
         originalLighthouseData: googlePageSpeedMobileData,
         originalPerformanceScore: mobileScore * 100,
-        optimizePerformanceScore: Math.ceil((100 - mobileScore) / 2 + mobileScore),
+        // optimizePerformanceScore: Math.ceil((100 - mobileScore * 100) / 2 + mobileScore * 100)
       },
       finish: true
     })

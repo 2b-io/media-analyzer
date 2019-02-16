@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import 'elements/contact-form/auto-height-textarea'
 
 window.addEventListener('load', () => {
   if (REPORT.finish) {
@@ -28,13 +29,21 @@ window.addEventListener('load', () => {
     }
   })
 
-  socket.on('analyze:progress', (data) => {
-    const message = data.payload.message
-    const dom = document.createElement('div')
+  if (REPORT.progress.length) {
+    const { progress } = REPORT
+    const { message, step, total } = progress[ progress.length -1 ]
+    const percentProgress = (step * 100) / total
+    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
+    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
+  }
 
-    dom.innerHTML = message
-    dom.classList.add('progress-message')
-    document.getElementById('progress').appendChild(dom)
+  socket.on('analyze:progress', (data) => {
+    console.log('data.payload',  data.payload)
+    const { message, step, total } = data.payload.message
+    const percentProgress = (step * 100) / total
+
+    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
+    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
 
     if (message === 'Finished!') {
       location.reload()
@@ -42,10 +51,20 @@ window.addEventListener('load', () => {
   })
 
   socket.on('analyze:failure', (data) => {
-    const dom = document.createElement('div')
-
-    dom.innerHTML = 'An error happens, please try again later...'
-    dom.classList.add('progress-message')
-    document.getElementById('progress').appendChild(dom)
+    document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
   })
 })
+
+function openTab (e, tabName) {
+  document.getElementById('report-mobile').style.display = "grid";
+  document.getElementById('report-desktop').style.display = "none";
+  document.getElementById('element-tab-mobile').className = "elements-tab-active";
+  document.getElementById('element-tab-desktop').className = "elements-tab";
+
+  if (tabName === 'report-desktop') {
+    document.getElementById('report-desktop').style.display = "grid";
+    document.getElementById('report-mobile').style.display = "none";
+    document.getElementById('element-tab-desktop').className = "elements-tab-active";
+    document.getElementById('element-tab-mobile').className = "elements-tab";
+  }
+}

@@ -1,82 +1,110 @@
-*
-  padding: 0
-  margin: 0
-  color: inherit
-  font-size: inherit
-
-html
-  box-sizing: border-box
-
-*, *:before, *:after
-  box-sizing: inherit
-
-body
-  font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace
-  font-size: 12px
-  line-height: 24px
-
-.navbar
-  appearance: none
-  overflow: hidden
-  background-color: #07f
-  color: white
-  text-align: center
-
-.navbar-content {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.loading-icon
-  margin: 0 auto
-  text-align: center
-
-.navbar-tab {
-  font-size: 14px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 5px;
-  cursor: pointer;
-}
-
-.navbar-tab-active {
-  font-weight: bold;
-  border-bottom-color: white;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-}
+@require '~style/base'
+@require '~elements/circle-chart'
+@require '~elements/contact-form'
+@require '~elements/footer'
+@require '~elements/header'
+@require '~elements/report-tab'
+@require '~elements/table-report'
+@require '~elements/progress-bar'
 
 .report
   display: grid
   grid-template-columns: 1fr 1fr
   grid-gap: 16px
+  margin: auto
+
+  &.content
+    padding-top: 72px
+
+.table-report
+  position: relative
+  background-color: $color__white
+  border-radius: 16px
   padding: 16px
 
-  & > *
-    min-width: 0
-    min-height: 0
-
-  .metric-title
+  .title-report
     text-align: center
-    padding: 8px
+    font-size: 24px
+    font-weight: 500
+    color: $color__dove-gray
+    padding-top: 96px
+    padding-bottom: 16px
+
+  .score-report
+    font-size: 26px
+    position: absolute
+    top: 0px
+    left: 50%
+    transform: translate(-50%, -50%)
+    text-align: center
+
+  .report-info
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-gap: 16px
+    padding: 32px 0 16px
+
+  .report-description
+    text-align: center
+
+  .degrade-inform
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background: rgba(255, 255, 255, 0.9)
+    display: flex
+    justify-content: center
+    align-items: center
+    border-radius: 16px
+    padding: 64px
     font-size: 14px
 
-  .metric
-    width: 100%
-    table-layout: fixed
-    border-collapse: collapse
+#report-desktop
+  display: none
 
-    td, th
-      border: 1px solid #07f
-      padding: 8px
-
-  .screenshot
-    padding-top: 16px
-
-    img
-      max-width: 100%
-
-.progress-message
-  padding: 8px
+.summary-domain
   text-align: center
+
+
+  .audited-url
+    font-size: 24px
+    line-height: 40px
+    padding-bottom: 24px
+    color: #1268b3
+    font-weight: 500
+    overflow: hidden
+    text-overflow: ellipsis
+
+  .summary-description
+    display: inline-block
+    text-align: left
+
+    .summary-message
+      color: #6c6c6c
+
+    .gauge-scale
+      color: #6c6c6c
+
+      .range::before
+        content: ''
+        width: 16px;
+        height: 8px
+        border-radius: 4px
+        display: inline-block
+        margin: 0px 8px
+
+      .range.fast::before
+        background-color: #178239
+
+      .range.average::before
+        background-color: #e67700
+
+      .range.slow::before
+        background-color: #c7221f
+
+.progress-description
+  font-size: $font-size__h3
+  line-height: $line-height__h3
+  padding-bottom: 8px

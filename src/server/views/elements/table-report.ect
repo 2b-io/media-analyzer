@@ -1,0 +1,34 @@
+<div class="table-report">
+  <div class="score-report">
+    <% include 'elements/circle-chart', {
+      value:  Math.round(@score),
+      info:  Math.round(@score)
+    } %>
+  </div>
+  <div class="title-report">
+    <h1><%= @titleReport %></h1>
+  </div>
+  <div class="report-description">
+    <%- @scoreDescription %>
+  </div>
+  <div class="report-info">
+    <% include 'elements/small-circle-chart', {
+      value: @loadTimePercent,
+      info: @loadTime,
+      titleReport: 'Load Time'
+    } %>
+    <% include 'elements/small-circle-chart', {
+      value: @pageSizePercent,
+      info: @pageSize,
+      titleReport: 'Page Size'
+    } %>
+  </div>
+  <div class="report-description">
+    It takes <strong><%= @loadTime %></strong> from the start of initial navigation until the begining of the window load event (onload). The webpage weighs <strong><%= @pageSize %></strong>, which makes users wait and <a href="https://whatdoesmysitecost.com/#usdCost">costs money</a> to download over metered networks.
+  </div>
+  <% if @degrade : %>
+    <div class="degrade-inform">
+      Your original webpage is too good for us to further optimize OR our server is too busy to analyze your webpage. Please try again later.
+    </div>
+  <% end %>
+</div>

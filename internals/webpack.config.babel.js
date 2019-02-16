@@ -29,7 +29,8 @@ export default {
   output: {
     path: outDir,
     filename: 'js/[name].[hash:6].js',
-    publicPath: `${ cdn }/assets`
+    publicPath: `${ cdn }/assets`,
+    pathinfo: false
   },
   plugins: [
     new CleanWebpackPlugin([ outDir ], {

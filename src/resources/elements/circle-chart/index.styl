@@ -1,0 +1,72 @@
+.flex-wrapper
+  display: flex
+  justify-content: center
+  flex-flow: row nowrap
+
+.single-chart
+  width: 250px
+  justify-content: space-around
+
+.circular-chart
+  display: block
+  max-width: 250px
+  max-height: 135px
+
+.circle-bg
+  fill: #ebebeb
+  stroke: #bbb
+  stroke-width: 3.0
+
+.circle
+  fill: none
+  stroke-width: 2.5
+  stroke-linecap: round
+  animation: progress 1s ease-out forwards
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100
+  }
+}
+
+.circular-chart.orange .circle {
+  stroke: #E67700
+}
+
+.circular-chart.green .circle {
+  stroke: #178239
+}
+
+.circular-chart.red .circle {
+  stroke: #C7221F
+}
+
+.circular-chart.blue .circle {
+  stroke: #1268b3
+}
+
+.circular-chart.small {
+  max-height: 100px
+}
+
+.small-circle-chart-title
+  text-align: center
+  padding-top: 8px
+  font-weight: 500
+  font-size: 14px
+
+.percentage
+  fill: #666
+  font-family: 'Maven Pro', sans-serif
+  font-size: 0.45em
+  font-weight: 500
+  text-anchor: middle
+
+.percentage.red
+  fill: #C7221F
+
+.percentage.orange
+  fill: #E67700
+
+.percentage.green
+  fill: #178239

@@ -1,55 +1,17 @@
-@require '~style/reset'
-@require '~style/typo'
+@require '~style/base'
+@require '~style/layout'
+@require '~elements/contact-form'
+@require '~elements/footer'
+@require '~elements/header'
 
-.navbar
-  appearance: none
-  overflow: hidden
-  background-color: #07f
-  color: white
-  text-align: center
+.introduction
+  display: grid
+  margin: auto
+  grid-template-columns: 1fr 1fr
+  grid-gap: 24px
+  color: #6c6c6c
 
-.navbar-container {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: bold;
-}
-.center-form
-  max-width: 640px
-  margin: auto;
-  padding-top: 256px
-  padding-bottom: 64px
-
-  form
-    display: grid
-    grid-template-columns: 1fr 128px
-    grid-gap: 8px
-
-    .analyze-input
-      height: 40px
-      padding: 8px
-
-    .analyze-button
-      border: none
-      background: #07f
-      color: white
-      cursor: pointer
-
-      &:hover
-        transition: opacity .3s
-        opacity: 0.8
-
-  .description
-    padding: 8px
-    line-height: 24px
-    text-align: center
-
-.recent-reports
-  padding: 16px
-
-  table
-    width: 100%
-    border-collapse: collapse
-
-    th, td
-      border: 1px solid #07f
-      padding: 8px
+  .title-content
+    font-weight: 500
+    font-size: 14px
+    color: #111111
