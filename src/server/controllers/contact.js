@@ -9,7 +9,7 @@ const SCHEMA = joi.object().keys({
   name: joi.string().trim().required(),
   email: joi.string().lowercase().email().required(),
   company: joi.string().allow('').trim(),
-  content: joi.string().allow('').trim(),
+  content: joi.string().trim().required(),
   phone: joi.number().allow(''),
   token: joi.string().trim()
 })
@@ -34,9 +34,10 @@ export default {
           return res.sendStatus(BAD_REQUEST)
         }
 
-        await contact.update(values)
+        await contact.create(values)
         res.render('pages/contact')
       } catch (e) {
+        console.log('e', e);
         return res.sendStatus(BAD_REQUEST)
       }
     }
