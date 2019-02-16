@@ -154,7 +154,8 @@ const initBrowser = async (params) => {
       '--disable-dev-shm-usage',
       '--window-size=1440,900',
       '--proxy-server="direct://"',
-      '--proxy-bypass-list=*'
+      '--proxy-bypass-list=*',
+      '--enable-features=NetworkService'
     ],
     ignoreHTTPSErrors: true
   })

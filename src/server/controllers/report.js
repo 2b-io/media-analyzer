@@ -27,7 +27,7 @@ export default {
         return res.redirect('/')
       }
 
-      if (!report.finish) {
+      if (!report.finish || !report.desktop || !report.mobile) {
         res.render('pages/report', { report })
       }
 
@@ -86,37 +86,37 @@ export default {
         }
       }
 
-      // const target = {
-      //   loadTime: ms('1s'),
-      //   pageSize: 2000000 // ~2mb
-      // }
-
       const target = {
-        loadTime: 0,
-        pageSize: 0
+        loadTime: ms('1s'),
+        pageSize: 1000000 // ~2mb
       }
+
+      // const target = {
+      //   loadTime: 0,
+      //   pageSize: 0
+      // }
 
       const needImprove = {
         desktop: {
           score: 100 - metrics.desktop.score.original,
           loadTime: {
-            original: metrics.desktop.loadTime.original - target.loadTime,
-            optimized: metrics.desktop.loadTime.optimized - target.loadTime
+            original: Math.max(1, metrics.desktop.loadTime.original - target.loadTime),
+            optimized: Math.max(1, metrics.desktop.loadTime.optimized - target.loadTime)
           },
           pageSize: {
-            original: metrics.desktop.pageSize.original - target.pageSize,
-            optimized: metrics.desktop.pageSize.optimized - target.pageSize
+            original: Math.max(1, metrics.desktop.pageSize.original - target.pageSize),
+            optimized: Math.max(1, metrics.desktop.pageSize.optimized - target.pageSize)
           }
         },
         mobile: {
           score: 100 - metrics.mobile.score.original,
           loadTime: {
-            original: metrics.mobile.loadTime.original - target.loadTime,
-            optimized: metrics.mobile.loadTime.optimized - target.loadTime
+            original: Math.max(1, metrics.mobile.loadTime.original - target.loadTime),
+            optimized: Math.max(1, metrics.mobile.loadTime.optimized - target.loadTime)
           },
           pageSize: {
-            original: metrics.mobile.pageSize.original - target.pageSize,
-            optimized: metrics.mobile.pageSize.optimized - target.pageSize
+            original: Math.max(1, metrics.mobile.pageSize.original - target.pageSize),
+            optimized: Math.max(1, metrics.mobile.pageSize.optimized - target.pageSize)
           }
         }
       }
@@ -133,8 +133,8 @@ export default {
       }
 
       const optimizedScore = {
-        desktop: Math.max(0, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
-        mobile: Math.max(0, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
+        desktop: Math.max(1, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
+        mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
       }
 
       // return res.json({
