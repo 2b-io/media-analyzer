@@ -6,7 +6,7 @@ const recaptcha = async (token) => {
   const response = await request.post(config.googleRecaptchaUrl)
     .type('form')
     .send({
-      secret: config.googleGoogleRecaptchaApiKey,
+      secret: config.googleRecaptchaSecretKey,
       response: token
     })
 

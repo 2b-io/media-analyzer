@@ -18,6 +18,7 @@ export default {
   googlePageSpeedApiKey: process.env.GOOGLE_PAGE_SPEED_API_KEY,
   googlePageSpeedUrl: process.env.GOOGLE_PAGE_SPEED_URL,
   // google recaptcha
-  googleGoogleRecaptchaApiKey: process.env.GOOGLE_RECAPTCHA_API_KEY,
+  googleRecaptchaSecretKey: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
+  googleRecaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
   googleRecaptchaUrl: process.env.GOOGLE_RECAPTCHA_URL
 }

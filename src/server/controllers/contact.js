@@ -20,21 +20,18 @@ export default {
     async (req, res, next) => {
       try {
         const body = req.body
-        const token = body['g-recaptcha-response']
+        const { token } = body
 
         if (!token) {
           return res.sendStatus(BAD_REQUEST)
         }
 
-        delete body['g-recaptcha-response']
-
-        const params = { ...body, token }
         const values = await joi.validate(body, SCHEMA)
 
         const result = await recaptcha(token)
 
         if (!result.success) {
-          return
+          return res.sendStatus(BAD_REQUEST)
         }
 
         await contact.update(values)
