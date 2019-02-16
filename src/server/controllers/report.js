@@ -18,145 +18,151 @@ const SCHEMA = joi.object().keys({
 export default {
   get: [
     async (req, res, next) => {
-      const { identifier } = req.params
+      try {
+        const { identifier } = req.params
 
-      const report = await reportService.get(identifier)
+        const report = await reportService.get(identifier)
 
-      if (!report || report.error) {
-        // return res.sendStatus(NOT_FOUND)
-        return res.redirect('/')
-      }
-
-      if (!report.finish || !report.desktop || !report.mobile) {
-        res.render('pages/report', { report })
-      }
-
-      // calculate optimized score here
-      const {
-        desktop: {
-          original: {
-            loadTime: desktopOriginalLoadTime,
-            downloadedBytes: desktopOriginalPageSize
-          },
-          optimized: {
-            loadTime: desktopOptimizedLoadTime,
-            downloadedBytes: desktopOptimizedPageSize
-          },
-          originalPerformanceScore: desktopOriginalScore
-        },
-        mobile: {
-          original: {
-            loadTime: mobileOriginalLoadTime,
-            downloadedBytes: mobileOriginalPageSize
-          },
-          optimized: {
-            loadTime: mobileOptimizedLoadTime,
-            downloadedBytes: mobileOptimizedPageSize
-          },
-          originalPerformanceScore: mobileOriginalScore
+        if (!report || report.error) {
+          // return res.sendStatus(NOT_FOUND)
+          return res.redirect('/')
         }
-      } = report
 
-      const metrics = {
-        desktop: {
-          score: {
-            original: desktopOriginalScore
-          },
-          loadTime: {
-            original: desktopOriginalLoadTime,
-            optimized: desktopOptimizedLoadTime
-          },
-          pageSize: {
-            original: desktopOriginalPageSize,
-            optimized: desktopOptimizedPageSize
-          }
-        },
-        mobile: {
-          score: {
-            original: mobileOriginalScore
-          },
-          loadTime: {
-            original: mobileOriginalLoadTime,
-            optimized: mobileOptimizedLoadTime
-          },
-          pageSize: {
-            original: mobileOriginalPageSize,
-            optimized: mobileOptimizedPageSize
-          }
+        if (!report.finish || !report.desktop || !report.mobile) {
+          res.render('pages/report', { report })
         }
-      }
 
-      const target = {
-        loadTime: ms('1s'),
-        pageSize: 1000000 // ~2mb
-      }
-
-      // const target = {
-      //   loadTime: 0,
-      //   pageSize: 0
-      // }
-
-      const needImprove = {
-        desktop: {
-          score: 100 - metrics.desktop.score.original,
-          loadTime: {
-            original: Math.max(1, metrics.desktop.loadTime.original - target.loadTime),
-            optimized: Math.max(1, metrics.desktop.loadTime.optimized - target.loadTime)
-          },
-          pageSize: {
-            original: Math.max(1, metrics.desktop.pageSize.original - target.pageSize),
-            optimized: Math.max(1, metrics.desktop.pageSize.optimized - target.pageSize)
-          }
-        },
-        mobile: {
-          score: 100 - metrics.mobile.score.original,
-          loadTime: {
-            original: Math.max(1, metrics.mobile.loadTime.original - target.loadTime),
-            optimized: Math.max(1, metrics.mobile.loadTime.optimized - target.loadTime)
-          },
-          pageSize: {
-            original: Math.max(1, metrics.mobile.pageSize.original - target.pageSize),
-            optimized: Math.max(1, metrics.mobile.pageSize.optimized - target.pageSize)
-          }
-        }
-      }
-
-      const penaltyScore = {
-        desktop: {
-          loadTime: (needImprove.desktop.score / 3 * 2) * needImprove.desktop.loadTime.optimized / needImprove.desktop.loadTime.original,
-          pageSize: (needImprove.desktop.score / 3) * needImprove.desktop.pageSize.optimized / needImprove.desktop.pageSize.original
-        },
-        mobile: {
-          loadTime: (needImprove.mobile.score / 3 * 2) * needImprove.mobile.loadTime.optimized / needImprove.mobile.loadTime.original,
-          pageSize: (needImprove.mobile.score / 3) * needImprove.mobile.pageSize.optimized / needImprove.mobile.pageSize.original
-        }
-      }
-
-      const optimizedScore = {
-        desktop: Math.max(1, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
-        mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
-      }
-
-      // return res.json({
-      //   optimizedScore,
-      //   metrics,
-      //   needImprove,
-      //   penaltyScore
-      // })
-
-      res.render('pages/report', {
-        report: {
-          ...report,
+        // calculate optimized score here
+        const {
           desktop: {
-            ...report.desktop,
-            optimizedPerformanceScore: optimizedScore.desktop
+            original: {
+              loadTime: desktopOriginalLoadTime,
+              downloadedBytes: desktopOriginalPageSize
+            },
+            optimized: {
+              loadTime: desktopOptimizedLoadTime,
+              downloadedBytes: desktopOptimizedPageSize
+            },
+            originalPerformanceScore: desktopOriginalScore
           },
           mobile: {
-            ...report.mobile,
-            optimizedPerformanceScore: optimizedScore.mobile
+            original: {
+              loadTime: mobileOriginalLoadTime,
+              downloadedBytes: mobileOriginalPageSize
+            },
+            optimized: {
+              loadTime: mobileOptimizedLoadTime,
+              downloadedBytes: mobileOptimizedPageSize
+            },
+            originalPerformanceScore: mobileOriginalScore
+          }
+        } = report
+
+        const metrics = {
+          desktop: {
+            score: {
+              original: desktopOriginalScore
+            },
+            loadTime: {
+              original: desktopOriginalLoadTime,
+              optimized: desktopOptimizedLoadTime
+            },
+            pageSize: {
+              original: desktopOriginalPageSize,
+              optimized: desktopOptimizedPageSize
+            }
+          },
+          mobile: {
+            score: {
+              original: mobileOriginalScore
+            },
+            loadTime: {
+              original: mobileOriginalLoadTime,
+              optimized: mobileOptimizedLoadTime
+            },
+            pageSize: {
+              original: mobileOriginalPageSize,
+              optimized: mobileOptimizedPageSize
+            }
           }
         }
-      })
+
+        const target = {
+          loadTime: ms('1s'),
+          pageSize: 1000000 // ~2mb
+        }
+
+        // const target = {
+        //   loadTime: 0,
+        //   pageSize: 0
+        // }
+
+        const needImprove = {
+          desktop: {
+            score: 100 - metrics.desktop.score.original,
+            loadTime: {
+              original: Math.max(1, metrics.desktop.loadTime.original - target.loadTime),
+              optimized: Math.max(1, metrics.desktop.loadTime.optimized - target.loadTime)
+            },
+            pageSize: {
+              original: Math.max(1, metrics.desktop.pageSize.original - target.pageSize),
+              optimized: Math.max(1, metrics.desktop.pageSize.optimized - target.pageSize)
+            }
+          },
+          mobile: {
+            score: 100 - metrics.mobile.score.original,
+            loadTime: {
+              original: Math.max(1, metrics.mobile.loadTime.original - target.loadTime),
+              optimized: Math.max(1, metrics.mobile.loadTime.optimized - target.loadTime)
+            },
+            pageSize: {
+              original: Math.max(1, metrics.mobile.pageSize.original - target.pageSize),
+              optimized: Math.max(1, metrics.mobile.pageSize.optimized - target.pageSize)
+            }
+          }
+        }
+
+        const penaltyScore = {
+          desktop: {
+            loadTime: (needImprove.desktop.score / 3 * 2) * needImprove.desktop.loadTime.optimized / needImprove.desktop.loadTime.original,
+            pageSize: (needImprove.desktop.score / 3) * needImprove.desktop.pageSize.optimized / needImprove.desktop.pageSize.original
+          },
+          mobile: {
+            loadTime: (needImprove.mobile.score / 3 * 2) * needImprove.mobile.loadTime.optimized / needImprove.mobile.loadTime.original,
+            pageSize: (needImprove.mobile.score / 3) * needImprove.mobile.pageSize.optimized / needImprove.mobile.pageSize.original
+          }
+        }
+
+        const optimizedScore = {
+          desktop: Math.max(1, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
+          mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
+        }
+
+        // return res.json({
+        //   optimizedScore,
+        //   metrics,
+        //   needImprove,
+        //   penaltyScore
+        // })
+
+        res.render('pages/report', {
+          report: {
+            ...report,
+            desktop: {
+              ...report.desktop,
+              optimizedPerformanceScore: optimizedScore.desktop
+            },
+            mobile: {
+              ...report.mobile,
+              optimizedPerformanceScore: optimizedScore.mobile
+            }
+          }
+        })
+      } catch (e) {
+        console.error(e)
+
+        return res.redirect('/')
+      }
     }
   ],
   post: [
@@ -197,9 +203,10 @@ export default {
 
           console.error(e)
         }
-
       } catch (e) {
-        return res.sendStatus(500)
+        console.error(e)
+
+        return res.redirect('/')
       }
     }
   ]
