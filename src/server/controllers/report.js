@@ -29,7 +29,7 @@ export default {
         }
 
         if (!report.finish || !report.desktop || !report.mobile) {
-          res.render('pages/report', { report })
+          return res.render('pages/report', { report })
         }
 
         // calculate optimized score here
