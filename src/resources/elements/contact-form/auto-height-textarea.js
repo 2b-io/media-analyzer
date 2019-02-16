@@ -28,7 +28,7 @@ grecaptcha.ready(() => {
     const company = formData.get('company')
     const content = formData.get('content')
 
-    const token = await grecaptcha.execute('6LdQp5EUAAAAAIdiADbkjQ2HKpi2HZ8qcKIQ9Tug', {
+    const token = await grecaptcha.execute(RECAPTCHA_KEY, {
       action: 'contact'
     })
 
