@@ -28,7 +28,7 @@ export default {
       }
 
       if (!report.finish) {
-        res.render('pages/report', { report })
+        res.render('pages/report', { report, googleRecaptchaSiteKey: config.googleRecaptchaSiteKey })
       }
 
       // calculate optimized score here
@@ -155,7 +155,8 @@ export default {
             ...report.mobile,
             optimizedPerformanceScore: optimizedScore.mobile
           }
-        }
+        },
+      googleRecaptchaSiteKey: config.googleRecaptchaSiteKey
       })
     }
   ],

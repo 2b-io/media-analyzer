@@ -1,8 +1,11 @@
+import config from 'infrastructure/config'
+
 export default {
   get: [
     (req, res, next) => {
       res.render('pages/home', {
-        reports: []
+        reports: [],
+        googleRecaptchaSiteKey: config.googleRecaptchaSiteKey
       })
     }
   ]
