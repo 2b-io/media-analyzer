@@ -7,6 +7,7 @@ import puppeteer from 'puppeteer'
 import devices from 'puppeteer/DeviceDescriptors'
 
 import config from 'infrastructure/config'
+import adBlocker from 'services/adblock'
 import googlePageSpeedService from 'services/google-page-speed'
 import reportService from 'services/report'
 
@@ -16,6 +17,13 @@ const setRequestImage = (page, images) => {
     const url = request.url()
 
     if (request.resourceType() === 'image') {
+      // check ads
+      if (adBlocker.isAdvertisement(url)) {
+        // don't optimize advertisement media
+        console.log(`[adblock] skip ${ url }`)
+        return request.continue()
+      }
+
       if (images[url] && images[url].optimizedUrl) {
         return request.continue({
           url: images[url].optimizedUrl
@@ -154,7 +162,8 @@ const initBrowser = async (params) => {
       '--disable-dev-shm-usage',
       '--window-size=1440,900',
       '--proxy-server="direct://"',
-      '--proxy-bypass-list=*'
+      '--proxy-bypass-list=*',
+      '--enable-features=NetworkService'
     ],
     ignoreHTTPSErrors: true
   })

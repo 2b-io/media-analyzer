@@ -2,16 +2,17 @@ import hash from '@emotion/hash'
 
 import ContactModel from 'models/contact'
 
-const update = async (data) => {
-  const contact = await ContactModel.findOneAndUpdate({
-    identifier: hash(data.email)
-  }, data, {
-    upsert: true,
-    new: true
-  }).lean()
+const create = async ({ email, name, phone, company, content }) => {
+  const contact = await new ContactModel({
+    email,
+    name,
+    phone,
+    company,
+    content
+  }).save()
 
   return contact
 }
 export default {
-  update
+  create
 }

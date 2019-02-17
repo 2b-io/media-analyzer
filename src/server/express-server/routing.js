@@ -3,10 +3,12 @@ import prettyBytes from 'pretty-bytes'
 import prettyMs from 'pretty-ms'
 
 import * as controllers from 'controllers'
+import config from 'infrastructure/config'
 
 export default (app) => {
   app.locals.prettyBytes = (value) => value ? prettyBytes(value) : 'N/A'
   app.locals.prettyMs = (value) => value ? prettyMs(value) : 'N/A'
+  app.locals.googleRecaptchaSiteKey = config.googleRecaptchaSiteKey
 
   app.get('/', controllers.home.get)
 

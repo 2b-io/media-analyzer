@@ -3,13 +3,13 @@
     <div class="form-title">
       <h1>GET IN TOUCH</h1>
     </div>
-    <form class="contact-form" action="/contact" method="post">
+    <form id="formContact" class="contact-form" action="/contact" method="post" enctype="application/x-www-form-urlencoded">
       <div class="groups-input-form">
-        <input type="text" name="name" class="input-line" placeholder="Name">
-        <input type="text" name="email" class="input-line" placeholder="Email">
+        <input id="nameContact" type="text" name="name" class="input-line" placeholder="Name*" required>
+        <input id="emailContact" type="email" name="email" class="input-line" placeholder="Email*" required>
         <input type="text" name="company" class="input-line" placeholder="Company Name">
         <input type="text" name="phone" class="input-line" placeholder="Phone Number">
-        <textarea rows="1" cols="1" name="content" placeholder="Content" class="input-line multi-line"></textarea>
+        <textarea rows="1" cols="1" name="content" placeholder="Content*" class="input-line multi-line" required></textarea>
       </div>
       <button type="submit" class="send-button">Send</button>
     </form>

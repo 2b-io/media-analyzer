@@ -9,7 +9,7 @@ const SCHEMA = joi.object().keys({
   name: joi.string().trim().required(),
   email: joi.string().lowercase().email().required(),
   company: joi.string().allow('').trim(),
-  content: joi.string().allow('').trim(),
+  content: joi.string().trim().required(),
   phone: joi.number().allow(''),
   token: joi.string().trim()
 })
@@ -20,26 +20,24 @@ export default {
     async (req, res, next) => {
       try {
         const body = req.body
-        const token = body['g-recaptcha-response']
+        const { token } = body
 
         if (!token) {
           return res.sendStatus(BAD_REQUEST)
         }
 
-        delete body['g-recaptcha-response']
-
-        const params = { ...body, token }
         const values = await joi.validate(body, SCHEMA)
 
         const result = await recaptcha(token)
 
         if (!result.success) {
-          return
+          return res.sendStatus(BAD_REQUEST)
         }
 
-        await contact.update(values)
+        await contact.create(values)
         res.render('pages/contact')
       } catch (e) {
+        console.log('e', e);
         return res.sendStatus(BAD_REQUEST)
       }
     }

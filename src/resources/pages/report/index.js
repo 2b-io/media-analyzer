@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import 'elements/contact-form/auto-height-textarea'
 
-window.addEventListener('load', () => {
+const listenSocket = () => {
   if (REPORT.finish) {
     return
   }
@@ -39,6 +39,7 @@ window.addEventListener('load', () => {
 
   socket.on('analyze:progress', (data) => {
     console.log('data.payload',  data.payload)
+
     const { message, step, total } = data.payload.message
     const percentProgress = (step * 100) / total
 
@@ -53,18 +54,32 @@ window.addEventListener('load', () => {
   socket.on('analyze:failure', (data) => {
     document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
   })
+}
+
+const handleTabs = () => {
+  if (!REPORT.finish) {
+    return
+  }
+
+  document.getElementById('tab-mobile').addEventListener('click', () => {
+    document.getElementById('report-mobile').style.display = 'grid'
+    document.getElementById('report-desktop').style.display = 'none'
+    document.getElementById('tab-mobile').className = 'elements-tab-active'
+    document.getElementById('tab-desktop').className = 'elements-tab'
+  })
+
+  document.getElementById('tab-desktop').addEventListener('click', () => {
+    document.getElementById('report-desktop').style.display = 'grid'
+    document.getElementById('report-mobile').style.display = 'none'
+    document.getElementById('tab-desktop').className = 'elements-tab-active'
+    document.getElementById('tab-mobile').className = 'elements-tab'
+  })
+}
+
+window.addEventListener('load', () => {
+  listenSocket()
+
+  handleTabs()
 })
 
-function openTab (e, tabName) {
-  document.getElementById('report-mobile').style.display = "grid";
-  document.getElementById('report-desktop').style.display = "none";
-  document.getElementById('element-tab-mobile').className = "elements-tab-active";
-  document.getElementById('element-tab-desktop').className = "elements-tab";
 
-  if (tabName === 'report-desktop') {
-    document.getElementById('report-desktop').style.display = "grid";
-    document.getElementById('report-mobile').style.display = "none";
-    document.getElementById('element-tab-desktop').className = "elements-tab-active";
-    document.getElementById('element-tab-mobile').className = "elements-tab";
-  }
-}
