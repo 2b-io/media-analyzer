@@ -23,39 +23,35 @@ export default {
 
         const report = await reportService.get(identifier)
 
-        if (!report || report.error) {
+        if (!report) {
           // return res.sendStatus(NOT_FOUND)
           return res.redirect('/')
         }
 
-        if (!report.finish || !report.desktop || !report.mobile) {
+        if (!report.finish) {
           return res.render('pages/report', { report })
         }
 
         // calculate optimized score here
         const {
-          desktop: {
-            original: {
-              loadTime: desktopOriginalLoadTime,
-              downloadedBytes: desktopOriginalPageSize
-            },
-            optimized: {
-              loadTime: desktopOptimizedLoadTime,
-              downloadedBytes: desktopOptimizedPageSize
-            },
-            originalPerformanceScore: desktopOriginalScore
+          desktopOriginalData: {
+            loadTime: desktopOriginalLoadTime,
+            downloadedBytes: desktopOriginalPageSize
           },
-          mobile: {
-            original: {
-              loadTime: mobileOriginalLoadTime,
-              downloadedBytes: mobileOriginalPageSize
-            },
-            optimized: {
-              loadTime: mobileOptimizedLoadTime,
-              downloadedBytes: mobileOptimizedPageSize
-            },
-            originalPerformanceScore: mobileOriginalScore
-          }
+          desktopOptimizedData: {
+            loadTime: desktopOptimizedLoadTime,
+            downloadedBytes: desktopOptimizedPageSize
+          },
+          desktopOriginalScore,
+          mobileOriginalData: {
+            loadTime: mobileOriginalLoadTime,
+            downloadedBytes: mobileOriginalPageSize
+          },
+          mobileOptimizedData: {
+            loadTime: mobileOptimizedLoadTime,
+            downloadedBytes: mobileOptimizedPageSize
+          },
+          mobileOriginalScore
         } = report
 
         const metrics = {
@@ -148,14 +144,10 @@ export default {
         res.render('pages/report', {
           report: {
             ...report,
-            desktop: {
-              ...report.desktop,
-              optimizedPerformanceScore: optimizedScore.desktop
-            },
-            mobile: {
-              ...report.mobile,
-              optimizedPerformanceScore: optimizedScore.mobile
-            }
+            ...report.desktop,
+            desktopOptimizedScore: optimizedScore.desktop,
+            ...report.mobile,
+            mobileOptimizedScore: optimizedScore.mobile
           }
         })
       } catch (e) {

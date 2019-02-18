@@ -73,58 +73,10 @@ const updateProgress = async (identifier, message) => {
   return report
 }
 
-const updateReportOriginPage = async (identifier, data) => {
-  const report = await ReportModel.findOneAndUpdate({
-    identifier
-  }, {
-    $push: {
-      origins: data
-    }
-  }, {
-    upsert: true,
-    new: true
-  }).lean()
-
-  const socketServer = getSocketServer()
-
-  socketServer.emit('report origin', {
-    payload: {
-      message: data
-    }
-  })
-
-  return report
-}
-
-const updateReportOptimizePage = async (identifier, data) => {
-  const report = await ReportModel.findOneAndUpdate({
-    identifier
-  }, {
-    $push: {
-      optimize: data
-    }
-  }, {
-    upsert: true,
-    new: true
-  }).lean()
-
-  const socketServer = getSocketServer()
-
-  socketServer.emit('report optimize', {
-    payload: {
-      message: data
-    }
-  })
-
-  return report
-}
-
 export default {
   create,
   get,
   list,
   update,
-  updateReportOriginPage,
-  updateReportOptimizePage,
   updateProgress
 }

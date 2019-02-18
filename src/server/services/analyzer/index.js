@@ -232,6 +232,10 @@ export const analyze = async (params) => {
       state.url = location.href
       state.desktopOriginal = result
 
+      await reportService.update(identifier, {
+        url: state.url,
+        desktopOriginalData: state.desktopOriginal
+      })
       // collection <img> tags
       const imgTags = await originDesktopPage.evaluate(() => {
         const tags = document.querySelectorAll('img')
@@ -339,6 +343,10 @@ export const analyze = async (params) => {
       console.log(result)
 
       state.desktopOtimized = result
+
+      await reportService.update(identifier, {
+        desktopOptimizedData: state.desktopOtimized
+      })
     } catch (e) {
       throw e
     } finally {
@@ -374,6 +382,10 @@ export const analyze = async (params) => {
       console.log(originalMobileResult)
 
       state.mobileOriginal = originalMobileResult
+
+      await reportService.update(identifier, {
+        mobileOriginalData: state.mobileOriginal
+      })
     } catch (e) {
       throw e
     } finally {
@@ -407,6 +419,9 @@ export const analyze = async (params) => {
 
       state.mobileOptimized = resultMobileOtimized
 
+      await reportService.update(identifier, {
+        mobileOptimizedData: state.mobileOptimized
+      })
     } catch (e) {
       throw e
     } finally {
@@ -415,75 +430,71 @@ export const analyze = async (params) => {
       console.log('Optimized mobile page closed')
     }
 
-    await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
+    try {
+      await reportService.updateProgress(identifier, 'Google page speed test desktop mode...')
 
-    const googlePageSpeedDesktopData = await googlePageSpeedService(
-      url,
-      { strategy: 'desktop' }
-    )
+      const googlePageSpeedDesktopData = await googlePageSpeedService(
+        url,
+        { strategy: 'desktop' }
+      )
 
-    await reportService.updateProgress(identifier, 'Google page speed test desktop... done')
+      await reportService.updateProgress(identifier, 'Google page speed test desktop... done')
 
-    const {
-      lighthouseResult: {
-        categories: {
-          performance: {
-            score: desktopScore
+      const {
+        lighthouseResult: {
+          categories: {
+            performance: {
+              score: desktopScore
+            }
           }
         }
-      }
-    } = googlePageSpeedDesktopData
+      } = googlePageSpeedDesktopData
 
-    // summary report
-    // delete screenshots & thumbnails: DATA TOO LARGE
-    googlePageSpeedDesktopData.lighthouseResult.audits['screenshot-thumbnails'] = null
-    googlePageSpeedDesktopData.lighthouseResult.audits['final-screenshot'] = null
+      // summary report
+      // delete screenshots & thumbnails: DATA TOO LARGE
+      googlePageSpeedDesktopData.lighthouseResult.audits['screenshot-thumbnails'] = null
+      googlePageSpeedDesktopData.lighthouseResult.audits['final-screenshot'] = null
 
-    await reportService.update(identifier, {
-      url: state.url,
-      desktop: {
-        original: state.desktopOriginal,
-        optimized: state.desktopOtimized,
-        originalLighthouseData: googlePageSpeedDesktopData,
-        originalPerformanceScore: desktopScore * 100,
-        // optimizePerformanceScore: Math.ceil((100 - desktopScore * 100) / 2 + desktopScore * 100)
-      }
-    })
+      await reportService.update(identifier, {
+        desktopLighthouseData: googlePageSpeedDesktopData,
+        desktopOriginalScore: desktopScore * 100
+      })
 
-    await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
+      await reportService.updateProgress(identifier, 'Google page speed test mobile mode...')
 
-    const googlePageSpeedMobileData = await googlePageSpeedService(
-      url,
-      { strategy: 'mobile' }
-    )
+      const googlePageSpeedMobileData = await googlePageSpeedService(
+        url,
+        { strategy: 'mobile' }
+      )
 
-    const {
-      lighthouseResult: {
-        categories: {
-          performance: {
-            score: mobileScore
+      const {
+        lighthouseResult: {
+          categories: {
+            performance: {
+              score: mobileScore
+            }
           }
         }
-      }
-    } = googlePageSpeedMobileData
+      } = googlePageSpeedMobileData
 
-    // delete screenshots & thumbnails: DATA TOO LARGE
-    googlePageSpeedMobileData.lighthouseResult.audits['screenshot-thumbnails'] = null
-    googlePageSpeedMobileData.lighthouseResult.audits['final-screenshot'] = null
+      // delete screenshots & thumbnails: DATA TOO LARGE
+      googlePageSpeedMobileData.lighthouseResult.audits['screenshot-thumbnails'] = null
+      googlePageSpeedMobileData.lighthouseResult.audits['final-screenshot'] = null
 
-    await reportService.updateProgress(identifier, 'Google page speed test mobile... done')
+      await reportService.updateProgress(identifier, 'Google page speed test mobile... done')
 
-    await reportService.update(identifier, {
-      mobile: {
-        original: state.mobileOriginal,
-        optimized: state.mobileOptimized,
-        originalLighthouseData: googlePageSpeedMobileData,
-        originalPerformanceScore: mobileScore * 100,
-        // optimizePerformanceScore: Math.ceil((100 - mobileScore * 100) / 2 + mobileScore * 100)
-      },
-      finish: true
-    })
-
+      await reportService.update(identifier, {
+        mobileLighthouseData: googlePageSpeedMobileData,
+        mobileOriginalScore: mobileScore * 100,
+        finish: true
+      })
+    } catch (e) {
+      console.error('error', e)
+      await reportService.update(identifier, {
+        finish: true,
+        error: true
+      })
+    }
     await reportService.updateProgress(identifier, 'Finished!')
   } catch (e) {
     throw e
