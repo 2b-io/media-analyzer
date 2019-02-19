@@ -1,25 +1,25 @@
 import ReportModel from 'models/report'
 import { getSocketServer } from 'socket-server'
 
-const STEPS = {
-  'Load origin desktop page...': 1,
-  'Load origin desktop page... done': 2,
-  'Warm up cache...': 3,
-  'Warm up cache... done': 4,
-  'Load optimized desktop page...': 5,
-  'Load optimized desktop page... done': 6,
-  'Load origin mobile page...': 7,
-  'Load origin mobile page... done': 8,
-  'Load optimized mobile page...': 9,
-  'Load optimized mobile page... done': 10,
-  'Google page speed test desktop mode...': 11,
-  'Google page speed test desktop... done': 12,
-  'Google page speed test mobile mode...': 13,
-  'Google page speed test mobile... done': 14,
-  'Finished!': 15
-}
+const STEPS = [
+  'Load origin desktop page...',
+  'Load origin desktop page... done',
+  'Warm up cache...',
+  'Warm up cache... done',
+  'Load optimized desktop page...',
+  'Load optimized desktop page... done',
+  'Load origin mobile page...',
+  'Load origin mobile page... done',
+  'Load optimized mobile page...',
+  'Load optimized mobile page... done',
+  'Google page speed test desktop mode...',
+  'Google page speed test desktop... done',
+  'Google page speed test mobile mode...',
+  'Google page speed test mobile... done',
+  'Finished!'
+]
 
-const TOTAL_STEPS = Object.keys(STEPS).length
+const TOTAL_STEPS = STEPS.length
 
 const create = async (identifier, url) => {
   return await new ReportModel({
@@ -45,8 +45,10 @@ const update = async (identifier, data) => {
 }
 
 const updateProgress = async (identifier, message) => {
+  const { progress } = await ReportModel.findOne({ identifier })
+
   const messageContent = {
-    step: STEPS[ message ],
+    step: progress.length,
     total: TOTAL_STEPS,
     message
   }
