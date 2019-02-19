@@ -16,6 +16,7 @@ const loadPage = async (page, params = {}) => {
   } = params
 
   // await page._client.send('Performance.enable')
+  await page.setCacheEnabled(false)
   await page.setViewport({
     width,
     height,

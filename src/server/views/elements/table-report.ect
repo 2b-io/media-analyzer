@@ -1,5 +1,5 @@
 <div class="table-report">
-  <% if @score :%>
+  <% if @score >=0 :%>
     <div class="score-report">
       <% include 'elements/circle-chart', {
         value:  Math.round(@score),
