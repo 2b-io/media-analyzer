@@ -4,10 +4,13 @@ import fs from 'fs-extra'
 import ms from 'ms'
 import path from 'path'
 
+import generateHar from 'services/analyzer/generate-har'
+
 const loadPage = async (page, params = {}) => {
   const {
     url,
     screenshot,
+    harName,
     width = 1440,
     height = 900,
     mode = 'load',
@@ -73,6 +76,10 @@ const loadPage = async (page, params = {}) => {
       path: screenshot
       // fullPage: true
     })
+  }
+
+  if (harName) {
+    await generateHar(page, harName)
   }
 
   const performance = JSON.parse(await page.evaluate(
