@@ -6,19 +6,37 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  desktop: {
-    original: mongoose.Schema.Types.Mixed,
-    optimized: mongoose.Schema.Types.Mixed,
-    originalLighthouseData: mongoose.Schema.Types.Mixed,
-    originalPerformanceScore: Number,
-    optimizePerformanceScore: Number
+  desktopOriginalData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
   },
-  mobile: {
-    original: mongoose.Schema.Types.Mixed,
-    optimized: mongoose.Schema.Types.Mixed,
-    originalLighthouseData: mongoose.Schema.Types.Mixed,
-    originalPerformanceScore: Number,
-    optimizePerformanceScore: Number
+  desktopOptimizedData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  mobileOriginalData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  mobileOptimizedData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  desktopLighthouseData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  desktopOriginalScore: {
+    type: Number,
+    default: 0
+  },
+  mobileLighthouseData: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  mobileOriginalScore: {
+    type: Number,
+    default: 0
   },
   images: [ {
     originUrl: String,
@@ -28,7 +46,10 @@ const schema = mongoose.Schema({
   } ],
   progress: [ mongoose.Schema.Types.Mixed ],
   finish: Boolean,
-  error: Boolean,
+  error: {
+    type: Boolean,
+    default: false
+  },
   url: String
 }, {
   timestamps: true
