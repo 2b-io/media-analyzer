@@ -28,18 +28,10 @@ const launchGooglePageSpeed = async (url, identifier, userAgent) => {
     googlePageSpeedData.lighthouseResult.audits['screenshot-thumbnails'] = null
     googlePageSpeedData.lighthouseResult.audits['final-screenshot'] = null
 
-    if (userAgent === 'mobile') {
-      await reportService.update(identifier, {
-        [ `${ userAgent }LighthouseData` ]: googlePageSpeedData,
-        [ `${ userAgent }OriginalScore` ]: performanceScore * 100,
-        finish: true
-      })
-    } else {
-      await reportService.update(identifier, {
-        [ `${ userAgent }LighthouseData` ]: googlePageSpeedData,
-        [ `${ userAgent }OriginalScore` ]: performanceScore * 100,
-      })
-    }
+    await reportService.update(identifier, {
+      [ `${ userAgent }LighthouseData` ]: googlePageSpeedData,
+      [ `${ userAgent }OriginalScore` ]: performanceScore * 100,
+    })
 
   } catch (e) {
     console.error('error', e)

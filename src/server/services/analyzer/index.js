@@ -19,6 +19,9 @@ export const analyze = async (params) => {
   } catch (e) {
     throw e
   } finally {
+    await reportService.update(identifier, {
+      finish: true
+    })
     await reportService.updateProgress(identifier, 'Finished!')
   }
 }
