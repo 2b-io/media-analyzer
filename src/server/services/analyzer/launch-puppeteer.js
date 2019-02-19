@@ -69,7 +69,8 @@ const launchPuppeteer = async (params) => {
       const result = await loadPage(originDesktopPage, {
         url,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-original.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-original.jpeg`),
+        harName: path.join(config.harDir, `${ identifier }-desktop-original.har`)
       })
 
       await reportService.updateProgress(identifier, 'Load origin desktop page... done')
@@ -190,7 +191,8 @@ const launchPuppeteer = async (params) => {
       const result = await loadPage(optimizedDesktopPage, {
         url,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`),
+        harName: path.join(config.harDir, `${ identifier }-desktop-optimized.har`)
       })
 
       console.timeEnd('Load optimized desktop page')
@@ -229,7 +231,8 @@ const launchPuppeteer = async (params) => {
         url,
         timeout,
         screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-original.jpeg`),
-        isMobile: true
+        isMobile: true,
+        harName: path.join(config.harDir, `${ identifier }-mobile-original.har`)
       })
 
       await reportService.updateProgress(identifier, 'Load origin mobile page... done')
@@ -264,7 +267,8 @@ const launchPuppeteer = async (params) => {
         url,
         timeout,
         screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-optimized.jpeg`),
-        isMobile: true
+        isMobile: true,
+        harName: path.join(config.harDir, `${ identifier }-mobile-optimized.har`)
       })
 
       console.timeEnd('Load optimize mobile page')
