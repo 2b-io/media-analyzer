@@ -28,30 +28,34 @@ export default {
           return res.redirect('/')
         }
 
-        if (!report.finish) {
+        if (!report.finish || !report.desktop || !report.mobile) {
           return res.render('pages/report', { report })
         }
 
         // calculate optimized score here
         const {
-          desktopOriginalData: {
-            loadTime: desktopOriginalLoadTime,
-            downloadedBytes: desktopOriginalPageSize
+          desktop: {
+            original: {
+              loadTime: desktopOriginalLoadTime,
+              downloadedBytes: desktopOriginalPageSize
+            },
+            optimized: {
+              loadTime: desktopOptimizedLoadTime,
+              downloadedBytes: desktopOptimizedPageSize
+            },
+            originalPerformanceScore: desktopOriginalScore
           },
-          desktopOptimizedData: {
-            loadTime: desktopOptimizedLoadTime,
-            downloadedBytes: desktopOptimizedPageSize
-          },
-          desktopOriginalScore,
-          mobileOriginalData: {
-            loadTime: mobileOriginalLoadTime,
-            downloadedBytes: mobileOriginalPageSize
-          },
-          mobileOptimizedData: {
-            loadTime: mobileOptimizedLoadTime,
-            downloadedBytes: mobileOptimizedPageSize
-          },
-          mobileOriginalScore
+          mobile: {
+            original: {
+              loadTime: mobileOriginalLoadTime,
+              downloadedBytes: mobileOriginalPageSize
+            },
+            optimized: {
+              loadTime: mobileOptimizedLoadTime,
+              downloadedBytes: mobileOptimizedPageSize
+            },
+            originalPerformanceScore: mobileOriginalScore
+          }
         } = report
 
         const metrics = {
@@ -144,10 +148,14 @@ export default {
         res.render('pages/report', {
           report: {
             ...report,
-            ...report.desktop,
-            desktopOptimizedScore: optimizedScore.desktop,
-            ...report.mobile,
-            mobileOptimizedScore: optimizedScore.mobile
+            desktop: {
+              ...report.desktop,
+              optimizedPerformanceScore: optimizedScore.desktop
+            },
+            mobile: {
+              ...report.mobile,
+              optimizedPerformanceScore: optimizedScore.mobile
+            }
           }
         })
       } catch (e) {
@@ -196,8 +204,6 @@ export default {
           console.error(e)
         }
       } catch (e) {
-        console.error(e)
-
         return res.redirect('/')
       }
     }

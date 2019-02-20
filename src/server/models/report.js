@@ -6,37 +6,37 @@ const schema = mongoose.Schema({
     required: true,
     unique: true
   },
-  desktopOriginalData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
+  desktop: {
+    original: mongoose.Schema.Types.Mixed,
+    optimized: mongoose.Schema.Types.Mixed,
+    originalLighthouseData:  {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
+    },
+    originalPerformanceScore: {
+      type: Number,
+      default: 0
+    },
+    optimizePerformanceScore: {
+      type: Number,
+      default: 0
+    }
   },
-  desktopOptimizedData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
-  },
-  mobileOriginalData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
-  },
-  mobileOptimizedData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
-  },
-  desktopLighthouseData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
-  },
-  desktopOriginalScore: {
-    type: Number,
-    default: 0
-  },
-  mobileLighthouseData: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {}
-  },
-  mobileOriginalScore: {
-    type: Number,
-    default: 0
+  mobile: {
+    original: mongoose.Schema.Types.Mixed,
+    optimized: mongoose.Schema.Types.Mixed,
+    originalLighthouseData: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
+    },
+    originalPerformanceScore: {
+      type: Number,
+      default: 0
+    },
+    optimizePerformanceScore: {
+      type: Number,
+      default: 0
+    }
   },
   images: [ {
     originUrl: String,
@@ -46,10 +46,7 @@ const schema = mongoose.Schema({
   } ],
   progress: [ mongoose.Schema.Types.Mixed ],
   finish: Boolean,
-  error: {
-    type: Boolean,
-    default: false
-  },
+  error: Boolean,
   url: String
 }, {
   timestamps: true

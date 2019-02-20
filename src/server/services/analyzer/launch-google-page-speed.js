@@ -29,8 +29,10 @@ const launchGooglePageSpeed = async (url, identifier, userAgent) => {
     googlePageSpeedData.lighthouseResult.audits['final-screenshot'] = null
 
     await reportService.update(identifier, {
-      [ `${ userAgent }LighthouseData` ]: googlePageSpeedData,
-      [ `${ userAgent }OriginalScore` ]: performanceScore * 100,
+      $set: {
+        [ `${ userAgent }.originalLighthouseData` ]: googlePageSpeedData,
+        [ `${ userAgent }.originalPerformanceScore` ]: performanceScore * 100
+      }
     })
 
   } catch (e) {

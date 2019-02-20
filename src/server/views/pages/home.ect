@@ -1,12 +1,15 @@
 <% extend './layout' %>
 
 <% block 'body-end' :%>
-<% if @__asset('home.js') :%>
-  <script src="<%= @__asset('home.js') %>" defer></script>
+  <% if @__asset('home.js') :%>
+    <script src="<%= @__asset('home.js') %>" defer></script>
+  <% end %>
 <% end %>
-<% end %>
-<% if @__asset('home.css') :%>
-  <link rel="stylesheet" href="<%= @__asset('home.css') %>">
+
+<% block 'head-end' :%>
+  <% if @__asset('home.css') :%>
+    <link rel="stylesheet" href="<%= @__asset('home.css') %>">
+  <% end %>
 <% end %>
 
 <div class="wrapper">
