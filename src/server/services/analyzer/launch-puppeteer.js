@@ -92,7 +92,7 @@ const launchPuppeteer = async (params) => {
 
       await reportService.update(identifier, {
         url: state.url,
-        desktopOriginalData: state.desktopOriginal
+        $set: { 'desktop.original': state.desktopOriginal }
       })
       // collection <img> tags
       const imgTags = await originDesktopPage.evaluate(() => {
@@ -204,7 +204,7 @@ const launchPuppeteer = async (params) => {
       state.desktopOtimized = result
 
       await reportService.update(identifier, {
-        desktopOptimizedData: state.desktopOtimized
+        $set: { 'desktop.optimized': state.desktopOtimized }
       })
     } catch (e) {
       throw e
@@ -244,7 +244,7 @@ const launchPuppeteer = async (params) => {
       state.mobileOriginal = originalMobileResult
 
       await reportService.update(identifier, {
-        mobileOriginalData: state.mobileOriginal
+        $set: { 'mobile.original': state.mobileOriginal }
       })
     } catch (e) {
       throw e
@@ -280,7 +280,7 @@ const launchPuppeteer = async (params) => {
       state.mobileOptimized = resultMobileOtimized
 
       await reportService.update(identifier, {
-        mobileOptimizedData: state.mobileOptimized
+        $set: { 'mobile.optimized': state.mobileOptimized }
       })
     } catch (e) {
       throw e
