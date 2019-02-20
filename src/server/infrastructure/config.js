@@ -6,6 +6,7 @@ export default {
   // dir
   _root: rootDir,
   screenshotDir: path.join(rootDir, '../../data/screenshot'),
+  harDir: path.join(rootDir, '../../data/har'),
   imgDir: path.join(rootDir, '../../assets/img'),
   // env
   devMode: process.env.PORT !== 'production',
