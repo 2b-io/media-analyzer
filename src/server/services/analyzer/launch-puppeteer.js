@@ -1,39 +1,22 @@
 import fetch from 'node-fetch'
-import puppeteer from 'puppeteer'
 import path from 'path'
 
 import config from 'infrastructure/config'
+import initBrowser from 'services/analyzer/init-browser'
 import loadPage from 'services/analyzer/load-page'
 import normalizeUrl from 'services/analyzer/normalize-url'
 import setRequestImage from 'services/analyzer/set-request-image'
 
 import reportService from 'services/report'
 
-const initBrowser = async (params) => {
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: 'google-chrome',
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--window-size=1440,900',
-      '--proxy-server="direct://"',
-      '--proxy-bypass-list=*',
-      '--enable-features=NetworkService'
-    ],
-    ignoreHTTPSErrors: true
-  })
-
-  return browser
-}
-
-const launchPuppeteer = async (params) => {
+const launchPuppeteer = async (params, userAgent) => {
   const {
     url,
     identifier,
     timeout
   } = params
+
+  const isMobile = userAgent === 'mobile' ? true : false
 
   const state = {
     inspect: false,
@@ -45,18 +28,18 @@ const launchPuppeteer = async (params) => {
   try {
     // create a new incognito browser context
     const incognitoContext = await browser.createIncognitoBrowserContext()
-    const originDesktopPage = await incognitoContext.newPage()
+    const originPage = await incognitoContext.newPage()
 
     try {
       // load origin page
-      await reportService.updateProgress(identifier, 'Load origin desktop page...')
-      console.log('Load origin desktop page')
-      console.time('Load origin desktop page')
+      await reportService.updateProgress(identifier, `Load origin ${ userAgent } page...`)
+      console.log(`Load origin ${ userAgent } page`)
+      console.time(`Load origin ${ userAgent } page`)
 
       // set request interception
-      await originDesktopPage.setRequestInterception(true)
+      await originPage.setRequestInterception(true)
 
-      originDesktopPage.on('request', (request) => {
+      originPage.on('request', (request) => {
         if (!state.inspect && request.resourceType() === 'image') {
           const url = request.url()
 
@@ -66,20 +49,21 @@ const launchPuppeteer = async (params) => {
         request.continue()
       })
 
-      const result = await loadPage(originDesktopPage, {
+      const result = await loadPage(originPage, {
         url,
+        isMobile,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-original.jpeg`),
-        harName: path.join(config.harDir, `${ identifier }-desktop-original.har`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-${ userAgent }-original.jpeg`),
+        harName: path.join(config.harDir, `${ identifier }-${ userAgent }-original.har`)
       })
 
-      await reportService.updateProgress(identifier, 'Load origin desktop page... done')
+      await reportService.updateProgress(identifier, `Load origin ${ userAgent } page... done`)
 
-      console.timeEnd('Load origin desktop page')
+      console.timeEnd(`Load origin ${ userAgent } page`)
 
       console.log(result)
 
-      const location = await originDesktopPage.evaluate(() => ({
+      const location = await originPage.evaluate(() => ({
         hostname: location.hostname,
         protocol: location.protocol,
         href: location.href
@@ -88,14 +72,13 @@ const launchPuppeteer = async (params) => {
       const normalize = normalizeUrl(location.protocol, location.hostname)
 
       state.url = location.href
-      state.desktopOriginal = result
 
       await reportService.update(identifier, {
         url: state.url,
-        $set: { 'desktop.original': state.desktopOriginal }
+        $set: { [ `${ userAgent }.original` ]: result }
       })
       // collection <img> tags
-      const imgTags = await originDesktopPage.evaluate(() => {
+      const imgTags = await originPage.evaluate(() => {
         const tags = document.querySelectorAll('img')
 
         return Array.from(tags || []).map(
@@ -149,9 +132,9 @@ const launchPuppeteer = async (params) => {
     } catch (e) {
       throw e
     } finally {
-      await originDesktopPage.close()
+      await originPage.close()
 
-      console.log('Origin desktop page closed')
+      console.log(`Origin ${ userAgent } page closed`)
     }
 
     // warm up optimized content
@@ -173,127 +156,51 @@ const launchPuppeteer = async (params) => {
       await reportService.updateProgress(identifier, 'Warm up cache... done')
     }
 
-    const optimizedDesktopPage = await incognitoContext.newPage()
+    const optimizedPage = await incognitoContext.newPage()
 
     try {
       // add request interception
-      await optimizedDesktopPage.setRequestInterception(true)
+      await optimizedPage.setRequestInterception(true)
 
       // handle requests
-      setRequestImage(optimizedDesktopPage, state.images)
+      setRequestImage(optimizedPage, state.images)
 
       // load optimized page
-      console.log('Load optimized desktop page')
-      console.time('Load optimized desktop page')
+      console.log(`Load optimized ${ userAgent } page`)
+      console.time(`Load optimized ${ userAgent } page`)
 
-      await reportService.updateProgress(identifier, 'Load optimized desktop page...')
+      await reportService.updateProgress(identifier, `Load optimized ${ userAgent } page...`)
 
-      const result = await loadPage(optimizedDesktopPage, {
+      const result = await loadPage(optimizedPage, {
         url,
+        isMobile,
         timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-desktop-optimized.jpeg`),
-        harName: path.join(config.harDir, `${ identifier }-desktop-optimized.har`)
+        screenshot: path.join(config.screenshotDir, `${ identifier }-${ userAgent }-optimized.jpeg`),
+        harName: path.join(config.harDir, `${ identifier }-${ userAgent }-optimized.har`)
       })
 
-      console.timeEnd('Load optimized desktop page')
+      console.timeEnd(`Load optimized ${ userAgent } page`)
 
-      await reportService.updateProgress(identifier, 'Load optimized desktop page... done')
+      await reportService.updateProgress(identifier, `Load optimized ${ userAgent } page... done`)
 
       console.log(result)
 
-      state.desktopOtimized = result
-
       await reportService.update(identifier, {
-        $set: { 'desktop.optimized': state.desktopOtimized }
+        $set: { [ `${ userAgent }.optimized` ]: result }
       })
     } catch (e) {
       throw e
     } finally {
-      await optimizedDesktopPage.close()
+      await optimizedPage.close()
 
-      console.log('Optimized desktop page closed')
-    }
-
-    const originalMobilePage = await incognitoContext.newPage()
-
-    try {
-      await reportService.updateProgress(identifier, 'Load origin mobile page...')
-      console.log('Load origin mobile page')
-      console.time('Load origin mobile page')
-
-      await originalMobilePage.setRequestInterception(true)
-
-      originalMobilePage.on('request', (request) => {
-        request.continue()
-      })
-
-      const originalMobileResult = await loadPage(originalMobilePage, {
-        url,
-        timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-original.jpeg`),
-        isMobile: true,
-        harName: path.join(config.harDir, `${ identifier }-mobile-original.har`)
-      })
-
-      await reportService.updateProgress(identifier, 'Load origin mobile page... done')
-
-      console.timeEnd('Load origin mobile page')
-
-      console.log(originalMobileResult)
-
-      state.mobileOriginal = originalMobileResult
-
-      await reportService.update(identifier, {
-        $set: { 'mobile.original': state.mobileOriginal }
-      })
-    } catch (e) {
-      throw e
-    } finally {
-      await originalMobilePage.close()
-    }
-    const optimizedMobilePage = await incognitoContext.newPage()
-
-    try {
-      await optimizedMobilePage.setRequestInterception(true)
-
-      setRequestImage(optimizedMobilePage, state.images)
-
-      // load mobile optimized page
-      console.log('Load optimized mobile page')
-      console.time('Load optimize mobile page')
-      await reportService.updateProgress(identifier, 'Load optimized mobile page...')
-
-      const resultMobileOtimized = await loadPage(optimizedMobilePage, {
-        url,
-        timeout,
-        screenshot: path.join(config.screenshotDir, `${ identifier }-mobile-optimized.jpeg`),
-        isMobile: true,
-        harName: path.join(config.harDir, `${ identifier }-mobile-optimized.har`)
-      })
-
-      console.timeEnd('Load optimize mobile page')
-
-      await reportService.updateProgress(identifier, 'Load optimized mobile page... done')
-
-      console.log(resultMobileOtimized)
-
-      state.mobileOptimized = resultMobileOtimized
-
-      await reportService.update(identifier, {
-        $set: { 'mobile.optimized': state.mobileOptimized }
-      })
-    } catch (e) {
-      throw e
-    } finally {
-      await optimizedMobilePage.close()
-
-      console.log('Optimized mobile page closed')
+      console.log(`Optimized ${ userAgent } page closed`)
     }
   } catch (e) {
+    console.log('e', e)
     throw e
   } finally {
-    await browser.close()
 
+    await browser.close()
     console.log('Browser closed')
   }
 }
