@@ -1,0 +1,14 @@
+<% extend './layout' %>
+
+<% block 'body-end' :%>
+<% if @__asset('home.js') :%>
+  <script src="<%= @__asset('home.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('report-detail.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('report-detail.css') %>">
+<% end %>
+
+<div class="wrapper">
+  <p>Report detail</p>
+</div>
