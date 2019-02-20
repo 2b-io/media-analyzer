@@ -3,8 +3,7 @@ import devices from 'puppeteer/DeviceDescriptors'
 import fs from 'fs-extra'
 import ms from 'ms'
 import path from 'path'
-
-import generateHar from 'services/analyzer/generate-har'
+import puppeteerHar from 'puppeteer-har'
 
 const loadPage = async (page, params = {}) => {
   const {
@@ -50,6 +49,10 @@ const loadPage = async (page, params = {}) => {
     resources[url].size += length
   })
 
+  const har = new puppeteerHar(page)
+
+  await har.start({ path: harName })
+
   if (url) {
     if (isMobile) {
       const iPhone = devices['iPhone 8']
@@ -67,6 +70,8 @@ const loadPage = async (page, params = {}) => {
     })
   }
 
+  await har.stop()
+
   if (screenshot) {
     await fs.ensureDir(path.dirname(screenshot))
 
@@ -76,10 +81,6 @@ const loadPage = async (page, params = {}) => {
       path: screenshot
       // fullPage: true
     })
-  }
-
-  if (harName) {
-    await generateHar(page, harName)
   }
 
   const performance = JSON.parse(await page.evaluate(
