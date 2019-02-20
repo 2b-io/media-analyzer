@@ -23,7 +23,7 @@ export default {
 
         const report = await reportService.get(identifier)
 
-        if (!report || report.error) {
+        if (!report) {
           // return res.sendStatus(NOT_FOUND)
           return res.redirect('/')
         }
@@ -204,8 +204,6 @@ export default {
           console.error(e)
         }
       } catch (e) {
-        console.error(e)
-
         return res.redirect('/')
       }
     }

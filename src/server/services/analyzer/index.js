@@ -6,12 +6,16 @@ import reportService from 'services/report'
 export const analyze = async (params) => {
   const { url, identifier } = params
   try {
+    console.time('time analyze')
+
     const [
-      puppeteerResult,
+      desktopPuppeteerResult,
+      mobilePuppeteerResult,
       desktopPageSpeedResult,
       mobilePageSpeedResult
     ] = await Promise.all([
-      callPuppeteer(params),
+      callPuppeteer(params, 'desktop'),
+      callPuppeteer(params, 'mobile'),
       callGooglePagespeed(url, identifier, 'desktop'),
       callGooglePagespeed(url, identifier, 'mobile')
     ])
@@ -23,5 +27,7 @@ export const analyze = async (params) => {
       finish: true
     })
     await reportService.updateProgress(identifier, 'Finished!')
+
+    console.timeEnd('time analyze')
   }
 }
