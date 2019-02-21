@@ -11,4 +11,63 @@
 
 <div class="wrapper">
   <p>Report detail</p>
+  <div class="table-report-detail">
+    <table>
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th class="status">Status</th>
+          <th>Timing</th>
+        </tr>
+      </thead>
+      <% for harData in @report.desktopOriginalHar.requests :%>
+        <tr>
+          <td class="name"><a href="<%- harData.request.url %>"><%= harData.request.url %></a></td>
+          <td class="status"><%= harData.response.status %></td>
+          <td class="graph">
+            <div class="stacked-bar-graph">
+              <span
+                style="width:<%- harData.queuedStart %>%"
+                class="bar-blank"
+                >
+              </span>
+              <span
+                style="width:<%- harData.blockedPercent %>%"
+                class="bar-block"
+                >
+              </span>
+              <span
+                style="width:<%- harData.dnsPercent %>%"
+                class="bar-dns"
+                >
+              </span>
+              <span
+                style="width:<%- harData.connectPercent %>%"
+                class="bar-connect"
+                >
+              </span>
+              <span
+                style="width:<%- harData.sendPercent %>%"
+                class="bar-send"
+                >
+              </span>
+              <span
+                style="width:<%- harData.waitPercent %>%"
+                class="bar-wait"
+                >
+              </span>
+              <span
+                style="width:<%- harData.receivePercent %>%"
+                class="bar-receive"
+                >
+              </span>
+              <span>
+                <%= harData.totalTime %>
+              </span>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 </div>
