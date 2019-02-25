@@ -10,6 +10,8 @@ const STEPS = [
   'Load optimized desktop page... done',
   'Load origin mobile page...',
   'Load origin mobile page... done',
+  'Warm up cache...',
+  'Warm up cache... done',
   'Load optimized mobile page...',
   'Load optimized mobile page... done',
   'Google page speed test desktop mode...',
@@ -48,7 +50,7 @@ const updateProgress = async (identifier, message) => {
   const { progress } = await ReportModel.findOne({ identifier })
 
   const messageContent = {
-    step: progress.length,
+    step: progress.length + 1,
     total: TOTAL_STEPS,
     message
   }
