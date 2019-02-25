@@ -41,6 +41,7 @@ const launchGooglePageSpeed = async (url, identifier, userAgent) => {
       finish: true,
       error: true
     })
+    throw e
   }
 }
 

@@ -163,7 +163,11 @@ export default {
       } catch (e) {
         console.error(e)
 
-        return res.redirect('/')
+        res.render('pages/report', {
+          report: {
+            errorMessage: 'An error occurred during the analyzed. You can try again...'
+          }
+        })
       }
     }
   ],

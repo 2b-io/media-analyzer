@@ -16,7 +16,7 @@
 <% end %>
 
 <div class="wrapper">
-  <% if !@report.finish :%>
+  <% if !@report.finish && !@report.errorMessage:%>
     <div class="content x-small">
       <div class="progress-description">
         <p id="progress-message">
@@ -26,6 +26,15 @@
       <% include 'elements/progress-bar',{
         progressPercent: "0%"
       } %>
+    </div>
+  <% end %>
+  <% if !@report.finish && @report.errorMessage :%>
+    <div class="content x-small">
+      <div class="progress-description">
+        <p class="error-message">
+          <%= @report.errorMessage %>
+        </p>
+      </div>
     </div>
   <% end %>
   <% if @report.finish :%>
