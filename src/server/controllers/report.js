@@ -23,7 +23,7 @@ export default {
 
         const report = await reportService.get(identifier)
 
-        if (!report || report.error) {
+        if (!report) {
           // return res.sendStatus(NOT_FOUND)
           return res.redirect('/')
         }
@@ -122,14 +122,16 @@ export default {
           }
         }
 
+        // weight: loadTime = 4/5, pageSize = 1/5
+
         const penaltyScore = {
           desktop: {
-            loadTime: (needImprove.desktop.score / 3 * 2) * needImprove.desktop.loadTime.optimized / needImprove.desktop.loadTime.original,
-            pageSize: (needImprove.desktop.score / 3) * needImprove.desktop.pageSize.optimized / needImprove.desktop.pageSize.original
+            loadTime: (needImprove.desktop.score / 5 * 4) * needImprove.desktop.loadTime.optimized / needImprove.desktop.loadTime.original,
+            pageSize: (needImprove.desktop.score / 5) * needImprove.desktop.pageSize.optimized / needImprove.desktop.pageSize.original
           },
           mobile: {
-            loadTime: (needImprove.mobile.score / 3 * 2) * needImprove.mobile.loadTime.optimized / needImprove.mobile.loadTime.original,
-            pageSize: (needImprove.mobile.score / 3) * needImprove.mobile.pageSize.optimized / needImprove.mobile.pageSize.original
+            loadTime: (needImprove.mobile.score / 5 * 4) * needImprove.mobile.loadTime.optimized / needImprove.mobile.loadTime.original,
+            pageSize: (needImprove.mobile.score / 5) * needImprove.mobile.pageSize.optimized / needImprove.mobile.pageSize.original
           }
         }
 
@@ -204,8 +206,6 @@ export default {
           console.error(e)
         }
       } catch (e) {
-        console.error(e)
-
         return res.redirect('/')
       }
     }

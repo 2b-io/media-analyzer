@@ -6,6 +6,7 @@ export default {
   // dir
   _root: rootDir,
   screenshotDir: path.join(rootDir, '../../data/screenshot'),
+  harDir: path.join(rootDir, '../../data/har'),
   imgDir: path.join(rootDir, '../../assets/img'),
   // env
   devMode: process.env.PORT !== 'production',
@@ -20,5 +21,7 @@ export default {
   // google recaptcha
   googleRecaptchaSecretKey: process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
   googleRecaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
-  googleRecaptchaUrl: process.env.GOOGLE_RECAPTCHA_URL
+  googleRecaptchaUrl: process.env.GOOGLE_RECAPTCHA_URL,
+  // google analytics
+  googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID
 }

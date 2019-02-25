@@ -9,16 +9,34 @@ const schema = mongoose.Schema({
   desktop: {
     original: mongoose.Schema.Types.Mixed,
     optimized: mongoose.Schema.Types.Mixed,
-    originalLighthouseData: mongoose.Schema.Types.Mixed,
-    originalPerformanceScore: Number,
-    optimizePerformanceScore: Number
+    originalLighthouseData:  {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
+    },
+    originalPerformanceScore: {
+      type: Number,
+      default: 0
+    },
+    optimizePerformanceScore: {
+      type: Number,
+      default: 0
+    }
   },
   mobile: {
     original: mongoose.Schema.Types.Mixed,
     optimized: mongoose.Schema.Types.Mixed,
-    originalLighthouseData: mongoose.Schema.Types.Mixed,
-    originalPerformanceScore: Number,
-    optimizePerformanceScore: Number
+    originalLighthouseData: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
+    },
+    originalPerformanceScore: {
+      type: Number,
+      default: 0
+    },
+    optimizePerformanceScore: {
+      type: Number,
+      default: 0
+    }
   },
   images: [ {
     originUrl: String,

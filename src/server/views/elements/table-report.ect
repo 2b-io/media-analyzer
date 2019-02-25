@@ -1,10 +1,20 @@
 <div class="table-report">
-  <div class="score-report">
-    <% include 'elements/circle-chart', {
-      value:  Math.round(@score),
-      info:  Math.round(@score)
-    } %>
-  </div>
+  <% if @score > 0 :%>
+    <div class="score-report">
+      <% include 'elements/circle-chart', {
+        value:  Math.round(@score),
+        info:  Math.round(@score)
+      } %>
+    </div>
+  <% end %>
+  <% if @score == 0  :%>
+    <div class="score-report">
+      <% include 'elements/circle-chart', {
+        value:  '0,100',
+        info:  '?'
+      } %>
+    </div>
+  <% end %>
   <div class="title-report">
     <h1><%= @titleReport %></h1>
   </div>

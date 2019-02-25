@@ -44,6 +44,7 @@
         pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
+        error: @report.error,
         scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
       } %>
       <% include 'elements/table-report', {
@@ -71,6 +72,7 @@
         pageSize: @prettyBytes(@report.mobile.original.downloadedBytes),
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
+        error: @report.error,
         scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
       } %>
       <% include 'elements/table-report', {
