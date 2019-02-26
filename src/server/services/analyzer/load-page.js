@@ -49,9 +49,13 @@ const loadPage = async (page, params = {}) => {
     resources[url].size += length
   })
 
+  await fs.ensureDir(path.dirname(harName))
+
   const har = new puppeteerHar(page)
 
-  await har.start({ path: harName })
+  await har.start({
+    path: harName
+  })
 
   if (url) {
     if (isMobile) {
