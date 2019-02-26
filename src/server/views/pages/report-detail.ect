@@ -1,0 +1,218 @@
+<% extend './layout' %>
+
+<% block 'body-end' :%>
+  <% if @__asset('report-detail.js') :%>
+    <script src="<%= @__asset('report-detail.js') %>" defer></script>
+  <% end %>
+  <% if @__asset('report-detail.css') :%>
+    <link rel="stylesheet" href="<%= @__asset('report-detail.css') %>">
+  <% end %>
+<% end %>
+
+<div class="wrapper">
+  <h2 class="report-detail-title">Waterfall View</h2>
+  <div id="report-detail-mobile" class="report-detail">
+    <table>
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th class="status">Status</th>
+          <th class="originTiming">Origin Timing</th>
+          <th>Optimized Timing</th>
+        </tr>
+      </thead>
+      <% for harData in @report.mobileHar :%>
+        <tr>
+          <td class="name"><a target="_blank" href="<%- harData.mobileOriginal.url %>"><%= harData.mobileOriginal.url %></a></td>
+          <td class="status"><%= harData.mobileOriginal.status %></td>
+          <td class="graph">
+            <div class="stacked-bar-graph">
+              <span
+                style="width:<%- harData.mobileOriginal.queuedStart %>%"
+                class="bar-blank"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.blockedPercent %>%"
+                class="bar-block"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.dnsPercent %>%"
+                class="bar-dns"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.connectPercent %>%"
+                class="bar-connect"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.sendPercent %>%"
+                class="bar-send"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.waitPercent %>%"
+                class="bar-wait"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOriginal.receivePercent %>%"
+                class="bar-receive"
+                >
+              </span>
+              <span class="total-time">
+                <%= harData.mobileOriginal.totalTime %>
+              </span>
+            </div>
+          </td>
+          <td class="graph">
+            <div class="stacked-bar-graph">
+              <span
+                style="width:<%- harData.mobileOptimized.queuedStart %>%"
+                class="bar-blank"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.blockedPercent %>%"
+                class="bar-block"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.dnsPercent %>%"
+                class="bar-dns"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.connectPercent %>%"
+                class="bar-connect"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.sendPercent %>%"
+                class="bar-send"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.waitPercent %>%"
+                class="bar-wait"
+                >
+              </span>
+              <span
+                style="width:<%- harData.mobileOptimized.receivePercent %>%"
+                class="bar-receive"
+                >
+              </span>
+              <span class="total-time">
+                <%= harData.mobileOptimized.totalTime %>
+              </span>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <div id="report-detail-desktop" class="report-detail report-detail-hidden">
+    <table>
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th class="status">Status</th>
+          <th class="originTiming">Origin Timing</th>
+          <th>Optimized Timing</th>
+        </tr>
+      </thead>
+      <% for harData in @report.desktopHar :%>
+        <tr>
+          <td class="name"><a target="_blank" href="<%- harData.desktopOriginal.url %>"><%= harData.desktopOriginal.url %></a></td>
+          <td class="status"><%= harData.desktopOriginal.status %></td>
+          <td class="graph">
+            <div class="stacked-bar-graph">
+              <span
+                style="width:<%- harData.desktopOriginal.queuedStart %>%"
+                class="bar-blank"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.blockedPercent %>%"
+                class="bar-block"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.dnsPercent %>%"
+                class="bar-dns"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.connectPercent %>%"
+                class="bar-connect"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.sendPercent %>%"
+                class="bar-send"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.waitPercent %>%"
+                class="bar-wait"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOriginal.receivePercent %>%"
+                class="bar-receive"
+                >
+              </span>
+              <span class="total-time">
+                <%= harData.desktopOriginal.totalTime %>
+              </span>
+            </div>
+          </td>
+          <td class="graph">
+            <div class="stacked-bar-graph">
+              <span
+                style="width:<%- harData.desktopOptimized.queuedStart %>%"
+                class="bar-blank"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.blockedPercent %>%"
+                class="bar-block"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.dnsPercent %>%"
+                class="bar-dns"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.connectPercent %>%"
+                class="bar-connect"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.sendPercent %>%"
+                class="bar-send"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.waitPercent %>%"
+                class="bar-wait"
+                >
+              </span>
+              <span
+                style="width:<%- harData.desktopOptimized.receivePercent %>%"
+                class="bar-receive"
+                >
+              </span>
+              <span class="total-time">
+                <%= harData.desktopOptimized.totalTime %>
+              </span>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

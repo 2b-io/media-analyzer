@@ -22,6 +22,9 @@ export default {
     report: glob.sync(
       path.join(resourceDir, 'pages/report/index.*')
     ),
+    ['report-detail']: glob.sync(
+      path.join(resourceDir, 'pages/report-detail/index.*')
+    ),
     img: glob.sync(
       path.join(resourceDir, 'img/**/*')
     )
