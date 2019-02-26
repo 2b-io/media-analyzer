@@ -47,7 +47,7 @@ const update = async (identifier, data) => {
 }
 
 const updateProgress = async (identifier, message) => {
-  const { progress } = await ReportModel.findOne({ identifier })
+  const { progress, error } = await ReportModel.findOne({ identifier })
 
   const messageContent = {
     step: progress.length + 1,
@@ -67,6 +67,14 @@ const updateProgress = async (identifier, message) => {
   }).lean()
 
   const socketServer = getSocketServer()
+
+  if (error) {
+    socketServer.to(identifier).emit('analyze:failure', {
+      payload: {
+        error
+      }
+    })
+  }
 
   socketServer.to(identifier).emit('analyze:progress', {
     payload: {

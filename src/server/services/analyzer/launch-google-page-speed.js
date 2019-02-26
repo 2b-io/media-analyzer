@@ -36,11 +36,8 @@ const launchGooglePageSpeed = async (url, identifier, userAgent) => {
     })
 
   } catch (e) {
-    console.error('error', e)
-    await reportService.update(identifier, {
-      finish: true,
-      error: true
-    })
+    console.log('e', e)
+    throw e
   }
 }
 
