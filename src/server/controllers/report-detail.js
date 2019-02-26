@@ -1,22 +1,11 @@
-import hash from '@emotion/hash'
 import bodyParser from 'body-parser'
-import fs from 'fs-extra'
+
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
-import joi from 'joi'
-import ms from 'ms'
-import normalizeUrl from 'normalize-url'
-import path from 'path'
-import prettyMs from 'pretty-ms'
+
 import serializeError from 'serialize-error'
 
-import config from 'infrastructure/config'
-import { analyze } from 'services/analyzer'
+import reportDetailService from 'services/report-detail'
 import reportService from 'services/report'
-import { getSocketServer } from 'socket-server'
-
-const SCHEMA = joi.object().keys({
-  url: joi.string().trim().required()
-})
 
 export default {
   get: [
@@ -24,53 +13,45 @@ export default {
       try {
         const { identifier } = req.params
 
-        const report = await reportService.get(identifier)
+        const { finish, error } = await reportService.get(identifier)
 
-        if (!report) {
-          // return res.sendStatus(NOT_FOUND)
+        if (!finish || error) {
           return res.redirect('/')
         }
 
-        if (!report.finish) {
-          return res.render('pages/report-detail', { report })
-        }
-        const { log } = await fs.readJson(path.join(config.harDir, `${ identifier }-desktop-optimized.har`))
+        const desktopOriginalHar = await reportDetailService(identifier, 'desktop-original')
+        const desktopOptimizedHar = await reportDetailService(identifier, 'desktop-optimized')
+        const mobileOriginalHar = await reportDetailService(identifier, 'mobile-original')
+        const mobileOptimizedHar = await reportDetailService(identifier, 'mobile-optimized')
 
-        const requests = log.entries.map((element) => {
-          const {
-            timings: {
-              blocked,
-              dns,
-              connect,
-              send,
-              wait,
-              receive,
-              _queued: queued
-            }
-          } = element
+        const desktopHar = Object.values(desktopOriginalHar).map(({ url }) => {
           return {
-            ...element,
-            blockedPercent: Math.max(0, ((blocked * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            dnsPercent: Math.max(0, ((dns * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            connectPercent: Math.max(0, ((connect * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            sendPercent: Math.max(0, ((send * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            waitPercent: Math.max(0.1, ((wait * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            receivePercent: Math.max(0, ((receive * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
-            totalTime: prettyMs(blocked + dns + connect + send + wait + receive),
-            queuedStart: ((Date.parse(element.startedDateTime) - Date.parse(log.pages[0].startedDateTime)) * 100) / log.pages[0].pageTimings.onLoad
+            desktopOriginal: {
+              ...desktopOriginalHar[ url ]
+            },
+            desktopOptimized: {
+              ...desktopOptimizedHar[ url ]
+            }
           }
         })
 
-        const desktopOriginalHar = {
-          requests,
-          onLoad: log.pages[0].pageTimings.onLoad,
-          startTime: Date.parse(log.pages[0].startedDateTime)
-        }
+        const mobileHar = Object.values(mobileOriginalHar).map(({ url }) => {
+          return {
+            mobileOriginal: {
+              ...mobileOriginalHar[ url ]
+            },
+            mobileOptimized: {
+              ...mobileOptimizedHar[ url ]
+            }
+          }
+        })
 
         res.render('pages/report-detail', {
           report: {
-            ...report,
-            desktopOriginalHar
+            finish,
+            error,
+            desktopHar,
+            mobileHar
           }
         })
       } catch (e) {
