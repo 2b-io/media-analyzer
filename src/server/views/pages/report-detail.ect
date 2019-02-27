@@ -11,6 +11,14 @@
 
 <div class="wrapper">
   <h2 class="report-detail-title">Waterfall View</h2>
+  <div class="description-report-detail">
+    <span>Description:</span>
+    <span class="bar-description block">Block</span>
+    <span class="bar-description dns">DNS</span>
+    <span class="bar-description connect">Connect</span>
+    <span class="bar-description wait">Wait</span>
+    <span class="bar-description receive">Receive</span>
+  </div>
   <div id="report-detail-mobile" class="report-detail">
     <table>
       <thead>
@@ -62,10 +70,10 @@
                 class="bar-receive"
                 >
               </span>
-              <span class="total-time">
-                <%= harData.mobileOriginal.totalTime %>
-              </span>
             </div>
+            <span class="total-time">
+              <%= harData.mobileOriginal.totalTime %>
+            </span>
           </td>
           <td class="graph">
             <div class="stacked-bar-graph">
@@ -104,10 +112,10 @@
                 class="bar-receive"
                 >
               </span>
-              <span class="total-time">
-                <%= harData.mobileOptimized.totalTime %>
-              </span>
             </div>
+            <span class="total-time">
+              <%= harData.mobileOptimized.totalTime %>
+            </span>
           </td>
         </tr>
       <% end %>
@@ -164,10 +172,10 @@
                 class="bar-receive"
                 >
               </span>
-              <span class="total-time">
-                <%= harData.desktopOriginal.totalTime %>
-              </span>
             </div>
+            <span class="total-time">
+              <%= harData.desktopOriginal.totalTime %>
+            </span>
           </td>
           <td class="graph">
             <div class="stacked-bar-graph">
@@ -206,10 +214,10 @@
                 class="bar-receive"
                 >
               </span>
-              <span class="total-time">
-                <%= harData.desktopOptimized.totalTime %>
-              </span>
             </div>
+            <span class="total-time">
+              <%= harData.desktopOptimized.totalTime %>
+            </span>
           </td>
         </tr>
       <% end %>
