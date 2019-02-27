@@ -17,7 +17,7 @@ export default (app) => {
   app.get('/', controllers.home.get)
 
   app.get('/reports/:identifier', controllers.report.get)
-  app.get('/reports-detail/:identifier', controllers.reportDetail.get)
+  app.get('/reports/:identifier/detail', controllers.reportDetail.get)
 
   app.post('/reports', controllers.report.post)
   app.post('/contact', controllers.contact.post)
