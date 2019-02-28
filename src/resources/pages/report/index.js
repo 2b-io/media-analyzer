@@ -41,17 +41,19 @@ const listenSocket = () => {
     console.log('data.payload',  data.payload)
 
     const { message, step, total } = data.payload.message
+    const { error } = data.payload
     const percentProgress = (step * 100) / total
 
     document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
     document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
 
-    if (message === 'Finished!') {
+    if (message === 'Finished!' && !error) {
       location.reload()
     }
   })
 
   socket.on('analyze:failure', (data) => {
+    socket.disconnect()
     document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
   })
 }
@@ -81,5 +83,3 @@ window.addEventListener('load', () => {
 
   handleTabs()
 })
-
-
