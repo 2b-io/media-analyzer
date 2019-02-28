@@ -5,14 +5,18 @@
 @require '~elements/header'
 @require '~elements/report-tab'
 
+.wrapper
+  max-width: 1920px
+  min-width: 1150px
+  margin: auto
+
 table
   border-collapse: collapse
   width: 100%
 
-  th, td
-    padding: 4px
+  td
+    padding: 16px
     text-align: left
-    border: 1px solid #ddd
     white-space: nowrap
     overflow: hidden
     text-overflow: ellipsis
@@ -20,8 +24,22 @@ table
   tr
     height: 16px
 
+  tr:nth-child(even)
+    background-color: #dadada
+
   .name
     max-width: 250px
+
+  th
+    background-color: #9e9e9e
+    padding: 8px
+    overflow: hidden
+    text-align: left
+
+    &.optimized-timing
+      background-color: $color__cornflower-blue
+      color: white
+      font-size: $font-size__h4
 
   .status
     max-width: 100px
@@ -90,12 +108,15 @@ tr:hover
 .total-time
   right: 4px
   width: 48px
-  top: 4px
+  top: 16px
   position: absolute
 
+  &.optimized
+    color: $color__cornflower-blue
 .bar-description::before
   content: ''
-  width: 16px;
+  width: 16px
+  border-radius: 4px
   height: 8px
   display: inline-block
   margin: 0px 8px
@@ -120,3 +141,4 @@ tr:hover
 
 .description-report-detail
   text-align: center
+  color: $color__cornflower-blue
