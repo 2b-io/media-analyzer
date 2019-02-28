@@ -18,17 +18,11 @@ table
     padding: 16px
     text-align: left
     white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
-
   tr
     height: 16px
 
   tr:nth-child(even)
     background-color: #dadada
-
-  .name
-    max-width: 250px
 
   th
     background-color: #9e9e9e
@@ -42,7 +36,10 @@ table
       font-size: $font-size__h4
 
   .status
-    max-width: 100px
+    max-width: 70px
+
+  .content-type
+    max-width: 70px
 
   .graph
     min-width: 500px
@@ -142,3 +139,28 @@ tr:hover
 .description-report-detail
   text-align: center
   color: $color__cornflower-blue
+
+.fileName
+  position: relative
+  max-width: 250px
+  overflow: hidden
+  text-overflow: ellipsis
+  z-index: 10
+  a
+    white-space: nowrap
+    padding-right: 24px
+    color: $text-color__primary
+
+.fileName::after
+  content: attr(data-filetype)
+  position: absolute
+  right: 10px
+  top: 8px
+
+.fileName:hover
+  width: auto
+  overflow: inherit
+
+  a
+    color: white
+    background: $color__dove-gray
