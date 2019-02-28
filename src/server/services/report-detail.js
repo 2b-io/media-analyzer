@@ -1,4 +1,5 @@
 import fs from 'fs-extra'
+import mime from 'mime'
 import path from 'path'
 import prettyMs from 'pretty-ms'
 
@@ -22,12 +23,16 @@ const reportDetail = async (identifier, reportName) => {
         url
       },
       response: {
-        status
+        status,
+        content: {
+          mimeType
+        }
       }
     } = element
     return {
       status,
       url,
+      contentType: mime.getExtension(mimeType) || mimeType,
       blockedPercent: Math.max(0, ((blocked * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
       dnsPercent: Math.max(0, ((dns * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),
       connectPercent: Math.max(0, ((connect * 100) / log.pages[0].pageTimings.onLoad).toFixed(2)),

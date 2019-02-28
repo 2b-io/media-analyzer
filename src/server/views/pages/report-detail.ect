@@ -23,15 +23,17 @@
     <table>
       <thead>
         <tr>
-          <th class="name">Name</th>
-          <th class="status">Status</th>
-          <th class="originTiming">Origin Timing</th>
-          <th>Optimized Timing</th>
+          <th>Name</th>
+          <th>Content Type</th>
+          <th>Status</th>
+          <th>Origin Timing</th>
+          <th class="optimized-timing">Optimized Timing</th>
         </tr>
       </thead>
       <% for harData in @report.mobileHar :%>
         <tr>
-          <td class="name"><a target="_blank" href="<%- harData.mobileOriginal.url %>"><%= harData.mobileOriginal.url %></a></td>
+          <td class="fileName"><a target="_blank" href="<%- harData.mobileOriginal.url %>"><%= harData.mobileOriginal.url %></a></td>
+          <td class="content-type"><%= harData.mobileOriginal.contentType %></td>
           <td class="status"><%= harData.mobileOriginal.status %></td>
           <td class="graph">
             <div class="stacked-bar-graph">
@@ -113,7 +115,7 @@
                 >
               </span>
             </div>
-            <span class="total-time">
+            <span class="total-time optimized">
               <%= harData.mobileOptimized.totalTime %>
             </span>
           </td>
@@ -125,15 +127,17 @@
     <table>
       <thead>
         <tr>
-          <th class="name">Name</th>
-          <th class="status">Status</th>
-          <th class="originTiming">Origin Timing</th>
-          <th>Optimized Timing</th>
+          <th>Name</th>
+          <th>Content Type</th>
+          <th>Status</th>
+          <th>Origin Timing</th>
+          <th class="optimized-timing">Optimized Timing</th>
         </tr>
       </thead>
       <% for harData in @report.desktopHar :%>
         <tr>
-          <td class="name"><a target="_blank" href="<%- harData.desktopOriginal.url %>"><%= harData.desktopOriginal.url %></a></td>
+          <td class="fileName"><a target="_blank" href="<%- harData.desktopOriginal.url %>"><%= harData.desktopOriginal.url %></a></td>
+          <td class="content-type"><%= harData.desktopOriginal.contentType %></td>
           <td class="status"><%= harData.desktopOriginal.status %></td>
           <td class="graph">
             <div class="stacked-bar-graph">
@@ -215,7 +219,7 @@
                 >
               </span>
             </div>
-            <span class="total-time">
+            <span class="total-time optimized">
               <%= harData.desktopOptimized.totalTime %>
             </span>
           </td>
