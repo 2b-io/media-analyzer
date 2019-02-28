@@ -199,7 +199,7 @@ export default {
 
           socketServer.to(identifier).emit('analyze:failure', {
             payload: {
-              error: serializeError(e)
+              error: true
             }
           })
 
