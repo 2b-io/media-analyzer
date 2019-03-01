@@ -31,7 +31,7 @@ const handleViewFileName = () => {
     const originName = element.getElementsByTagName('a')[0].innerText.trim()
 
     if (originName.length > 40) {
-      const lastPart = originName.substring(originName.length - 10, originName.length)
+      const lastPart = originName.substring(originName.length - 20, originName.length)
       const firstPart = originName.substring(0, 20)
       const newName = `${ firstPart }...${ lastPart }`
       element.getElementsByTagName('a')[0].innerText = newName
