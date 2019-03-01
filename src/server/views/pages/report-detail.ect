@@ -32,7 +32,7 @@
       </thead>
       <% for harData in @report.mobileHar :%>
         <tr>
-          <td class="fileName">
+          <td class="file-name">
             <a target="_blank" href="<%- harData.mobileOriginal.url %>">
               <%= harData.mobileOriginal.url %>
             </a>
@@ -142,7 +142,7 @@
       </thead>
       <% for harData in @report.desktopHar :%>
         <tr>
-          <td class="fileName">
+          <td class="file-name">
             <a target="_blank" href="<%- harData.desktopOriginal.url %>">
               <%= harData.desktopOriginal.url %>
             </a>
