@@ -13,7 +13,7 @@ export default {
       try {
         const { identifier } = req.params
 
-        const { finish, error } = await reportService.get(identifier)
+        const { finish, error, url } = await reportService.get(identifier)
 
         if (!finish || error) {
           return res.redirect('/')
@@ -48,6 +48,7 @@ export default {
 
         res.render('pages/report-detail', {
           report: {
+            url,
             finish,
             error,
             desktopHar,
