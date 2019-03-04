@@ -1,0 +1,45 @@
+<style type="text/css">
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  h2 {
+    text-align: center;
+  }
+</style>
+<body>
+    <br />
+    <br />
+      <h2>Information customer</h2>
+    <br />
+    <br />
+    <table>
+      <thead>
+        <tr>
+          <th>Customer email</th>
+          <th>Customer name</th>
+          <th>Customer phone</th>
+          <th>Customer company</th>
+          <th>Customer message</th>
+          <th>Date contact</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><%= @email %></td>
+        <td><%= @name %></td>
+        <td><%= @phone %></td>
+        <td><%= @company %></td>
+        <td><%= @content %></td>
+        <td><%= @createdAt %></td>
+      </tr>
+  </table>
+  <br />
+  <br />
+    <p>MR.ROCKET TEAM!</p>
+</body>
