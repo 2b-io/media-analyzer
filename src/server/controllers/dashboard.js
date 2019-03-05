@@ -1,12 +1,9 @@
 export default {
   get: [
-    (req, res, next) => {
+    async (req, res, next) => {
+      // const session = req.session
+      console.log(req.session.account)
       res.render('admin/dashboard')
     }
-  ],
-  post: [
-    (req, res, next) => {
-      res.render('admin/dashboard')
-    }
-  ],
+  ]
 }
