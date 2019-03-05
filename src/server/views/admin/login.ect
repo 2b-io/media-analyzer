@@ -8,6 +8,15 @@
 <% if @__asset('login.css') :%>
   <link rel="stylesheet" href="<%= @__asset('login.css') %>">
 <% end %>
-<div>
-  <p>login page</p>
+<div class="wrapper">
+  <div class="content">
+    <div class="logo">
+    </div>
+    <form class="login-form" action="/login" method="post" />
+      <input class="input-line" type="text" name="account" placeholder="account" required />
+      <input class="input-line" type="password" name="password" placeholder="password" required />
+      <br/>
+      <button class="button-round" type="submit" name="login-button">Login</button>
+    </form>
+  </div>
 </div>
