@@ -1,0 +1,13 @@
+<% extend './layout-admin' %>
+
+<% block 'body-end' :%>
+<% if @__asset('dashboard.js') :%>
+  <script src="<%= @__asset('dashboard.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('dashboard.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('dashboard.css') %>">
+<% end %>
+<div>
+  <p>dashboard</p>
+</div>

@@ -21,6 +21,11 @@ export default (app) => {
   app.post('/reports', controllers.report.post)
   app.post('/contact', controllers.contact.post)
 
+  app.get('/login', controllers.login.get)
+  app.post('/login', controllers.login.post)
+
+  app.get('/dashboard', controllers.dashboard.get)
+
   app.use((req, res, next) => {
     res.sendStatus(NOT_FOUND)
   })

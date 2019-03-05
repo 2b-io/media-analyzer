@@ -1,0 +1,13 @@
+<% extend './layout-admin' %>
+
+<% block 'body-end' :%>
+<% if @__asset('login.js') :%>
+  <script src="<%= @__asset('login.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('login.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('login.css') %>">
+<% end %>
+<div>
+  <p>login page</p>
+</div>
