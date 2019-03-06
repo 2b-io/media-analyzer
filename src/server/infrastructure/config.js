@@ -29,5 +29,13 @@ export default {
     sender: process.env.SENDGRID_SENDER,
     apiKey: process.env.SENDGRID_API_KEY
   },
-  emailReceivers: process.env.EMAIL_RECEIVERS
+
+  emailReceivers: process.env.EMAIL_RECEIVERS,
+  emailAdmin: process.env.EMAIL_ADMIN,
+  passwordAdmin: process.env.PASSWORD_ADMIN,
+
+  session: {
+    secret: process.env.SESSION_SECRET,
+    ttl: process.env.SESSION_TTL
+  }
 }
