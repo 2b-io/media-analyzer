@@ -14,7 +14,7 @@ const create = async ({ email, password }) => {
   return account.comparePassword(password) ? issueJWT(account) : null
 }
 
-const verify = async (token, { refresh } = { refresh: false }) => {
+const verify = async (token) => {
   const decoded = jwt.verify(token, config.session.secret)
 
   const account = await accountService.findById(decoded._id)
@@ -23,11 +23,7 @@ const verify = async (token, { refresh } = { refresh: false }) => {
     throw new Error('Invalid or expired JWT')
   }
 
-  return refresh ? issueJWT(account) : {
-    token,
-    ttl: ms(config.session.ttl),
-    account
-  }
+  return issueJWT(account)
 }
 
 const issueJWT = (account) => {
@@ -35,17 +31,14 @@ const issueJWT = (account) => {
     _id: account._id
   }
 
-  const token = jwt.sign(payload, config.session.secret, {
-    expiresIn: config.session.ttl
-  })
+  const token = jwt.sign(payload, config.session.secret)
 
   return {
-    token,
-    ttl: ms(config.session.ttl),
-    account
+    token
   }
 }
 
 export default {
-  create
+  create,
+  verify
 }

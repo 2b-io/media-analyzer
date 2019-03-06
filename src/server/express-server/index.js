@@ -21,11 +21,10 @@ export default () => {
 
     app.use(session({
       secret: config.session.secret,
-      resave: false,
+      resave: true,
+      cookie: { maxAge: 60000 },
       saveUninitialized: true
     }))
-
-    app.use(cookieParser())
 
     initAsset(app)
     initViewEngine(app)

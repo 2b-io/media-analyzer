@@ -21,20 +21,9 @@ const findById = async (id) => {
   return await Account.findById(id)
 }
 
-const verify = async ({ email, password }) => {
-  const account = await Account.findOne({ email })
-
-  if (!account.isActive) {
-    return false
-  }
-
-  return account.comparePassword(password) ? true : false
-}
-
 export default {
   create,
   findByEmail,
   findById,
-  list,
-  verify
+  list
 }

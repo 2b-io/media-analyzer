@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 
 import config from 'infrastructure/config'
 import accountService from 'services/account'
+import sessionService from 'services/session'
 
 export default {
   get: [
@@ -27,18 +28,19 @@ export default {
       const body = req.body
       const { email, password } = body
       try {
-        const account = await accountService.verify({
+        const section = await sessionService.create({
           email,
           password
         })
 
-        if (account) {
-          req.session.account = 'session'
+        if (section) {
+          req.session.token = section.token
           return res.redirect('/dashboard')
         }
-        res.render('admin/login')
+
+        return res.render('admin/login')
       } catch (e) {
-        res.render('admin/login')
+        return res.render('admin/login')
       }
     }
   ],
