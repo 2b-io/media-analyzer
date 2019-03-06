@@ -41,6 +41,7 @@
     "body-parser": "1.18.3",
     "boolean": "0.2.0",
     "clone-buffer": "1.0.0",
+    "connect-mongodb-session": "2.1.1",
     "date-and-time": "0.6.3",
     "delay": "4.1.0",
     "ect": "0.5.9",
