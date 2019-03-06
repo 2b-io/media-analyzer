@@ -1,4 +1,5 @@
 import express from 'express'
+import ms from 'ms'
 import session from 'express-session'
 import slash from 'express-slash'
 import morgan from 'morgan'
@@ -22,7 +23,7 @@ export default () => {
     app.use(session({
       secret: config.session.secret,
       resave: true,
-      cookie: { maxAge: 60000 },
+      cookie: { maxAge: ms(config.session.ttl) },
       saveUninitialized: true
     }))
 

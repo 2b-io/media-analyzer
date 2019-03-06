@@ -15,8 +15,15 @@ export default {
             password: config.passwordAdmin
           })
         }
+        const { session } = req
 
-        res.render('admin/login')
+        const authenticatedAccount = await sessionService.verify(session.token)
+
+        if (authenticatedAccount) {
+          return res.redirect('/dashboard')
+        }
+
+        return res.render('admin/login')
       } catch (e) {
         return res.redirect('/')
       }
@@ -33,7 +40,7 @@ export default {
           password
         })
 
-        if (section) {
+        if (section.token) {
           req.session.token = section.token
           return res.redirect('/dashboard')
         }

@@ -15,6 +15,10 @@ const create = async ({ email, password }) => {
 }
 
 const verify = async (token) => {
+  if (!token) {
+    return null
+  }
+
   const decoded = jwt.verify(token, config.session.secret)
 
   const account = await accountService.findById(decoded._id)

@@ -6,13 +6,9 @@ export default {
       try {
         const { token } = req.session
 
-        if (!token) {
-          return res.redirect('/login')
-        }
+        const authenticatedAccount = await sessionService.verify(token)
 
-        const section = await sessionService.verify(token)
-
-        if (!section.token) {
+        if (!authenticatedAccount) {
           return res.redirect('/login')
         }
         return res.render('admin/dashboard')
