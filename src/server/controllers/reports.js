@@ -14,7 +14,7 @@ export default {
 
         const reports = await reportService.list(page)
 
-        return res.render('admin/reports', { account: true, reports })
+        return res.render('admin/reports', { account, data: reports })
       } catch (e) {
         return res.redirect('/login')
       }
