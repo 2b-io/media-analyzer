@@ -17,9 +17,9 @@ export default {
         }
         const { session } = req
 
-        const authenticatedAccount = await sessionService.verify(session.token)
+        const account = await sessionService.verify(session.token)
 
-        if (authenticatedAccount) {
+        if (account) {
           return res.redirect('/dashboard')
         }
 
@@ -40,8 +40,8 @@ export default {
           password
         })
 
-        if (section.token) {
-          req.session.token = section.token
+        if (section) {
+          req.session.account = section
           return res.redirect('/dashboard')
         }
 

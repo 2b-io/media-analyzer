@@ -28,6 +28,9 @@ export default {
     dashboard: glob.sync(
       path.join(resourceDir, 'admin/dashboard/index.*')
     ),
+    reports: glob.sync(
+      path.join(resourceDir, 'admin/reports/index.*')
+    ),
     img: glob.sync(
       path.join(resourceDir, 'img/**/*')
     )

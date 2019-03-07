@@ -38,7 +38,10 @@ const issueJWT = (account) => {
   const token = jwt.sign(payload, config.session.secret)
 
   return {
-    token
+    token,
+    identifier: account.identifier,
+    name: account.name,
+    email: account.email
   }
 }
 

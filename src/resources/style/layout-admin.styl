@@ -1,3 +1,6 @@
+@require '~elements/sidebar'
+
+
 body
   background-color: $color__gallery
 
@@ -21,3 +24,16 @@ img
 
    &.full-width
      width: 100%
+
+.dashboard
+  transform: translateX(256px)
+  margin-left: 40px
+  max-width: 1600px
+  min-width: 1150px
+  overflow: hidden
+
+  .dashboard-content-title
+    text-align: center
+    font-weight: 500
+    font-size: $font-size__h3
+    padding: 24px

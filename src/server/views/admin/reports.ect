@@ -1,0 +1,56 @@
+<% extend './layout-admin' %>
+
+<% block 'body-end' :%>
+<% if @__asset('reports.js') :%>
+  <script src="<%= @__asset('reports.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('reports.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('reports.css') %>">
+<% end %>
+<div class="dashboard">
+  <div class="dashboard-content">
+    <h3 class="dashboard-content-title">List Report Customer</h3>
+  <% if @data.reports :%>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="performance-score-title" colspan="2" rowspan="2">Desktop</th>
+          <th class="performance-score-title" colspan="2" rowspan="2">Mobile</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tr>
+        <th class="report-url">Url</th>
+        <th>Origin</th>
+        <th>Optimized</th>
+        <th>Origin</th>
+        <th>Optimized</th>
+        <th>Status</th>
+        <th>Identifier</th>
+      </tr>
+      <% for report in @data.reports :%>
+        <tr>
+          <td class="report-url"><%= report.url %></td>
+          <td><%= Math.round(report.desktop.originalPerformanceScore) %></td>
+          <td><%= Math.round(report.desktop.optimizePerformanceScore) %></td>
+          <td><%= Math.round(report.mobile.originalPerformanceScore) %></td>
+          <td><%= Math.round(report.mobile.optimizePerformanceScore) %></td>
+          <% if @report?.error :%>
+            <td>Error</td>
+          <% else : %>
+            <td>Done</td>
+          <% end %>
+          <td>
+            <a href="/reports/<%- report.identifier %>">
+              <%= report.identifier %>
+            </a>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+  </div>
+</div>
