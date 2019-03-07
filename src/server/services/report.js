@@ -36,8 +36,14 @@ const get = async (identifier) => {
   }).lean()
 }
 
-const list = async (...args) => {
-  return await ReportModel.find(...args).sort('-createdAt')
+const list = async (page) => {
+  const reports = await ReportModel.find().sort('-createdAt').limit(10).skip(Number(10 * page))
+  const reportsHit = await ReportModel.count()
+
+  return {
+    reportsHit,
+    reports,
+  }
 }
 
 const update = async (identifier, data) => {
