@@ -18,7 +18,7 @@ const findByEmail = async (email) => {
 }
 
 const findById = async (id) => {
-  return await Account.findById(id)
+  return await Account.findById(id).lean()
 }
 
 export default {

@@ -25,6 +25,7 @@ export default (app) => {
   app.post('/login', controllers.login.post)
 
   app.get('/dashboard', controllers.dashboard.get)
+  app.get('/dashboard/reports', controllers.reports.get)
 
   app.use((req, res, next) => {
     res.sendStatus(NOT_FOUND)
