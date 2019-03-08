@@ -3,6 +3,9 @@
 <% block 'body-end' :%>
 <% if @__asset('reports.js') :%>
   <script src="<%= @__asset('reports.js') %>" defer></script>
+  <script>
+    var REPORTS = <%- JSON.stringify(@data) %>;
+  </script>
 <% end %>
 <% end %>
 <% if @__asset('reports.css') :%>
@@ -53,10 +56,7 @@
     </table>
     <p><%= @data.reportsHit %></p>
     <div class="report-pagination">
-      <% include 'elements/pagination',{
-        tail: @data.reportsHit % 10 > 0,
-        total:  Math.floor(@data.reportsHit / 10)
-      } %>
+      <% include 'elements/pagination'%>
     </div>
   <% end %>
   </div>

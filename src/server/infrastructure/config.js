@@ -37,5 +37,7 @@ export default {
   session: {
     secret: process.env.SESSION_SECRET,
     ttl: process.env.SESSION_TTL
-  }
+  },
+  pageNumberOfReports: process.env.PAGE_NUMBER_OF_REPORTS,
+  reportPaginationStep: process.env.REPORT_PAGINATION_STEP
 }

@@ -35,13 +35,13 @@ export default {
       const body = req.body
       const { email, password } = body
       try {
-        const section = await sessionService.create({
+        const session = await sessionService.create({
           email,
           password
         })
 
-        if (section) {
-          req.session.account = section
+        if (session) {
+          req.session.account = session
           return res.redirect('/dashboard')
         }
 

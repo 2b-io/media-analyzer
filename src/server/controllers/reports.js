@@ -6,7 +6,7 @@ export default {
     async (req, res, next) => {
       try {
         const { account } = req.session
-        const { page } = req.query
+        const { page } = req.query || 1
 
         if (!account) {
           return res.redirect('/login')
@@ -16,6 +16,8 @@ export default {
 
         return res.render('admin/reports', { account, data: reports })
       } catch (e) {
+        console.error('Error', e)
+
         return res.redirect('/login')
       }
     }
