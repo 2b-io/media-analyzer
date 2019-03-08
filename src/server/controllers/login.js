@@ -17,9 +17,9 @@ export default {
         }
         const { session } = req
 
-        const authenticatedAccount = await sessionService.verify(session.token)
+        const account = await sessionService.verify(session.token)
 
-        if (authenticatedAccount) {
+        if (account) {
           return res.redirect('/dashboard')
         }
 
@@ -35,13 +35,13 @@ export default {
       const body = req.body
       const { email, password } = body
       try {
-        const section = await sessionService.create({
+        const session = await sessionService.create({
           email,
           password
         })
 
-        if (section.token) {
-          req.session.token = section.token
+        if (session) {
+          req.session.account = session
           return res.redirect('/dashboard')
         }
 
