@@ -1,5 +1,8 @@
 <nav class="navbar wrapper">
   <div class="content small">
+    <div class="content small logo">
+      <img src="/img/logo.svg" />
+    </div>
     <h1 class="title"><a href="/">Mr. ROCKET</a>&nbsp;-&nbsp;Speed Up Website Performance</h1>
     <form id="form" method="post" action="/reports">
       <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" value="<%= @report?.url %>" equired>
@@ -9,5 +12,7 @@
       Location: US East (N. Virginia) - Browser: Google Chrome (72.0.3626.81)
     </p>
   </div>
+  <img class="content over-cloud" src="/img/cloud-over.svg" />
+  <img class="content under-cloud" src="/img/cloud-under.svg" />
   <% include 'elements/tab' %>
 </nav>

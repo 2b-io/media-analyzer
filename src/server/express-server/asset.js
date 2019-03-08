@@ -10,7 +10,6 @@ export default (app) => {
   app.locals.__asset = (file) => manifest[file]
 
   app.use('/screenshots', express.static(config.screenshotDir))
-  app.use('/har', express.static(config.harDir))
   app.use('/img', express.static(config.imgDir))
 
   return app

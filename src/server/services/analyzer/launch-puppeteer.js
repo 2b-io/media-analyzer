@@ -43,7 +43,7 @@ const launchPuppeteer = async (params, userAgent) => {
         if (!state.inspect && request.resourceType() === 'image') {
           const url = request.url()
 
-          state.images[url] = { url }
+          state.images[ url ] = { url }
         }
 
         request.continue()
@@ -107,7 +107,7 @@ const launchPuppeteer = async (params, userAgent) => {
 
           return {
             ...all,
-            [url]: img
+            [ url ]: img
           }
         },
         {}
@@ -117,7 +117,7 @@ const launchPuppeteer = async (params, userAgent) => {
       Object.values(state.images).forEach((image) => {
         const url = image.url
 
-        const img = imagesInHTML[url] || {}
+        const img = imagesInHTML[ url ] || {}
 
         const { displayed } = img
 
