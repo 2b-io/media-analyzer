@@ -3,6 +3,9 @@
 <% block 'body-end' :%>
 <% if @__asset('reports.js') :%>
   <script src="<%= @__asset('reports.js') %>" defer></script>
+  <script>
+    var REPORTS = <%- JSON.stringify(@data) %>;
+  </script>
 <% end %>
 <% end %>
 <% if @__asset('reports.css') :%>
@@ -10,7 +13,7 @@
 <% end %>
 <div class="dashboard">
   <div class="dashboard-content">
-    <h3 class="dashboard-content-title">List Report Customer</h3>
+    <h3 class="dashboard-content-title">List Customer Report</h3>
   <% if @data.reports :%>
     <table>
       <thead>
@@ -51,6 +54,10 @@
         </tr>
       <% end %>
     </table>
+    <p><%= @data.reportsHit %></p>
+    <div class="report-pagination">
+      <% include 'elements/pagination'%>
+    </div>
   <% end %>
   </div>
 </div>

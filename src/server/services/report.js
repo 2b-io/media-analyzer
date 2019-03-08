@@ -1,6 +1,8 @@
 import ReportModel from 'models/report'
 import { getSocketServer } from 'socket-server'
 
+import config from 'infrastructure/config'
+
 const STEPS = [
   'Load origin desktop page...',
   'Load origin desktop page... done',
@@ -37,12 +39,15 @@ const get = async (identifier) => {
 }
 
 const list = async (page) => {
-  const reports = await ReportModel.find().sort('-createdAt').limit(10).skip(Number(10 * page))
+  const { pageNumberOfReports, reportPaginationStep } = config
+  const reports = await ReportModel.find().sort('-createdAt').limit(Number(pageNumberOfReports)).skip(Number(pageNumberOfReports * (page - 1)))
   const reportsHit = await ReportModel.count()
 
   return {
-    reportsHit,
+    totalPage: Math.ceil(reportsHit / Number(pageNumberOfReports)),
+    currentPage: page,
     reports,
+    reportPaginationStep
   }
 }
 
