@@ -21,9 +21,24 @@ const findById = async (id) => {
   return await Account.findById(id).lean()
 }
 
+const verify = async ({ email, password }) => {
+  const account = await Account.findOne({ email })
+
+  if (!account) {
+    throw new Error('Invalid email')
+  }
+
+  return account.comparePassword(password) ? {
+    name: account.name,
+    email: account.email,
+    password: account.hashedPassword
+  } : null
+}
+
 export default {
   create,
   findByEmail,
   findById,
-  list
+  list,
+  verify
 }
