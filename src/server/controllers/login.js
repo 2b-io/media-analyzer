@@ -3,9 +3,11 @@ import bodyParser from 'body-parser'
 import config from 'infrastructure/config'
 import accountService from 'services/account'
 import sessionService from 'services/session'
+import verifySession from 'middlewares/verify-session'
 
 export default {
   get: [
+    verifySession,
     async (req, res, next) => {
       try {
         const accounts = await accountService.list()
@@ -15,15 +17,13 @@ export default {
             password: config.passwordAdmin
           })
         }
-        const { session } = req
 
-        const account = await sessionService.verify(session.token)
-
-        if (account) {
+        if (req.session.loggedIn ) {
           return res.redirect('/dashboard')
+        } else {
+          return res.render('admin/login')
         }
 
-        return res.render('admin/login')
       } catch (e) {
         return res.redirect('/')
       }
@@ -34,19 +34,19 @@ export default {
     async (req, res, next) => {
       const body = req.body
       const { email, password } = body
+
       try {
-        const session = await sessionService.create({
+        const account = await accountService.verify({
           email,
           password
         })
 
-        if (session) {
-          req.session.account = session
-          return res.redirect('/dashboard')
-        }
+        req.session.loggedIn = true
+        req.session.account = account
 
-        return res.render('admin/login')
+        return res.redirect('/dashboard')
       } catch (e) {
+        console.error('Error', e)
         return res.render('admin/login')
       }
     }
