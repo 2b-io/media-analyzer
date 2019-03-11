@@ -41,18 +41,6 @@ export default {
           password
         })
 
-        req.session.regenerate((err) => {
-          if (err) {
-            return next(err)
-          }
-        })
-
-        req.session.save((err) => {
-          if (err) {
-            return next(err)
-          }
-        })
-
         req.session.loggedIn = true
         req.session.account = account
 

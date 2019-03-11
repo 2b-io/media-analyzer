@@ -1,9 +1,7 @@
 export default {
   post: [
     async (req, res, next) => {
-      req.session.destroy((err) => {
-        return next(err)
-      })
+      req.session.destroy()
       return res.redirect('/login')
     }
   ]
