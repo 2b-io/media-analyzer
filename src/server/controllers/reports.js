@@ -1,17 +1,25 @@
+import bodyParser from 'body-parser'
+
 import sessionService from 'services/session'
 import reportService from 'services/report'
 import verifySession from 'middlewares/verify-session'
-
 export default {
   get: [
     verifySession,
+    bodyParser.urlencoded({ extended: true }),
     async (req, res, next) => {
       try {
-        const { page } = req.query || 1
+        const  page = req.query.page || 1
 
-        const reports = await reportService.list(page)
+        const url = req.query.url || ''
 
-        return res.render('admin/reports', { account: req.session.account, data: reports })
+        const params = url ? { url: { $regex: `${ escape(url) }.*` } } : {}
+
+        const query = url ? `&url=${ url }` : ''
+
+        const reports = await reportService.list(params , page, query)
+
+        return res.render('admin/reports', { account: req.session.account, data: reports, url })
       } catch (e) {
         console.error('Error', e)
         return res.redirect('/login')

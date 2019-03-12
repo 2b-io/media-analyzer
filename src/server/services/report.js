@@ -38,16 +38,21 @@ const get = async (identifier) => {
   }).lean()
 }
 
-const list = async (page) => {
+const list = async (params = {}, page, query) => {
+
   const { pageNumberOfReports, reportPaginationStep } = config
-  const reports = await ReportModel.find().sort('-createdAt').limit(Number(pageNumberOfReports)).skip(Number(pageNumberOfReports * (page - 1)))
-  const reportsHit = await ReportModel.count()
+
+  const reports = await ReportModel.find(params).sort('-createdAt').limit(Number(pageNumberOfReports)).skip(Number(Math.abs(pageNumberOfReports * (page - 1))))
+
+  const reportsHit = await ReportModel.find(params).countDocuments()
 
   return {
     totalPage: Math.ceil(reportsHit / Number(pageNumberOfReports)),
     currentPage: page,
     reports,
-    reportPaginationStep
+    reportPaginationStep,
+    reportsHit,
+    query
   }
 }
 

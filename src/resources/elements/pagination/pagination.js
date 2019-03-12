@@ -2,20 +2,21 @@ var pagination = {
     code: '',
     extend: (data) => {
         data = data || {}
-        pagination.size = data.size || 300
+        pagination.size = data.size || 1
         pagination.page = data.page || 1
-        pagination.step = data.step || 3
+        pagination.step = data.step || 1
+        pagination.query = data.query
     },
     add: (s, f) => {
         for (var i = s; i < f; i++) {
-            pagination.code += `<a href=/dashboard/reports?page=${ i }>` + i + '</a>'
+            pagination.code += `<a href=/dashboard/reports?page=${ i }${ pagination.query }>` + i + '</a>'
         }
     },
     last: () => {
-        pagination.code += '<i>...</i><a>' + pagination.size + '</a>'
+        pagination.code += `<i>...</i><a href=/dashboard/reports?page=${ pagination.size }${ pagination.query }>` + pagination.size + '</a>'
     },
     first: () => {
-        pagination.code += '<a>1</a><i>...</i>'
+        pagination.code += `<a href=/dashboard/reports?page=1${ pagination.query }>1</a><i>...</i>`
     },
     click: function() {
         pagination.page = +this.innerHTML
@@ -73,9 +74,9 @@ var pagination = {
     },
     create: (e) => {
         var html = [
-            `<a href=/dashboard/reports?page=${ REPORTS.currentPage - 1 }>&#9668;</a>`,
+            `<a href=/dashboard/reports?page=${ REPORTS.currentPage - 1 }${ pagination.query }>&#9668;</a>`,
             '<span></span>',
-            `<a href=/dashboard/reports?page=${ REPORTS.currentPage + 1 }>&#9658;</a>`
+            `<a href=/dashboard/reports?page=${ REPORTS.currentPage + 1 }${ pagination.query }>&#9658;</a>`
         ];
         e.innerHTML = html.join('')
         pagination.e = e.getElementsByTagName('span')[0]
@@ -91,7 +92,8 @@ var init = () => {
     pagination.init(document.getElementById('pagination'), {
         size: Number(REPORTS.totalPage),
         page: Number(REPORTS.currentPage),
-        step: Number(REPORTS.reportPaginationStep)
+        step: Number(REPORTS.reportPaginationStep),
+        query: String(REPORTS.query) || ''
     })
 }
 document.addEventListener('DOMContentLoaded', init, false)
