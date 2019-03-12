@@ -66,10 +66,10 @@
         degrade: @report.desktop.optimizedPerformanceScore < @report.desktop.originalPerformanceScore
       } %>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
       </div>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
       </div>
     </div>
     <div class="report content" id="report-mobile">
@@ -94,10 +94,10 @@
         degrade: @report.mobile.optimizedPerformanceScore < @report.mobile.originalPerformanceScore
       } %>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
       </div>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
       </div>
     </div>
     <div class="link-report-detail">
