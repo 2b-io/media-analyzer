@@ -48,8 +48,8 @@
           <td><%= Math.round(report.desktop.optimizePerformanceScore) %></td>
           <td><%= Math.round(report.mobile.originalPerformanceScore) %></td>
           <td><%= Math.round(report.mobile.optimizePerformanceScore) %></td>
-          <% if @report?.error :%>
-            <td>Error</td>
+          <% if report?.error : %>
+            <td class="report-error">Error</td>
           <% else : %>
             <td>Done</td>
           <% end %>
