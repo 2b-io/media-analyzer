@@ -3,6 +3,7 @@
 @require '~elements/input-line'
 @require '~elements/button-round'
 @require '~elements/pagination'
+@require '~elements/header'
 
 .dashboard-reports
   max-width: 1600px
@@ -17,6 +18,10 @@ table
     padding: 16px
     text-align: left
     white-space: nowrap
+
+  .report-error
+    color: red
+    font-weight: 500
   tr
     height: 16px
 
@@ -37,3 +42,39 @@ table
   .report-url
     max-width: 200px
     text-overflow: ellipsis
+
+.dashboard-search-content
+  min-width: 600px
+  max-width: 800px
+  margin: auto
+
+  form
+    position: relative
+    display: grid
+    grid-template-columns: 6fr 1fr
+    grid-gap: 32px
+    padding-bottom: 32px
+
+    .dashboard-search-input
+      width: 100%
+      padding: 8px 144px 8px 16px
+      appearance: none
+      outline: none
+      border-radius: 40px
+      border: none
+      color: $color__cod-gray
+
+    .dashboard-search-button
+      width: 128px
+      height: 40px
+      border: none
+      background: #074071
+      color: $color__white
+      cursor: pointer
+      border-radius: 40px
+      appearance: none
+      outline: none
+
+      &:hover
+        transition: opacity .3s
+        opacity: 0.8

@@ -14,7 +14,14 @@
 <div class="dashboard">
   <div class="dashboard-content">
     <h3 class="dashboard-content-title">List Customer Report</h3>
+    <div class="dashboard-search-content">
+      <form id="form" method="get" action="/dashboard/reports?url=">
+        <input type="text" name="url" placeholder="Enter a Website URL" class="dashboard-search-input" value="<%= @url %>" equired>
+        <button type="submit" class="dashboard-search-button">Search</button>
+      </form>
+    </div>
   <% if @data.reports :%>
+    <p>Total records: <%= @data.reportsHit %></p>
     <table>
       <thead>
         <tr>
@@ -41,8 +48,8 @@
           <td><%= Math.round(report.desktop.optimizePerformanceScore) %></td>
           <td><%= Math.round(report.mobile.originalPerformanceScore) %></td>
           <td><%= Math.round(report.mobile.optimizePerformanceScore) %></td>
-          <% if @report?.error :%>
-            <td>Error</td>
+          <% if report?.error : %>
+            <td class="report-error">Error</td>
           <% else : %>
             <td>Done</td>
           <% end %>
@@ -54,7 +61,6 @@
         </tr>
       <% end %>
     </table>
-    <p><%= @data.reportsHit %></p>
     <div class="report-pagination">
       <% include 'elements/pagination'%>
     </div>
