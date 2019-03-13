@@ -23,12 +23,20 @@
           Analyzing...
         </p>
       </div>
-      <% include 'elements/progress-bar',{
-        progressPercent: "0%"
-      } %>
+      <% include 'elements/progress-bar' %>
     </div>
   <% end %>
-  <% if @report.finish :%>
+  <% if @report.finish && @report.error :%>
+    <div class="content x-small">
+      <div class="progress-description">
+         <p id="progress-message">
+           Analyzed <%= @report.progressPercent+'%'%>. An error happens, please try again later...
+        </p>
+      </div>
+      <% include 'elements/progress-bar', { progressPercent: @report.progressPercent+'%' } %>
+    </div>
+  <% end %>
+  <% if @report.finish && !@report.error :%>
     <div class="summary-domain content small">
       <h2 class="audited-url"><%= @report.url %></h2>
       <div class="summary-description">
@@ -58,10 +66,10 @@
         degrade: @report.desktop.optimizedPerformanceScore < @report.desktop.originalPerformanceScore
       } %>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
       </div>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
+        <img src="/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
       </div>
     </div>
     <div class="report content" id="report-mobile">
@@ -86,11 +94,14 @@
         degrade: @report.mobile.optimizedPerformanceScore < @report.mobile.originalPerformanceScore
       } %>
       <div class="screenshot">
-        <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
-      </div>
-      <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
       </div>
+      <div class="screenshot">
+        <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
+      </div>
+    </div>
+    <div class="link-report-detail">
+      <a target="_blank" href="<%- @report.identifier%>/detail">View Detail</a>
     </div>
   <% end %>
 </div>
