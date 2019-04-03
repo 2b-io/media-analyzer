@@ -4,28 +4,24 @@ import morgan from 'morgan'
 import path from 'path'
 
 import initAsset from './asset'
+import initBrowser from './browser'
 import initRoutes from './routing'
 import initViewEngine from './view-engine'
 
-const state = {}
+export default async () => {
+  const app = express()
 
-export default () => {
-  if (!state.app) {
-    const app = express()
+  app.enable('strict routing')
+  app.enable('trust proxy')
+  app.disable('x-powered-by')
 
-    app.enable('strict routing')
-    app.enable('trust proxy')
-    app.disable('x-powered-by')
+  app.use(morgan('dev'), slash())
 
-    app.use(morgan('dev'), slash())
+  await initAsset(app)
+  await initBrowser(app)
+  await initViewEngine(app)
 
-    initAsset(app)
-    initViewEngine(app)
+  await initRoutes(app)
 
-    initRoutes(app)
-
-    state.app = app
-  }
-
-  return state.app
+  return app
 }

@@ -1,3 +1,4 @@
+import asynk from 'async'
 import hash from '@emotion/hash'
 import bodyParser from 'body-parser'
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
@@ -189,6 +190,53 @@ export default {
   post: [
     bodyParser.urlencoded({ extended: true }),
     async (req, res, next) => {
+      const { browserCluster } = req.app.locals
+
+      if (!browserCluster) {
+        return res.json({
+          error: 'No Browser Cluster'
+        })
+      }
+
+      const tasks = [1, 2, 3, 4, 5, 6, 7].map((index) => {
+        return (done) => {
+          browserCluster.queue({ url: req.body.url }, async ({ page, data }) => {
+            console.time(`Load origin page #${index}`)
+
+            try {
+              await page.setCacheEnabled(false)
+              await page.goto(data.url, {
+                timeout: ms('2m')
+              })
+            } catch (e) {
+              console.log(`#${index}`, e)
+            }
+
+            console.timeEnd(`Load origin page #${index}`)
+
+            done()
+          })
+        }
+      })
+
+      console.log(tasks)
+
+      asynk.parallel(tasks, () => {
+        console.log('all done!')
+
+        res.json({
+          ok: true
+        })
+      })
+    }
+  ],
+  _post: [
+    bodyParser.urlencoded({ extended: true }),
+    async (req, res, next) => {
+      return res.json({
+        ok: true
+      })
+
       try {
         const body = req.body
         const values = await joi.validate(body, SCHEMA)

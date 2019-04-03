@@ -36,10 +36,10 @@ export default {
     pathinfo: false
   },
   plugins: [
-    new CleanWebpackPlugin([ outDir ], {
-      verbose: true,
+    new CleanWebpackPlugin({
+      dry: true,
       watch: true,
-      allowExternal: true
+      dangerouslyAllowCleanPatternsOutsideProject: true
     }),
     new WebpackAssetsManifest({
       output: path.join(outDir, '../manifest.json'),
