@@ -198,35 +198,10 @@ export default {
         })
       }
 
-      const tasks = [1, 2, 3, 4, 5, 6, 7].map((index) => {
-        return (done) => {
-          browserCluster.queue({ url: req.body.url }, async ({ page, data }) => {
-            console.time(`Load origin page #${index}`)
+      const state =await analyze(browserCluster, req.body.url)
 
-            try {
-              await page.setCacheEnabled(false)
-              await page.goto(data.url, {
-                timeout: ms('2m')
-              })
-            } catch (e) {
-              console.log(`#${index}`, e)
-            }
-
-            console.timeEnd(`Load origin page #${index}`)
-
-            done()
-          })
-        }
-      })
-
-      console.log(tasks)
-
-      asynk.parallel(tasks, () => {
-        console.log('all done!')
-
-        res.json({
-          ok: true
-        })
+      return res.json({
+        state
       })
     }
   ],

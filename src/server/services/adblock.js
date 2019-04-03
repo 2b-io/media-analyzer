@@ -20,7 +20,10 @@ const blacklist = [
   'cs.gssprt.jp',
   'images-na.ssl-images-amazon.com',
   'p.adsymptotic.com',
-  'penta.a.one.impact-ad.jp'
+  'penta.a.one.impact-ad.jp',
+  'stats.g.doubleclick.net',
+  'www.google.com',
+  'www.google.com.vn'
 ]
 
 const blacklistIndices = blacklist.reduce(
