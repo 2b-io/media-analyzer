@@ -6,6 +6,7 @@ import joi from 'joi'
 import ms from 'ms'
 import normalizeUrl from 'normalize-url'
 import serializeError from 'serialize-error'
+import uuid from 'uuid'
 
 import config from 'infrastructure/config'
 import { analyze } from 'services/analyzer'
@@ -198,9 +199,12 @@ export default {
         })
       }
 
-      const state =await analyze(browserCluster, req.body.url)
+      const identifier = uuid.v4()
+
+      const state =await analyze(browserCluster, identifier, req.body.url)
 
       return res.json({
+        identifier,
         state
       })
     }

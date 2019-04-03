@@ -1,15 +1,19 @@
+import delay from 'delay'
+import fs from 'fs-extra'
 import ms from 'ms'
 import fetch from 'node-fetch'
+import path from 'path'
+import DeviceDescriptors from 'puppeteer/DeviceDescriptors'
 
 import config from 'infrastructure/config'
 import adBlocker from 'services/adblock'
 
-export const analyze = async (cluster, url) => {
+export const analyze = async (cluster, identifier, url) => {
   const state = {}
 
   const [ mobile, desktop ] = await Promise.all([
-    analyzeByDevice(cluster, url, 'mobile'),
-    analyzeByDevice(cluster, url, 'desktop')
+    analyzeByDevice(cluster, identifier, url, 'mobile'),
+    analyzeByDevice(cluster, identifier, url, 'desktop')
   ])
 
   state.mobile = mobile
@@ -18,7 +22,7 @@ export const analyze = async (cluster, url) => {
   return state
 }
 
-const analyzeByDevice = async (cluster, url, device) => {
+const analyzeByDevice = async (cluster, identifier, url, device) => {
   // load desktop page
   const state = {
     images: {}
@@ -47,7 +51,8 @@ const analyzeByDevice = async (cluster, url, device) => {
       }
 
       return request.continue()
-    }
+    },
+    screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`)
   })
 
   console.timeEnd(`Load origin ${device} page`)
@@ -96,7 +101,10 @@ const analyzeByDevice = async (cluster, url, device) => {
   state.optimizedStat = await loadPage({
     cluster,
     page: {
-      url
+      url,
+      options: {
+        isMobile: device === 'mobile'
+      }
     },
     requestInterception: (request) => {
       // check redirectChain
@@ -115,7 +123,8 @@ const analyzeByDevice = async (cluster, url, device) => {
       return request.continue({
         url: image.optimizedUrl
       })
-    }
+    },
+    screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-optimized.jpeg`)
   })
 
   console.timeEnd(`Load optimized ${device} page`)
@@ -123,8 +132,10 @@ const analyzeByDevice = async (cluster, url, device) => {
   return state
 }
 
-const loadPage = async ({ cluster, page, requestInterception }) => {
+const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
   return await cluster.execute(page, async ({ page, data }) => {
+    console.log(data)
+
     const resources = {}
 
     // init event handlers
@@ -152,11 +163,26 @@ const loadPage = async ({ cluster, page, requestInterception }) => {
       resources[url].size += length
     })
 
+    if (data.options.isMobile) {
+      await page.emulate(DeviceDescriptors['iPhone 8'])
+    }
+
     // begin load page
     await page.goto(data.url, {
       timeout: ms('2m'),
       ...data.options
     })
+
+    if (screenshot) {
+      await fs.ensureDir(path.dirname(screenshot))
+
+      await delay(ms('1s'))
+
+      await page.screenshot({
+        path: screenshot,
+        fullPage: true
+      })
+    }
 
     // extract useful metrics
     const performance = JSON.parse(await page.evaluate(
