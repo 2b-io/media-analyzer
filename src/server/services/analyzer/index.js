@@ -1,9 +1,11 @@
 import delay from 'delay'
 import fs from 'fs-extra'
+import lighthouse from 'lighthouse'
 import ms from 'ms'
 import fetch from 'node-fetch'
 import path from 'path'
 import DeviceDescriptors from 'puppeteer/DeviceDescriptors'
+import { URL } from 'url'
 
 import config from 'infrastructure/config'
 import adBlocker from 'services/adblock'
@@ -11,16 +13,47 @@ import adBlocker from 'services/adblock'
 export const analyze = async (cluster, identifier, url) => {
   const state = {}
 
-  const [ mobile, desktop ] = await Promise.all([
-    analyzeByDevice(cluster, identifier, url, 'mobile'),
-    analyzeByDevice(cluster, identifier, url, 'desktop')
-  ])
+  await cluster.execute({
+    url: url
+  }, async ({ page, data }) => {
+    const browser = page.browser()
 
-  state.mobile = mobile
-  state.desktop = desktop
+    const wsEndpoint = browser.wsEndpoint()
+    // console.log(browser.port)
+
+    const port = (new URL(wsEndpoint)).port
+
+    // console.log(wsEndpoint, port)
+
+    const result = await lighthouse(url, {
+      port,
+      onlyCategories: [ 'performance' ]
+    })
+
+
+
+    state.result = {
+      ...result,
+      report: null
+    }
+  })
 
   return state
 }
+
+// export const analyze = async (cluster, identifier, url) => {
+//   const state = {}
+
+//   const [ mobile, desktop ] = await Promise.all([
+//     analyzeByDevice(cluster, identifier, url, 'mobile'),
+//     analyzeByDevice(cluster, identifier, url, 'desktop')
+//   ])
+
+//   state.mobile = mobile
+//   state.desktop = desktop
+
+//   return state
+// }
 
 const analyzeByDevice = async (cluster, identifier, url, device) => {
   // load desktop page
@@ -57,14 +90,12 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
 
   console.timeEnd(`Load origin ${device} page`)
 
-  console.time(`Filter images for ${device}`)
+  console.time(`Analyze images for ${device}`)
 
   await Promise.all(
     Object.entries(state.images).map(async ([ url, image ]) => {
       try {
         if (url.startsWith('data:image')) {
-          console.log('inline image')
-
           image.inline = true
           image.skip = true
 
@@ -72,8 +103,6 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
         }
 
         if (adBlocker.isAdvertisement(url)) {
-          console.log(`[adblock] ${url}`)
-
           image.block = true
           image.skip = true
 
@@ -94,7 +123,7 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
     })
   )
 
-  console.timeEnd(`Filter images for ${device}`)
+  console.timeEnd(`Analyze images for ${device}`)
 
   console.time(`Load optimized ${device} page`)
 
@@ -134,8 +163,6 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
 
 const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
   return await cluster.execute(page, async ({ page, data }) => {
-    console.log(data)
-
     const resources = {}
 
     // init event handlers
@@ -169,7 +196,7 @@ const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
 
     // begin load page
     await page.goto(data.url, {
-      timeout: ms('2m'),
+      timeout: ms('3m'),
       ...data.options
     })
 
