@@ -15,11 +15,11 @@ export const analyze = async (cluster, identifier, url, updateProgress) => {
   return {
     mobile: {
       ...mobile,
-      lhs: lighthouse.mobile.lhr.categories.performance.score
+      lhr: lighthouse.mobile.lhr
     },
     desktop: {
       ...desktop,
-      lhs: lighthouse.desktop.lhr.categories.performance.score
+      lhr: lighthouse.desktop.lhr
     }
   }
 }

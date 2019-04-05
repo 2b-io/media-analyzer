@@ -20,8 +20,6 @@ const SCHEMA = joi.object().keys({
 export default {
   get: [
     async (req, res, next) => {
-      return res.sendStatus(200)
-
       try {
         const { identifier } = req.params
 
@@ -31,6 +29,8 @@ export default {
           // return res.sendStatus(NOT_FOUND)
           return res.redirect('/')
         }
+
+        return res.json(report)
 
         if (!report.finish || !report.desktop || !report.mobile) {
           return res.render('pages/report', { report })

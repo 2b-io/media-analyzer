@@ -11,7 +11,12 @@ const create = async ({ url }) => {
   }).save()
 }
 
+const get = async (identifier) => {
+  return Report.findOne({ identifier })
+}
+
 export default {
   create,
-  createWatcher
+  createWatcher,
+  get
 }
