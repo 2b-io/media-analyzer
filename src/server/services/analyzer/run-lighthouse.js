@@ -1,7 +1,9 @@
 import lighthouse from 'lighthouse'
 import { URL } from 'url'
 
-export const runLighthouse = async (cluster, identifier, url) => {
+export const runLighthouse = async (cluster, identifier, url, notify) => {
+  notify('Run lighthouse for mobile site')
+
   const mobile = await cluster.execute({
     url: `${url}#lighthouse/mobile/${identifier}`
   }, async ({ page, data }) => {
@@ -33,6 +35,10 @@ export const runLighthouse = async (cluster, identifier, url) => {
       }
     })
   })
+
+  notify('Run lighthouse for mobile site', true)
+
+  notify('Run lighthouse for desktop site')
 
   const desktop = await cluster.execute({
     url: `${url}#lighthouse/desktop/${identifier}`
@@ -75,6 +81,8 @@ export const runLighthouse = async (cluster, identifier, url) => {
       ]
     })
   })
+
+  notify('Run lighthouse for desktop site', true)
 
   return {
     desktop: {

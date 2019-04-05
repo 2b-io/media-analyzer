@@ -5,13 +5,13 @@ import adBlocker from 'services/adblock'
 
 import { loadPage } from './load-page'
 
-export const analyzeByDevice = async (cluster, identifier, url, device) => {
+export const analyzeByDevice = async (cluster, identifier, url, device, notify) => {
   // load desktop page
   const state = {
     images: {}
   }
 
-  console.time(`Load original ${device} page`)
+  notify(`Load original ${device} page`)
 
   state.originalStat = await loadPage({
     cluster,
@@ -40,9 +40,9 @@ export const analyzeByDevice = async (cluster, identifier, url, device) => {
     screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`)
   })
 
-  console.timeEnd(`Load original ${device} page`)
+  notify(`Load original ${device} page`, true)
 
-  console.time(`Analyze images for ${device}`)
+  notify(`Analyze images for ${device}`)
 
   await Promise.all(
     Object.entries(state.images).map(async ([ url, image ]) => {
@@ -75,9 +75,9 @@ export const analyzeByDevice = async (cluster, identifier, url, device) => {
     })
   )
 
-  console.timeEnd(`Analyze images for ${device}`)
+  notify(`Analyze images for ${device}`, true)
 
-  console.time(`Load optimized ${device} page`)
+  notify(`Load optimized ${device} page`)
 
   state.optimizedStat = await loadPage({
     cluster,
@@ -109,7 +109,7 @@ export const analyzeByDevice = async (cluster, identifier, url, device) => {
     screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-optimized.jpeg`)
   })
 
-  console.timeEnd(`Load optimized ${device} page`)
+  notify(`Load optimized ${device} page`, true)
 
   return state
 }
