@@ -1,30 +1,15 @@
 import { analyzeByDevice } from './analyze-by-device'
 import { runLighthouse } from './run-lighthouse'
 
-const createNotifier = (identifier) => ({
-  notify: (message, isCompleted) => {
-    if (isCompleted) {
-      console.timeEnd(`[${identifier}] ${message}`)
-
-      return
-    }
-
-    console.log(`[${identifier}] ${message}...`)
-    console.time(`[${identifier}] ${message}`)
-  }
-})
-
-export const analyze = async (cluster, identifier, url) => {
-  const notifier = createNotifier(identifier)
-
+export const analyze = async (cluster, identifier, url, updateProgress) => {
   const [
     mobile,
     desktop,
     lighthouse
    ] = await Promise.all([
-    analyzeByDevice(cluster, identifier, url, 'mobile', notifier.notify),
-    analyzeByDevice(cluster, identifier, url, 'desktop', notifier.notify),
-    runLighthouse(cluster, identifier, url, notifier.notify)
+    analyzeByDevice(cluster, identifier, url, 'mobile', updateProgress),
+    analyzeByDevice(cluster, identifier, url, 'desktop', updateProgress),
+    runLighthouse(cluster, identifier, url, updateProgress)
   ])
 
   return {

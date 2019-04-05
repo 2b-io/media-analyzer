@@ -3,15 +3,22 @@ import path from 'path'
 import config from 'infrastructure/config'
 import adBlocker from 'services/adblock'
 
+import { TYPES } from 'services/report/watcher'
+
 import { loadPage } from './load-page'
 
-export const analyzeByDevice = async (cluster, identifier, url, device, notify) => {
+export const analyzeByDevice = async (cluster, identifier, url, device, updateProgress) => {
   // load desktop page
   const state = {
     images: {}
   }
 
-  notify(`Load original ${device} page`)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.LOAD_ORIGINAL_MOBILE :
+      TYPES.LOAD_ORIGINAL_DESKTOP,
+    message: `Load original ${device} page`
+  })
 
   state.originalStat = await loadPage({
     cluster,
@@ -40,9 +47,24 @@ export const analyzeByDevice = async (cluster, identifier, url, device, notify) 
     screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`)
   })
 
-  notify(`Load original ${device} page`, true)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.LOAD_ORIGINAL_MOBILE :
+      TYPES.LOAD_ORIGINAL_DESKTOP,
+    message: `Load original ${device} page`,
+    isCompleted: true,
+    data: {
+      key: `original.${device}.stat`,
+      value: state.originalStat
+    }
+  })
 
-  notify(`Analyze images for ${device}`)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.OPTIMIZE_IMAGES_MOBILE :
+      TYPES.OPTIMIZE_IMAGES_DESKTOP,
+    message: `Analyze images for ${device}`
+  })
 
   await Promise.all(
     Object.entries(state.images).map(async ([ url, image ]) => {
@@ -75,9 +97,24 @@ export const analyzeByDevice = async (cluster, identifier, url, device, notify) 
     })
   )
 
-  notify(`Analyze images for ${device}`, true)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.OPTIMIZE_IMAGES_MOBILE :
+      TYPES.OPTIMIZE_IMAGES_DESKTOP,
+    message: `Analyze images for ${device}`,
+    isCompleted: true,
+    data: {
+      key: `original.${device}.images`,
+      value: state.images
+    }
+  })
 
-  notify(`Load optimized ${device} page`)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.LOAD_OPTIMIZED_MOBILE :
+      TYPES.LOAD_OPTIMIZED_DESKTOP,
+    message: `Load optimized ${device} page`
+  })
 
   state.optimizedStat = await loadPage({
     cluster,
@@ -109,7 +146,18 @@ export const analyzeByDevice = async (cluster, identifier, url, device, notify) 
     screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-optimized.jpeg`)
   })
 
-  notify(`Load optimized ${device} page`, true)
+  updateProgress({
+    type: device === 'mobile' ?
+      TYPES.LOAD_OPTIMIZED_MOBILE :
+      TYPES.LOAD_OPTIMIZED_DESKTOP,
+    message: `Load optimized ${device} page`,
+    isCompleted: true,
+
+    data: {
+      key: `optimized.${device}.stat`,
+      value: state.optimizedStat
+    }
+  })
 
   return state
 }

@@ -20,6 +20,8 @@ const SCHEMA = joi.object().keys({
 export default {
   get: [
     async (req, res, next) => {
+      return res.sendStatus(200)
+
       try {
         const { identifier } = req.params
 
@@ -199,14 +201,28 @@ export default {
         })
       }
 
-      const identifier = uuid.v4()
+      const body = req.body
+      const values = await joi.validate(body, SCHEMA)
 
-      const state =await analyze(browserCluster, identifier, req.body.url)
-
-      return res.json({
-        identifier,
-        state
+      const { identifier, url } = await reportService.create({
+        url: normalizeUrl(values.url, {
+          stripWWW: false
+        })
       })
+
+      const watcher = reportService.createWatcher(identifier)
+
+      res.redirect(`/reports/${ identifier }`)
+
+      try {
+        await analyze(browserCluster, identifier, url, watcher.updateProgress)
+
+        await watcher.finish()
+      } catch (e) {
+        console.log('NOT ABLE TO FINISH ANALYZING!', e)
+
+        await watcher.finish(e)
+      }
     }
   ],
   _post: [

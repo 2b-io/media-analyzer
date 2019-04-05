@@ -1,10 +1,15 @@
 import lighthouse from 'lighthouse'
 import { URL } from 'url'
 
-export const runLighthouse = async (cluster, identifier, url, notify) => {
-  notify('Run lighthouse for mobile site')
+import { TYPES } from 'services/report/watcher'
+
+export const runLighthouse = async (cluster, identifier, url, updateProgress) => {
+  updateProgress({
+    message: 'Run lighthouse for mobile site'
+  })
 
   const mobile = await cluster.execute({
+    type: TYPES.RUN_LIGHTHOUSE_MOBILE,
     url: `${url}#lighthouse/mobile/${identifier}`
   }, async ({ page, data }) => {
     const browser = page.browser()
@@ -36,9 +41,20 @@ export const runLighthouse = async (cluster, identifier, url, notify) => {
     })
   })
 
-  notify('Run lighthouse for mobile site', true)
+  updateProgress({
+    type: TYPES.RUN_LIGHTHOUSE_MOBILE,
+    message: 'Run lighthouse for mobile site',
+    isCompleted: true,
+    data: {
+      key: 'lighthouse.mobile',
+      value: mobile.lhr
+    }
+  })
 
-  notify('Run lighthouse for desktop site')
+  updateProgress({
+    type: TYPES.RUN_LIGHTHOUSE_DESKTOP,
+    message: 'Run lighthouse for desktop site'
+  })
 
   const desktop = await cluster.execute({
     url: `${url}#lighthouse/desktop/${identifier}`
@@ -82,7 +98,15 @@ export const runLighthouse = async (cluster, identifier, url, notify) => {
     })
   })
 
-  notify('Run lighthouse for desktop site', true)
+  updateProgress({
+    type: TYPES.RUN_LIGHTHOUSE_DESKTOP,
+    message: 'Run lighthouse for desktop site',
+    isCompleted: true,
+    data: {
+      key: 'lighthouse.desktop',
+      value: desktop.lhr
+    }
+  })
 
   return {
     desktop: {
