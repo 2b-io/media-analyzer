@@ -10,8 +10,10 @@ import { URL } from 'url'
 import config from 'infrastructure/config'
 import adBlocker from 'services/adblock'
 
-export const analyze = async (cluster, identifier, url) => {
-  const mobile = await cluster.execute({ url }, async ({ page, data: { url } }) => {
+export const runLighthouse = async (cluster, identifier, url) => {
+  const mobile = await cluster.execute({
+    url: `${url}#lighthouse/mobile/${identifier}`
+  }, async ({ page, data }) => {
     const browser = page.browser()
     const wsEndpoint = browser.wsEndpoint()
     const port = (new URL(wsEndpoint)).port
@@ -41,7 +43,9 @@ export const analyze = async (cluster, identifier, url) => {
     })
   })
 
-  const desktop = await cluster.execute({ url }, async ({ page, data: { url } }) => {
+  const desktop = await cluster.execute({
+    url: `${url}#lighthouse/desktop/${identifier}`
+  }, async ({ page, data }) => {
     const browser = page.browser()
     const wsEndpoint = browser.wsEndpoint()
     const port = (new URL(wsEndpoint)).port
@@ -91,19 +95,24 @@ export const analyze = async (cluster, identifier, url) => {
   }
 }
 
-// export const analyze = async (cluster, identifier, url) => {
-//   const state = {}
+export const analyze = async (cluster, identifier, url) => {
+  const [ mobile, desktop, lighthouse ] = await Promise.all([
+    analyzeByDevice(cluster, identifier, url, 'mobile'),
+    analyzeByDevice(cluster, identifier, url, 'desktop'),
+    runLighthouse(cluster, identifier, url)
+  ])
 
-//   const [ mobile, desktop ] = await Promise.all([
-//     analyzeByDevice(cluster, identifier, url, 'mobile'),
-//     analyzeByDevice(cluster, identifier, url, 'desktop')
-//   ])
-
-//   state.mobile = mobile
-//   state.desktop = desktop
-
-//   return state
-// }
+  return {
+    mobile: {
+      ...mobile,
+      lhs: lighthouse.mobile.lhr.categories.performance.score
+    },
+    desktop: {
+      ...desktop,
+      lhs: lighthouse.desktop.lhr.categories.performance.score
+    }
+  }
+}
 
 const analyzeByDevice = async (cluster, identifier, url, device) => {
   // load desktop page
@@ -116,7 +125,9 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
   state.originalStat = await loadPage({
     cluster,
     page: {
+      identifier,
       url,
+      original: true,
       options: {
         isMobile: device === 'mobile'
       }
@@ -138,7 +149,7 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
     screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`)
   })
 
-  console.timeEnd(`Load origin ${device} page`)
+  console.timeEnd(`Load original ${device} page`)
 
   console.time(`Analyze images for ${device}`)
 
@@ -180,6 +191,7 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
   state.optimizedStat = await loadPage({
     cluster,
     page: {
+      identifier,
       url,
       options: {
         isMobile: device === 'mobile'
@@ -212,7 +224,11 @@ const analyzeByDevice = async (cluster, identifier, url, device) => {
 }
 
 const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
-  return await cluster.execute(page, async ({ page, data }) => {
+  return await cluster.execute({
+    ...page,
+    target: page.url,
+    url: `${page.url}#${page.original ? 'original' : 'optimized'}/${page.options.isMobile ? 'mobile' : 'desktop'}/${page.identifier}`
+  }, async ({ page, data }) => {
     const resources = {}
 
     // init event handlers
@@ -245,7 +261,7 @@ const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
     }
 
     // begin load page
-    await page.goto(data.url, {
+    await page.goto(data.target, {
       timeout: ms('3m'),
       ...data.options
     })

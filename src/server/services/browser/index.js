@@ -5,7 +5,7 @@ import os from 'os'
 export default {
   async createCluster() {
     const cluster = await Cluster.launch({
-      concurrency: Cluster.CONCURRENCY_BROWSER,
+      concurrency: Cluster.CONCURRENCY_CONTEXT,
       maxConcurrency: os.cpus().length,
       monitor: true,
       puppeteerOptions: {
