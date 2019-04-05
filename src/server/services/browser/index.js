@@ -5,7 +5,7 @@ import os from 'os'
 export default {
   async createCluster() {
     const cluster = await Cluster.launch({
-      concurrency: Cluster.CONCURRENCY_CONTEXT,
+      concurrency: Cluster.CONCURRENCY_BROWSER,
       maxConcurrency: os.cpus().length,
       monitor: true,
       puppeteerOptions: {
@@ -23,7 +23,8 @@ export default {
         ],
         ignoreHTTPSErrors: true
       },
-      timeout: ms('5m')
+      timeout: ms('5m'),
+      workerCreationDelay: ms('1s')
     })
 
     cluster.on('taskerror', (err, data) => {

@@ -16,7 +16,7 @@ const safeController = (controller) => {
     } catch (e) {
       console.log(e)
 
-      res.send(e)
+      res.status(500).send(e.message)
     }
   }
 }
