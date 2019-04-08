@@ -57,7 +57,7 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot,
 
     // begin load page
     await page.goto(data.target, {
-      timeout: config.optimizerTimeout || ms('3m'),
+      timeout: ms(config.optimizerTimeout || '3m'),
       waitUntil: 'load',
       ...data.options
     })
