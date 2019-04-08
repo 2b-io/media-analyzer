@@ -38,12 +38,25 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot 
     })
 
     if (data.options.isMobile) {
+       await page.setViewport({
+        width: 750,
+        height: 1334,
+        isMobile: true,
+      })
+
       await page.emulate(DeviceDescriptors['iPhone 8'])
+    } else {
+      await page.setViewport({
+        width: 1600,
+        height: 1200,
+        isMobile: false,
+      })
     }
 
     // begin load page
     await page.goto(data.target, {
       timeout: ms('3m'),
+      waitUntil: 'load',
       ...data.options
     })
 
@@ -54,7 +67,7 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot 
 
       await page.screenshot({
         path: screenshot,
-        fullPage: true
+        fullPage: false
       })
     }
 

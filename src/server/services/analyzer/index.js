@@ -1,6 +1,8 @@
 import { analyzeByDevice } from './analyze-by-device'
 import { runLighthouse } from './run-lighthouse'
 
+export { summarizeMetrics } from './scoring'
+
 export const analyze = async (cluster, identifier, url, updateProgress) => {
   const [
     mobile,
