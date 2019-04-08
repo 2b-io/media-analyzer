@@ -57,11 +57,6 @@ export default {
 
         const metrics = summarizeMetrics(report.data)
 
-        return res.json({
-          report,
-          metrics
-        })
-
         res.render('pages/report', {
           report,
           metrics

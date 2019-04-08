@@ -86,7 +86,8 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
         const optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}`
 
         await fetch(optimizedUrl, {
-          redirect: 'error'
+          redirect: 'error',
+          timeout: ms('30s')
         })
 
         image.optimizedUrl = optimizedUrl
