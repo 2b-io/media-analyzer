@@ -10,9 +10,18 @@ const schema = mongoose.Schema({
     type: Number,
     default: 0
   },
-  finish: Boolean,
-  error: Boolean,
-  url: String,
+  finish: {
+    type: Boolean,
+    default: false
+  },
+  error: {
+    type: Boolean,
+    default: false
+  },
+  url: {
+    type: String,
+    required: true
+  },
   data: mongoose.Schema.Types.Mixed
 }, {
   timestamps: true

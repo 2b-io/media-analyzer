@@ -43,10 +43,17 @@ export const createWatcher = (identifier) => ({
     // TODO send progress via websocket
   },
   finish: async (error) => {
+    await Report.findOneAndUpdate({
+      identifier
+    }, {
+      error: !!error,
+      finish: true
+    })
+
     if (error) {
       console.log(`[${identifier}] Exited with error`, error)
     } else {
       console.log(`[${identifier}] Exited normally!`)
     }
-  },
+  }
 })
