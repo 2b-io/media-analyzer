@@ -4,6 +4,8 @@ import ms from 'ms'
 import path from 'path'
 import DeviceDescriptors from 'puppeteer/DeviceDescriptors'
 
+import config from 'infrastructure/config'
+
 export const loadPage = async ({ cluster, page, requestInterception, screenshot, after }) => {
   return await cluster.execute({
     ...page,
