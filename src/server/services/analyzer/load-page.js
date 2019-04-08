@@ -4,7 +4,7 @@ import ms from 'ms'
 import path from 'path'
 import DeviceDescriptors from 'puppeteer/DeviceDescriptors'
 
-export const loadPage = async ({ cluster, page, requestInterception, screenshot }) => {
+export const loadPage = async ({ cluster, page, requestInterception, screenshot, after }) => {
   return await cluster.execute({
     ...page,
     target: page.url,
@@ -59,6 +59,10 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot 
       waitUntil: 'load',
       ...data.options
     })
+
+    if (after) {
+      await after(page)
+    }
 
     if (screenshot) {
       await fs.ensureDir(path.dirname(screenshot))

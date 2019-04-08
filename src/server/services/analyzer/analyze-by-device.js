@@ -1,8 +1,10 @@
 import fetch from 'node-fetch'
 import path from 'path'
+import ms from 'ms'
+
 import config from 'infrastructure/config'
 import adBlocker from 'services/adblock'
-
+import normalizeUrl from 'services/normalize-url'
 import { TYPES } from 'services/report/watcher'
 
 import { loadPage } from './load-page'
@@ -39,12 +41,70 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
       }
 
       state.images[url] = {
+        url,
         isNavigationRequest: request.isNavigationRequest()
       }
 
       return request.continue()
     },
-    screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`)
+    screenshot: path.join(config.screenshotDir, `${ identifier }-${ device }-original.jpeg`),
+    after: async (page) => {
+      const location = await page.evaluate(() => ({
+        hostname: location.hostname,
+        protocol: location.protocol,
+        href: location.href
+      }))
+
+      const normalize = normalizeUrl(location.protocol, location.hostname)
+
+      state.url = location.url
+
+      const images = (await page.evaluate(() => {
+        return Array.from(document.querySelectorAll('img'))
+          .map(
+            (imgTag) => ({
+              natural: {
+                width: imgTag.naturalWidth,
+                height: imgTag.naturalHeight
+              },
+              displayed: {
+                width: imgTag.clientWidth,
+                height: imgTag.clientHeight
+              },
+              src: imgTag.getAttribute('src')
+            })
+          )
+        })
+      ).reduce(
+        (allImages, image) => {
+          if (!image.src) {
+            return allImages
+          }
+
+          const url = normalize(image.src.trim())
+
+          return {
+            ...allImages,
+            [url]: image
+          }
+        }, {}
+      )
+
+      // merge image information
+      Object.values(state.images).forEach((image) => {
+        const { url } = image
+        const detail = images[url]
+
+        if (!detail) {
+          image.css = true
+
+          return
+        }
+
+        image.displayed = detail.displayed
+        image.natural = detail.natural
+      })
+    }
   })
 
   updateProgress({
@@ -66,6 +126,8 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
     message: `Analyze images for ${device}`
   })
 
+  // get image size here
+
   await Promise.all(
     Object.entries(state.images).map(async ([ url, image ]) => {
       try {
@@ -83,7 +145,18 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
           return
         }
 
-        const optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}`
+        let optimizedUrl
+
+        const shouldResize = image.natural
+          && image.displayed
+          && image.displayed.width * image.displayed.height > 0
+          && image.natural.width * image.natural.height > image.displayed.width * image.displayed.height
+
+        if (shouldResize) {
+          optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}&w=${image.displayed.width}&h=${image.displayed.height}`
+        } else {
+          optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}`
+        }
 
         await fetch(optimizedUrl, {
           redirect: 'error',
