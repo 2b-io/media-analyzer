@@ -7,7 +7,7 @@ export default {
     const cluster = await Cluster.launch({
       concurrency: Cluster.CONCURRENCY_CONTEXT,
       maxConcurrency: os.cpus().length,
-      monitor: true,
+      // monitor: true,
       puppeteerOptions: {
         headless: true,
         // executablePath: 'google-chrome',

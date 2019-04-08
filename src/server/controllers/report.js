@@ -11,7 +11,7 @@ import uuid from 'uuid'
 import config from 'infrastructure/config'
 import { analyze, summarizeMetrics } from 'services/analyzer'
 import reportService from 'services/report'
-import { TYPES } from 'services/report/watcher'
+import { FINISH, TYPES } from 'services/report/watcher'
 import { getSocketServer } from 'socket-server'
 
 const SCHEMA = joi.object().keys({
@@ -20,6 +20,12 @@ const SCHEMA = joi.object().keys({
 
 export default {
   get: [
+    (req, res, next) => {
+      res.locals.TYPES = TYPES
+      res.locals.FINISH = FINISH
+
+      next()
+    },
     async (req, res, next) => {
       try {
         const { identifier } = req.params

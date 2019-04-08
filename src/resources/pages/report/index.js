@@ -1,6 +1,17 @@
 import io from 'socket.io-client'
 import 'elements/contact-form/auto-height-textarea'
 
+import { parseProgress } from './parse-progress'
+
+const showProgress = (current, finish) => {
+  const progress = parseProgress(current, finish)
+
+  document.getElementById('progress-bar').style.width = `${progress}%`
+  document.getElementById('progress-message').innerHTML = `Analyzing... ${progress}% complete`
+}
+
+console.log(REPORT)
+
 const listenSocket = () => {
   if (REPORT.finish) {
     return
@@ -29,31 +40,23 @@ const listenSocket = () => {
     }
   })
 
-  if (REPORT.progress.length) {
-    const { progress } = REPORT
-    const { message, step, total } = progress[ progress.length -1 ]
-    const percentProgress = (step * 100) / total
-    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
-    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
+  if (REPORT.progress) {
+    showProgress(REPORT.progress, FINISH)
   }
 
   socket.on('analyze:progress', (data) => {
-    console.log('data.payload',  data.payload)
+    const { progress } = data.payload
 
-    const { message, step, total } = data.payload.message
-    const { error } = data.payload
-    const percentProgress = (step * 100) / total
+    showProgress(progress, FINISH)
 
-    document.getElementById('progress-bar').style.width = `${ Math.round(percentProgress) }%`
-    document.getElementById('progress-message').innerHTML = `Analyzing... ${ Math.round(percentProgress) }% complete`
-
-    if (message === 'Finished!' && !error) {
+    if (progress === FINISH) {
       location.reload()
     }
   })
 
   socket.on('analyze:failure', (data) => {
     socket.disconnect()
+
     document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
   })
 }

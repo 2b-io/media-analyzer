@@ -5,6 +5,9 @@
     <script src="<%= @__asset('report.js') %>" defer></script>
     <script>
       var REPORT = <%- JSON.stringify(@report) %>;
+      var METRICS = <%- JSON.stringify(@metrics || {}) %>;
+      var TYPES = <%- JSON.stringify(@TYPES) %>;
+      var FINISH = <%- JSON.stringify(@FINISH) %>;
     </script>
   <% end %>
 <% end %>
@@ -33,9 +36,6 @@
            An error happens, please try again later...
         </p>
       </div>
-      <% include 'elements/progress-bar', {
-        progressPercent: 0
-      } %>
     </div>
   <% end %>
   <% if @report.finish && !@report.error :%>

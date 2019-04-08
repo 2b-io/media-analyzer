@@ -12,7 +12,7 @@ const create = async ({ url }) => {
 }
 
 const get = async (identifier) => {
-  return Report.findOne({ identifier })
+  return Report.findOne({ identifier }).lean()
 }
 
 export default {

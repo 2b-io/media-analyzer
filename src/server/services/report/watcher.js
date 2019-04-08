@@ -1,3 +1,4 @@
+import { getSocketServer } from 'socket-server'
 import Report from 'models/report'
 
 // bitmask
@@ -41,6 +42,13 @@ export const createWatcher = (identifier) => ({
     })
 
     // TODO send progress via websocket
+    const socketServer = getSocketServer()
+
+    socketServer.to(identifier).emit('analyze:progress', {
+      payload: {
+        progress
+      }
+    })
   },
   finish: async (error) => {
     await Report.findOneAndUpdate({
@@ -52,6 +60,14 @@ export const createWatcher = (identifier) => ({
 
     if (error) {
       console.log(`[${identifier}] Exited with error`, error)
+
+      const socketServer = getSocketServer()
+
+      socketServer.to(identifier).emit('analyze:failure', {
+        payload: {
+          error
+        }
+      })
     } else {
       console.log(`[${identifier}] Exited normally!`)
     }
