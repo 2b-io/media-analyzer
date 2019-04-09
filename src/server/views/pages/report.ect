@@ -68,10 +68,14 @@
         degrade: @metrics.optimized.desktop.score < @metrics.original.desktop.score
       } %>
       <div class="screenshot">
-        <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
+        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg" target="_blank">
+          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg?w=560">
+        </a>
       </div>
       <div class="screenshot">
-        <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg">
+        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg" target="_blank">
+          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg?w=560">
+        </a>
       </div>
     </div>
     <div class="report content" id="report-mobile">
@@ -96,10 +100,14 @@
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
       <div class="screenshot">
-        <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
+        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg" target="_blank">
+          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg?w=560">
+        </a>
       </div>
       <div class="screenshot">
-        <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
+        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg" target="_blank">
+          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg?w=560">
+        </a>
       </div>
     </div>
     <!--
