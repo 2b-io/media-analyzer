@@ -106,8 +106,10 @@ const handleTabs = () => {
   })
 }
 
-window.addEventListener('load', () => {
+const main = () => {
   listenSocket()
 
   handleTabs()
-})
+}
+
+main()

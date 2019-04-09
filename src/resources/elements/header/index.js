@@ -1,6 +1,6 @@
 import Parallax from 'parallax-js'
 
-window.addEventListener('load', () => {
+const main = () => {
   const cloudyBackground = document.getElementById('cloudy')
   const scene = new Parallax(cloudyBackground, {
     limitY: 0
@@ -11,4 +11,6 @@ window.addEventListener('load', () => {
       cloudyBackground.classList.add('animated')
     }
   }
-})
+}
+
+main()
