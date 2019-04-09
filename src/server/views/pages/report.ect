@@ -5,6 +5,9 @@
     <script src="<%= @__asset('report.js') %>" defer></script>
     <script>
       var REPORT = <%- JSON.stringify(@report) %>;
+      var METRICS = <%- JSON.stringify(@metrics || {}) %>;
+      var TYPES = <%- JSON.stringify(@TYPES) %>;
+      var FINISH = <%- JSON.stringify(@FINISH) %>;
     </script>
   <% end %>
 <% end %>
@@ -30,10 +33,9 @@
     <div class="content x-small">
       <div class="progress-description">
          <p id="progress-message">
-           Analyzed <%= @report.progressPercent+'%'%>. An error happens, please try again later...
+           An error happens, please try again later...
         </p>
       </div>
-      <% include 'elements/progress-bar', { progressPercent: @report.progressPercent+'%' } %>
     </div>
   <% end %>
   <% if @report.finish && !@report.error :%>
@@ -47,9 +49,9 @@
     <div class="report content" id="report-desktop">
       <% include 'elements/table-report', {
         titleReport: 'ORIGINAL',
-        score: @report.desktop.originalPerformanceScore,
-        loadTime: @prettyMs(@report.desktop.original.loadTime),
-        pageSize: @prettyBytes(@report.desktop.original.downloadedBytes)
+        score: @metrics.original.desktop.score,
+        loadTime: @prettyMs(@metrics.original.desktop.loadTime),
+        pageSize: @prettyBytes(@metrics.original.desktop.pageSize)
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
@@ -57,13 +59,13 @@
       } %>
       <% include 'elements/table-report', {
         titleReport: 'OPTIMIZED',
-        score: @report.desktop.optimizedPerformanceScore,
-        loadTime: @prettyMs(@report.desktop.optimized.loadTime),
-        pageSize: @prettyBytes(@report.desktop.optimized.downloadedBytes),
-        loadTimePercent: ((@report.desktop.optimized.loadTime * 100) / @report.desktop.original.loadTime) + ',100',
-        pageSizePercent: ((@report.desktop.optimized.downloadedBytes * 100) / @report.desktop.original.downloadedBytes) + ',100',
+        score: @metrics.optimized.desktop.score,
+        loadTime: @prettyMs(@metrics.optimized.desktop.loadTime),
+        pageSize: @prettyBytes(@metrics.optimized.desktop.pageSize),
+        loadTimePercent: ((@metrics.optimized.desktop.loadTime * 100) / @metrics.original.desktop.loadTime) + ',100',
+        pageSizePercent: ((@metrics.optimized.desktop.pageSize * 100) / @metrics.original.desktop.pageSize) + ',100',
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
-        degrade: @report.desktop.optimizedPerformanceScore < @report.desktop.originalPerformanceScore
+        degrade: @metrics.optimized.desktop.score < @metrics.original.desktop.score
       } %>
       <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-desktop-original.jpeg">
@@ -75,9 +77,9 @@
     <div class="report content" id="report-mobile">
       <% include 'elements/table-report', {
         titleReport: 'ORIGINAL',
-        score: @report.mobile.originalPerformanceScore,
-        loadTime: @prettyMs(@report.mobile.original.loadTime),
-        pageSize: @prettyBytes(@report.mobile.original.downloadedBytes),
+        score: @metrics.original.mobile.score,
+        loadTime: @prettyMs(@metrics.original.mobile.loadTime),
+        pageSize: @prettyBytes(@metrics.original.mobile.pageSize),
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
@@ -85,13 +87,13 @@
       } %>
       <% include 'elements/table-report', {
         titleReport: 'OPTIMIZED',
-        score: @report.mobile.optimizedPerformanceScore,
-        loadTime: @prettyMs(@report.mobile.optimized.loadTime),
-        pageSize: @prettyBytes(@report.mobile.optimized.downloadedBytes),
-        loadTimePercent: ((@report.mobile.optimized.loadTime * 100) / @report.mobile.original.loadTime)+ ',100',
-        pageSizePercent: ((@report.mobile.optimized.downloadedBytes * 100) / @report.mobile.original.downloadedBytes) + ',100',
+        score: @metrics.optimized.mobile.score,
+        loadTime: @prettyMs(@metrics.optimized.mobile.loadTime),
+        pageSize: @prettyBytes(@metrics.optimized.mobile.pageSize),
+        loadTimePercent: ((@metrics.optimized.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
+        pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.paegSize) + ',100',
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
-        degrade: @report.mobile.optimizedPerformanceScore < @report.mobile.originalPerformanceScore
+        degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
       <div class="screenshot">
         <img src="/screenshots/<%= @report.identifier %>-mobile-original.jpeg">
@@ -100,8 +102,10 @@
         <img src="/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg">
       </div>
     </div>
+    <!--
     <div class="link-report-detail">
       <a target="_blank" href="<%- @report.identifier%>/detail">View Detail</a>
     </div>
+    -->
   <% end %>
 </div>

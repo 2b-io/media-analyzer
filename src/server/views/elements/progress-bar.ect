@@ -3,3 +3,58 @@
     <span id="progress-bar" class="progress" style="width: <%- @progressPercent %>"></span>
   </span>
 </div>
+<ul class="steps" id="progress-steps">
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.LOAD_ORIGINAL_MOBILE %>">
+    <div class="content">Load mobile site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.OPTIMIZE_IMAGES_MOBILE %>">
+    <div class="content">Analyze mobile site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.LOAD_OPTIMIZED_MOBILE %>">
+    <div class="content">Optimize mobile site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.RUN_LIGHTHOUSE_MOBILE %>">
+    <div class="content">Run lighthouse on mobile site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.LOAD_ORIGINAL_DESKTOP %>">
+    <div class="content">Load desktop site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.OPTIMIZE_IMAGES_DESKTOP %>">
+    <div class="content">Analyze desktop site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.LOAD_OPTIMIZED_DESKTOP %>">
+    <div class="content">Optimize desktop site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+  <li class="step"
+    data-status="processing"
+    data-code="<%= @TYPES.RUN_LIGHTHOUSE_DESKTOP %>">
+    <div class="content">Run lighthouse on desktop site</div>
+    <% include 'elements/progress-status' %>
+  </li>
+</ul>
+<% if @report.progress == @FINISH :%>
+  <div class="reload-manual">
+    <a href="/reports/<%= @report.identifier %>">View report</a>
+  </div>
+<% end %>

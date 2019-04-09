@@ -5,6 +5,22 @@ import prettyMs from 'pretty-ms'
 import * as controllers from 'controllers'
 import config from 'infrastructure/config'
 
+const safeController = (controller) => {
+  if (Array.isArray(controller)) {
+    return controller.map(safeController)
+  }
+
+  return async (req, res, next) => {
+    try {
+      await controller(req, res, next)
+    } catch (e) {
+      console.log(e)
+
+      res.status(500).send(e.message)
+    }
+  }
+}
+
 export default (app) => {
   // config
   app.locals.googleRecaptchaSiteKey = config.googleRecaptchaSiteKey
@@ -19,7 +35,7 @@ export default (app) => {
   app.get('/reports/:identifier', controllers.report.get)
   app.get('/reports/:identifier/detail', controllers.reportDetail.get)
 
-  app.post('/reports', controllers.report.post)
+  app.post('/reports', safeController(controllers.report.post))
   app.post('/contact', controllers.contact.post)
 
   app.use((req, res, next) => {

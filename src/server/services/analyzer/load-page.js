@@ -1,121 +1,107 @@
 import delay from 'delay'
-import devices from 'puppeteer/DeviceDescriptors'
 import fs from 'fs-extra'
 import ms from 'ms'
 import path from 'path'
-import puppeteerHar from 'puppeteer-har'
+import DeviceDescriptors from 'puppeteer/DeviceDescriptors'
 
-const loadPage = async (page, params = {}) => {
-  const {
-    url,
-    screenshot,
-    harName,
-    width = 1440,
-    height = 900,
-    mode = 'load',
-    timeout = '5m',
-    isMobile = false
-  } = params
+import config from 'infrastructure/config'
 
-  // await page._client.send('Performance.enable')
-  await page.setCacheEnabled(false)
-  await page.setViewport({
-    width,
-    height,
-    isMobile,
-  })
+export const loadPage = async ({ cluster, page, requestInterception, screenshot, after }) => {
+  return await cluster.execute({
+    ...page,
+    target: page.url,
+    url: `${page.url}#${page.original ? 'original' : 'optimized'}/${page.options.isMobile ? 'mobile' : 'desktop'}/${page.identifier}`
+  }, async ({ page, data }) => {
+    const resources = {}
 
-  const resources = {}
+    // init event handlers
+    await page.setRequestInterception(true)
+    await page.on('request', requestInterception)
+    await page._client.on('Network.dataReceived', (event) => {
+      const req = page._networkManager._requestIdToRequest.get(event.requestId)
 
-  page._client.on('Network.dataReceived', (event) => {
-    const req = page._networkManager._requestIdToRequest.get(event.requestId)
+      if (!req) {
+        return
+      }
 
-    if (!req) {
-      return
-    }
+      const url = req.url()
 
-    const url = req.url()
+      if (url.startsWith('data:')) {
+        return
+      }
 
-    if (url.startsWith('data:')) {
-      return
-    }
+      const length = event.dataLength
 
-    const length = event.dataLength
+      if (!resources[url]) {
+        resources[url] = { size: 0 }
+      }
 
-    if (!resources[url]) {
-      resources[url] = { size: 0 }
-    }
-
-    resources[url].size += length
-  })
-
-  await fs.ensureDir(path.dirname(harName))
-
-  const har = new puppeteerHar(page)
-
-  await har.start({
-    path: harName
-  })
-
-  if (url) {
-    if (isMobile) {
-      const iPhone = devices['iPhone 8']
-      await page.emulate(iPhone)
-    }
-
-    await page.goto(url, {
-      waitUntil: mode,
-      timeout: ms(timeout)
+      resources[url].size += length
     })
-  } else {
-    await page.reload({
-      waitUntil: mode,
-      timeout: timeout
+
+    if (data.options.isMobile) {
+       await page.setViewport({
+        width: 750,
+        height: 1334,
+        isMobile: true,
+      })
+
+      await page.emulate(DeviceDescriptors['iPhone 8'])
+    } else {
+      await page.setViewport({
+        width: 1600,
+        height: 1200,
+        isMobile: false,
+      })
+    }
+
+    // begin load page
+    await page.goto(data.target, {
+      ...data.options,
+      timeout: ms(config.optimizerTimeout || '3m'),
+      waitUntil: 'load'
     })
-  }
 
-  await har.stop()
+    await delay(ms('2s'))
 
-  if (screenshot) {
-    await fs.ensureDir(path.dirname(screenshot))
+    if (after) {
+      await after(page)
+    }
 
-    await delay(ms('1s'))
+    if (screenshot) {
+      await fs.ensureDir(path.dirname(screenshot))
 
-    await page.screenshot({
-      path: screenshot
-      // fullPage: true
-    })
-  }
+      await page.screenshot({
+        path: screenshot,
+        fullPage: false
+      })
+    }
 
-  const performance = JSON.parse(await page.evaluate(
-    () => JSON.stringify(window.performance)
-  ))
+    // extract useful metrics
+    const performance = JSON.parse(await page.evaluate(
+      () => JSON.stringify(window.performance)
+    ))
 
-  const latestTiming = Object.entries(performance.timing).reduce(
-    (max, [ key, value ]) => max.value > value ? max : { key, value }, { value: 0 }
-  )
+    const latestTiming = Object.entries(performance.timing).reduce(
+      (max, [ key, value ]) => max.value > value ? max : { key, value }, { value: 0 }
+    )
 
-  const downloadedBytes = Object.values(resources).reduce(
-    (sum, { size }) => sum + (size || 0), 0
-  )
+    const downloadedBytes = Object.values(resources).reduce(
+      (sum, { size }) => sum + (size || 0), 0
+    )
 
-  const timeToFirstByte = performance.timing.responseStart - performance.timing.requestStart
-  const request = performance.timing.requestStart - performance.timing.connectEnd
-  const response = performance.timing.responseEnd - performance.timing.responseStart
-  const processing = performance.timing.loadEventStart - performance.timing.domLoading
+    const timeToFirstByte = performance.timing.responseStart - performance.timing.requestStart
+    const request = performance.timing.requestStart - performance.timing.connectEnd
+    const response = performance.timing.responseEnd - performance.timing.responseStart
+    const processing = performance.timing.loadEventStart - performance.timing.domLoading
 
-  // refer
-  // https://marketing.adobe.com/resources/help/en_US/sc/implement/performanceTiming.html
-  // https://developer.mozilla.org/en-US/docs/Web/API/Navigation_timing_API
-
-  return {
-    loadTime: latestTiming.value - performance.timing.navigationStart,
-    timeToFirstByte,
-    request,
-    response,
-    processing,
-    downloadedBytes
-  }
+    return {
+      loadTime: latestTiming.value - performance.timing.navigationStart,
+      timeToFirstByte,
+      request,
+      response,
+      processing,
+      downloadedBytes
+    }
+  })
 }
-
-export default loadPage
