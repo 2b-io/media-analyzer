@@ -14,7 +14,11 @@
       Location: US East (N. Virginia) - Browser: Google Chrome (72.0.3626.81)
     </p>
   </div>
-  <img class="content over-cloud" src="<%= @__asset('img/cloud-over.svg') %>" />
-  <img class="content under-cloud" src="<%= @__asset('img/cloud-under.svg') %>" />
+  <div id="cloudy" class="cloudy-background" data-relative-input="true">
+    <div class="cloudy-layer front" data-depth="0.2">
+    </div>
+    <div class="cloudy-layer back" data-depth="0.6">
+    </div>
+  </div>
   <% include 'elements/tab' %>
 </nav>

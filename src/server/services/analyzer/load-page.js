@@ -57,10 +57,12 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot,
 
     // begin load page
     await page.goto(data.target, {
+      ...data.options,
       timeout: ms(config.optimizerTimeout || '3m'),
-      waitUntil: 'load',
-      ...data.options
+      waitUntil: 'load'
     })
+
+    await delay(ms('2s'))
 
     if (after) {
       await after(page)
@@ -68,8 +70,6 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot,
 
     if (screenshot) {
       await fs.ensureDir(path.dirname(screenshot))
-
-      await delay(ms('1s'))
 
       await page.screenshot({
         path: screenshot,

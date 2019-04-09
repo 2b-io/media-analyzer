@@ -1,16 +1,28 @@
 import io from 'socket.io-client'
 import 'elements/contact-form/auto-height-textarea'
+import 'elements/header'
 
 import { parseProgress } from './parse-progress'
 
-const showProgress = (current, finish) => {
+const updateProgress = (current, finish) => {
+  const steps = document.querySelectorAll('#progress-steps .step')
+
+  Array.from(steps).forEach((e) => {
+    const code = e.getAttribute('data-code')
+
+    if (current & code) {
+      e.querySelector('.succeed').style.display = 'block'
+      e.querySelector('.processing').style.display = 'none'
+      e.querySelector('.failed').style.display = 'none'
+      e.setAttribute('data-status', 'succeed')
+    }
+  })
+
   const progress = parseProgress(current, finish)
 
   document.getElementById('progress-bar').style.width = `${progress}%`
   document.getElementById('progress-message').innerHTML = `Analyzing... ${progress}% complete`
 }
-
-console.log(REPORT)
 
 const listenSocket = () => {
   if (REPORT.finish) {
@@ -41,13 +53,13 @@ const listenSocket = () => {
   })
 
   if (REPORT.progress) {
-    showProgress(REPORT.progress, FINISH)
+    updateProgress(REPORT.progress, FINISH)
   }
 
   socket.on('analyze:progress', (data) => {
     const { progress } = data.payload
 
-    showProgress(progress, FINISH)
+    updateProgress(progress, FINISH)
 
     if (progress === FINISH) {
       location.reload()
@@ -58,6 +70,19 @@ const listenSocket = () => {
     socket.disconnect()
 
     document.getElementById('progress-message').innerHTML = 'An error happens, please try again later...'
+
+    const steps = document.querySelectorAll('#progress-steps .step')
+
+    Array.from(steps).forEach((e) => {
+      const status = e.getAttribute('data-status')
+
+      if (status === 'processing') {
+        e.querySelector('.succeed').style.display = 'none'
+        e.querySelector('.processing').style.display = 'none'
+        e.querySelector('.failed').style.display = 'block'
+        e.setAttribute('data-status', 'failed')
+      }
+    })
   })
 }
 

@@ -2,6 +2,8 @@ import ms from 'ms'
 import { Cluster } from 'puppeteer-cluster'
 import os from 'os'
 
+import config from 'infrastructure/config'
+
 export default {
   async createCluster() {
     const cluster = await Cluster.launch({
@@ -23,7 +25,7 @@ export default {
         ],
         ignoreHTTPSErrors: true
       },
-      timeout: ms('5m'),
+      timeout: ms(config.optimizerTimeout || '3m') + ms('3m'),
       workerCreationDelay: ms('1s')
     })
 
