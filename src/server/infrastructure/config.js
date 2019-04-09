@@ -9,7 +9,7 @@ export default {
   harDir: path.join(rootDir, '../../data/har'),
   imgDir: path.join(rootDir, '../../assets/img'),
   // env
-  devMode: process.env.PORT !== 'production',
+  devMode: process.env.NODE_ENV !== 'production',
   port: process.env.PORT,
   mongodb: process.env.MONGODB,
   assetEndpoint: process.env.ASSET_ENDPOINT,
