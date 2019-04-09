@@ -91,7 +91,7 @@
         loadTime: @prettyMs(@metrics.optimized.mobile.loadTime),
         pageSize: @prettyBytes(@metrics.optimized.mobile.pageSize),
         loadTimePercent: ((@metrics.optimized.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
-        pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.paegSize) + ',100',
+        pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.pageSize) + ',100',
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
