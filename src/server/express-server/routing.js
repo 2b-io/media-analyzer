@@ -41,7 +41,11 @@ export default (app) => {
   app.post('/contact', controllers.contact.post)
 
   app.use((req, res, next) => {
-    res.sendStatus(NOT_FOUND)
+    if (config.devMode) {
+      return res.sendStatus(NOT_FOUND)
+    }
+
+    res.redirect('/')
   })
 
   app.use((error, req, res, next) => {
