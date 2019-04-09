@@ -165,7 +165,7 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
           timeout: ms('2m')
         })
       } catch (e) {
-        console.error(`[${id}] Optimize ${image.url} -> ${image.optimizedUrl} failed`, e)
+        console.error(`[${identifier}] Optimize ${image.url} -> ${image.optimizedUrl} failed`, e)
 
         image.error = true
         image.skip = true
