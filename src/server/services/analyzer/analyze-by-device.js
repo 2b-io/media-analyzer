@@ -1,3 +1,4 @@
+import delay from 'delay'
 import fetch from 'node-fetch'
 import path from 'path'
 import ms from 'ms'
@@ -184,6 +185,9 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
       value: state.images
     }
   })
+
+  // wait for cdn propagation
+  await delay('2s')
 
   updateProgress({
     type: device === 'mobile' ?

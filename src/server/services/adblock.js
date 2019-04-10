@@ -5,6 +5,7 @@ const blacklist = [
   'lg1.logging.admicro.vn',
   'media1.admicro.vn',
   'cm.g.doubleclick.net',
+  'googleads4.g.doubleclick.net',
   'pagead2.googlesyndication.com',
   'static.xx.fbcdn.net',
   's.ytimg.com',
