@@ -29,7 +29,11 @@ const blacklist = [
   'contextual.media.net',
   'beacon.krxd.net',
   'idsync.rlcdn.com',
-  'criteo-sync.teads.tv'
+  'criteo-sync.teads.tv',
+  'ir-jp.amazon-adsystem.com',
+  'cnt.fout.jp',
+  'sync.fout.jp',
+  'ssp-sync.i-mobile.co.jp'
 ]
 
 const blacklistIndices = blacklist.reduce(
