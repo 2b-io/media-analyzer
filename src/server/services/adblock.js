@@ -24,10 +24,12 @@ const blacklist = [
   'stats.g.doubleclick.net',
   'www.google.com',
   'www.google.com.vn',
+  'www.googletagmanager.com',
   'in.treasuredata.com',
   'contextual.media.net',
   'beacon.krxd.net',
-  'idsync.rlcdn.com'
+  'idsync.rlcdn.com',
+  'criteo-sync.teads.tv'
 ]
 
 const blacklistIndices = blacklist.reduce(
