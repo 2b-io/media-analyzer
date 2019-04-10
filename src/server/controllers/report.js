@@ -5,6 +5,7 @@ import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
 import ms from 'ms'
 import normalizeUrl from 'normalize-url'
+import pick from 'object.pick'
 import serializeError from 'serialize-error'
 import uuid from 'uuid'
 
@@ -64,7 +65,15 @@ export default {
         const metrics = summarizeMetrics(report.data)
 
         res.render('pages/report', {
-          report,
+          report: pick(report, [
+            'identifier',
+            'error',
+            'finish',
+            'progress',
+            'url',
+            'createdAt',
+            'updatedAt'
+          ]),
           metrics
         })
 
