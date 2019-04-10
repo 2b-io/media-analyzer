@@ -23,7 +23,11 @@ const blacklist = [
   'penta.a.one.impact-ad.jp',
   'stats.g.doubleclick.net',
   'www.google.com',
-  'www.google.com.vn'
+  'www.google.com.vn',
+  'in.treasuredata.com',
+  'contextual.media.net',
+  'beacon.krxd.net',
+  'idsync.rlcdn.com'
 ]
 
 const blacklistIndices = blacklist.reduce(
