@@ -73,7 +73,8 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot,
 
       await page.screenshot({
         path: screenshot,
-        fullPage: false
+        fullPage: false,
+        quality: 100
       })
     }
 
