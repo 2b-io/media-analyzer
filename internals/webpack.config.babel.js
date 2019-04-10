@@ -17,16 +17,20 @@ export default {
   mode: 'production',
   entry: {
     home: glob.sync(
-      path.join(resourceDir, 'pages/home/index.*')
+      path.join(resourceDir, 'pages/home/index.*'),
+      { nodir: true }
     ),
     report: glob.sync(
-      path.join(resourceDir, 'pages/report/index.*')
+      path.join(resourceDir, 'pages/report/index.*'),
+      { nodir: true }
     ),
     ['report-detail']: glob.sync(
-      path.join(resourceDir, 'pages/report-detail/index.*')
+      path.join(resourceDir, 'pages/report-detail/index.*'),
+      { nodir: true }
     ),
     img: glob.sync(
-      path.join(resourceDir, 'img/**/*')
+      path.join(resourceDir, 'img/**/*'),
+      { nodir: true }
     )
   },
   output: {
@@ -106,9 +110,10 @@ export default {
         {
           loader: 'file-loader',
           options: {
-            name: 'img/[name].[hash:6].[ext]',
+            name: 'img/[path][name].[hash:6].[ext]',
             publicPath: `${ cdn }/assets`,
-            emitFile: true
+            emitFile: true,
+            context: 'src/resources/img'
           }
         }
       ]
