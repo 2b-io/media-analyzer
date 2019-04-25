@@ -1,0 +1,16 @@
+<% block 'body-end' :%>
+<% if @__asset('home.js') :%>
+  <script src="<%= @__asset('home.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('home.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('home.css') %>">
+<% end %>
+<div class="notify-contact">
+  <p>
+    document here
+  <p>
+  <p>
+    document here
+  </p>
+</div>

@@ -39,6 +39,7 @@ export default (app) => {
 
   app.post('/reports', safeController(controllers.report.post))
   app.post('/contact', controllers.contact.post)
+  app.get('/document', controllers.doc.get)
 
   app.use((req, res, next) => {
     if (config.devMode) {
