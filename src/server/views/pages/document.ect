@@ -1,16 +1,19 @@
+<% extend './layout-document' %>
 <% block 'body-end' :%>
-<% if @__asset('home.js') :%>
-  <script src="<%= @__asset('home.js') %>" defer></script>
+  <% if @__asset('document.js') :%>
+    <script src="<%= @__asset('document.js') %>" defer></script>
+  <% end %>
 <% end %>
+
+<% block 'head-end' :%>
+  <% if @__asset('document.css') :%>
+    <link rel="stylesheet" href="<%= @__asset('document.css') %>">
+  <% end %>
 <% end %>
-<% if @__asset('home.css') :%>
-  <link rel="stylesheet" href="<%= @__asset('home.css') %>">
-<% end %>
-<div class="notify-contact">
-  <p>
-    document here
-  <p>
-  <p>
-    document here
-  </p>
-</div>
+<main id="main-doc" class="document">
+  <section class="document-content" id="getting-started">
+    <header>
+      <h1>Getting Started</h1>
+    </header>
+  </section>
+<main>

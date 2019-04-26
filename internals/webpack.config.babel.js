@@ -28,6 +28,10 @@ export default {
       path.join(resourceDir, 'pages/report-detail/index.*'),
       { nodir: true }
     ),
+    ['document']: glob.sync(
+      path.join(resourceDir, 'pages/document/index.*'),
+      { nodir: true }
+    ),
     img: glob.sync(
       path.join(resourceDir, 'img/**/*'),
       { nodir: true }

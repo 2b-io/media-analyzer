@@ -1,0 +1,17 @@
+<% extend './layout-document' %>
+
+<% block 'body-end' :%>
+<% if @__asset('document.js') :%>
+  <script src="<%= @__asset('document.js') %>" defer></script>
+<% end %>
+<% end %>
+<% if @__asset('document.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('document.css') %>">
+<% end %>
+<main id="about" class="document">
+      <section class="document-content" id="about">
+        <header>
+          <h1>About</h1>
+        </header>
+      </section>
+  <main>
