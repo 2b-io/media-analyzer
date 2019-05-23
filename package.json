@@ -62,7 +62,7 @@
     "parallax-js": "3.1.0",
     "pretty-bytes": "5.1.0",
     "pretty-ms": "4.0.0",
-    "puppeteer": "1.16.0",
+    "puppeteer": "1.14.0",
     "puppeteer-cluster": "0.15.2",
     "puppeteer-har": "1.0.5",
     "remove": "0.1.5",
