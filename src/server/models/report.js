@@ -22,9 +22,7 @@ const schema = mongoose.Schema({
     type: String,
     required: true
   },
-  lighthouse: mongoose.Schema.Types.Mixed,
-  original: mongoose.Schema.Types.Mixed,
-  optimized: mongoose.Schema.Types.Mixed
+  data: mongoose.Schema.Types.Mixed
 }, {
   timestamps: true
 })

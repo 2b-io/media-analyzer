@@ -25,40 +25,6 @@ const AUDIT_STRUCT_DATA = [
   'dom-size'
 ]
 
-const LIGHTHOUSE_STRUCT_DATA = {
-  userAgent: '',
-  fetchTime: '',
-  requestedUrl: '',
-  finalUrl: '',
-  audits: {
-    firstContentfulPaint: {},
-    firstMeaningfulPaint: {},
-    speedIndex: {},
-    firstCpuIdle: {},
-    interactive: {},
-    maxPotentialFid: {},
-    fontDisplay: {},
-    usesRelPreload: {},
-    redirects: {},
-    timeToFirstByte: {},
-    userTimings: {},
-    criticalRequestChains: {},
-    mainthreadWorkBreakdown: {},
-    bootupTime: {},
-    usesRelPreconnect: {},
-    usesLongCacheTtl: {},
-    offScreenImages: {},
-    unminifiedCss: {},
-    unminifiedJavascript: {},
-    usesWebpImages: {},
-    usesOptimizedImages: {},
-    usesTextCompression: {},
-    usesResponsiveImages: {},
-    domSize: {},
-  }
-}
-
 export {
-  LIGHTHOUSE_STRUCT_DATA as lighthouseStructData,
   AUDIT_STRUCT_DATA as auditStructData
 }
