@@ -43,6 +43,7 @@
     "clone-buffer": "1.0.0",
     "delay": "4.1.0",
     "ect": "0.5.9",
+    "email-templates": "5.1.0",
     "express": "4.16.4",
     "express-slash": "2.0.1",
     "fs-extra": "7.0.1",

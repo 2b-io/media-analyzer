@@ -1,0 +1,14 @@
+<p>
+  Hello <%= @customerName %>,<br /><br />
+  You receive this email because <%= @email %> has sent you contact <br />
+  <% if @message :%>
+    <br />
+    <blockquote>
+      <pre><%= @message %></pre>
+    </blockquote>
+    <br /><br />
+  <% end %>
+  Welcome to Mr Rocket! Please click the link below to try free.<br />
+  <a href="<%= @link %>">Try services</a><br /><br />
+  Thanks for your trust in Mr Rocket!
+</p>
