@@ -24,7 +24,7 @@ export default {
   googleRecaptchaUrl: process.env.GOOGLE_RECAPTCHA_URL,
   // google analytics
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
-
+  // sendgrid
   sendgrid: {
     sender: process.env.SENDGRID_SENDER,
     apiKey: process.env.SENDGRID_API_KEY
