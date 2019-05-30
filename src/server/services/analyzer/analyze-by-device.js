@@ -10,7 +10,7 @@ import { TYPES } from 'services/report/watcher'
 
 import { loadPage } from './load-page'
 
-export const analyzeByDevice = async (cluster, identifier, url, device, updateProgress) => {
+export const analyzeByDevice = async (cluster, identifier, url, optimize, device, updateProgress) => {
   // load desktop page
   const state = {
     images: {}
@@ -153,14 +153,16 @@ export const analyzeByDevice = async (cluster, identifier, url, device, updatePr
           && image.displayed.width * image.displayed.height > 0
           && image.natural.width * image.natural.height > image.displayed.width * image.displayed.height
 
-        if (shouldResize) {
-          optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}&w=${image.displayed.width}&h=${image.displayed.height}`
-        } else {
-          optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}`
+        if (optimize) {
+          if (shouldResize) {
+            optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}&w=${image.displayed.width}&h=${image.displayed.height}`
+          } else {
+            optimizedUrl = `${config.optimizerEndpoint}/u?url=${encodeURIComponent(url)}`
+          }
         }
 
         image.optimizedUrl = optimizedUrl
-
+        console.log('image.optimizedUrl', image.optimizedUrl)
         await fetch(optimizedUrl, {
           redirect: 'error',
           timeout: ms('2m')

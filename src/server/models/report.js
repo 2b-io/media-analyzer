@@ -22,6 +22,9 @@ const schema = mongoose.Schema({
     type: String,
     required: true
   },
+  optimize: {
+    type: Boolean
+  },
   data: mongoose.Schema.Types.Mixed
 }, {
   timestamps: true

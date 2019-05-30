@@ -9,6 +9,11 @@
     <form id="form" method="post" action="/reports">
       <input type="text" name="url" placeholder="Enter a Website URL" class="analyze-input" value="<%= @report?.url %>" equired>
       <button type="submit" class="analyze-button">Analyze</button>
+      <div class="switch-wrapper">
+        <label class="switch-description">No Optimize Image </label>
+        <input id="switch-optimize" class="switch" name="optimize" type="checkbox" value="false" >
+        <label for="switch-optimize" class="switch-label"></label>
+      </div>
     </form>
     <p class="description">
       Location: US East (N. Virginia) - Browser: Google Chrome (72.0.3626.81)

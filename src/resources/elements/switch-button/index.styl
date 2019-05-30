@@ -1,0 +1,58 @@
+
+
+.switch-wrapper {
+  top: 0;
+  position: absolute;
+  right: 0;
+}
+
+.switch {
+  visibility: hidden;
+}
+.switch-label {
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  box-sizing: border-box;
+  width: 60px;
+  height: 35px;
+  border-radius: 20px;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  background: #f1f1f1;
+  position: absolute;
+  transform: translatex(50%);
+  top: 0;
+  margin-top: 1px
+}
+.switch-label::before {
+  display: block;
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid white;
+  transition: all 0.25s ease-in-out;
+  background: white;
+}
+.switch:checked + .switch-label::before {
+  transform: translateX(25px);
+  border-color: white;
+}
+.switch:checked + .switch-label {
+  background: #074071;
+  border-color: #074071;
+}
+.switch-description {
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 24px;
+  position: absolute;
+  transform: translatey(100%);
+  margin-left: 32px;
+}
