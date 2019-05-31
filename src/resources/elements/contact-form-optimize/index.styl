@@ -1,0 +1,67 @@
+.contact-form-optimized
+  background-color: $color__white
+  margin-bottom: 8px
+
+  .form-title-optimized
+    color: $color__denium
+    font-size: 18px
+    font-weight: 500
+    padding-top: 48px
+    padding-bottom: 16px
+    text-align: center
+
+  .contact-form
+    text-align: center
+
+  .groups-input-form-optimized
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-gap: 16px
+    padding: 16px
+
+  .input-line
+    width: 100%
+    background: none
+    border: none
+    border-bottom: 1px solid $color__gallery
+    display: block
+    appearance: none
+    border-radius: 0
+    outline: none
+    line-height: 24px
+    padding: 8px 0
+    overflow: hidden
+
+    &::placeholder
+      color: $color__cod-gray
+
+    &:focus
+      border-bottom: 1px solid $color__cornflower-blue
+      transition: border .3s
+
+    &.multi-line
+      resize: none
+      overflow: hidden
+      grid-column-end: span 2
+
+  .send-button-contact-optimize
+    margin-top: 16px
+    border: none
+    width: 128px
+    background: $color__catalina-blue
+    color: $color__white
+    cursor: pointer
+    border-radius: 32px
+    height: 32px
+    appearance: none
+    outline: none
+
+    &:hover
+      transition: opacity .3s
+      opacity: 0.8
+
+  .google-recapcha
+    text-align: center
+    margin: auto
+    padding-bottom: 25px
+    max-width: 300px

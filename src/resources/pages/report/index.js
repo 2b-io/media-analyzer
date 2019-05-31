@@ -1,5 +1,6 @@
 import io from 'socket.io-client'
 import 'elements/contact-form/auto-height-textarea'
+import 'elements/contact-form-optimize/contact-form-optimize'
 import 'elements/header'
 
 import { parseProgress } from './parse-progress'

@@ -67,6 +67,16 @@
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
         degrade: @metrics.optimized.desktop.score < @metrics.original.desktop.score
       } %>
+      <% include 'elements/table-report', {
+        titleReport: 'OPTIMIZED UP TO',
+        score: @metrics.original.desktop.score,
+        loadTime: @prettyMs(@metrics.original.desktop.loadTime),
+        pageSize: @prettyBytes(@metrics.original.desktop.pageSize)
+        loadTimePercent: '100,100',
+        pageSizePercent: '100,100',
+        error: @report.error,
+        scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
+      } %>
       <div class="screenshot">
         <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg" target="_blank">
           <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg?w=560">
@@ -77,6 +87,7 @@
           <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg?w=560">
         </a>
       </div>
+      <% include 'elements/contact-form-optimize' %>
     </div>
     <div class="report content" id="report-mobile">
       <% include 'elements/table-report', {
@@ -99,6 +110,16 @@
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
+      <% include 'elements/table-report', {
+        titleReport: 'OPTIMIZED UP TO',
+        score: @metrics.optimized.mobile.score,
+        loadTime: @prettyMs(@metrics.optimized.mobile.loadTime),
+        pageSize: @prettyBytes(@metrics.optimized.mobile.pageSize),
+        loadTimePercent: ((@metrics.optimized.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
+        pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.pageSize) + ',100',
+        scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
+        degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
+      } %>
       <div class="screenshot">
         <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg" target="_blank">
           <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg?w=560">
@@ -109,6 +130,7 @@
           <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg?w=560">
         </a>
       </div>
+      <% include 'elements/contact-form-optimize' %>
     </div>
     <!--
     <div class="link-report-detail">

@@ -11,6 +11,7 @@ const SCHEMA = joi.object().keys({
   company: joi.string().allow('').trim(),
   content: joi.string().trim().required(),
   phone: joi.number().allow(''),
+  urlAnalyze: joi.string().trim(),
   token: joi.string().trim()
 })
 

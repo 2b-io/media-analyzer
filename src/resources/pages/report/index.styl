@@ -1,6 +1,6 @@
 @require '~style/base'
 @require '~elements/circle-chart'
-@require '~elements/contact-form'
+@require '~elements/contact-form-optimize'
 @require '~elements/footer'
 @require '~elements/header/index.styl'
 @require '~elements/report-tab'
@@ -8,8 +8,10 @@
 @require '~elements/progress-bar'
 
 .report
+  max-width: 1700px
+  width: 1700px !important
   display: grid
-  grid-template-columns: 1fr 1fr
+  grid-template-columns: 1fr 1fr 1fr
   grid-gap: 16px
   margin: auto
 
