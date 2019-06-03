@@ -125,6 +125,11 @@ export const summarizeMetrics = (data) => {
     mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
   }
 
+  const optimizedScoreUpto = {
+    desktop: Math.min(99, optimizedScore.desktop + Math.round((optimizedScore.desktop * 35)/100)),
+    mobile: Math.min(99, optimizedScore.mobile + Math.round((optimizedScore.desktop * 35)/100))
+  }
+
   return {
     original: {
       desktop: {
@@ -148,6 +153,18 @@ export const summarizeMetrics = (data) => {
         loadTime: mobileOptimizedLoadTime,
         pageSize: mobileOptimizedPageSize,
         score: optimizedScore.mobile
+      }
+    },
+    optimizedUpto: {
+      desktop: {
+        loadTime: desktopOptimizedLoadTime - Math.round((desktopOptimizedLoadTime * 60)/100),
+        pageSize: desktopOptimizedPageSize - Math.round((desktopOptimizedPageSize * 50)/100),
+        score: optimizedScoreUpto.desktop
+      },
+      mobile: {
+        loadTime: mobileOptimizedLoadTime - Math.round((mobileOptimizedLoadTime * 60)/100),
+        pageSize: mobileOptimizedPageSize - Math.round((mobileOptimizedPageSize * 50)/100),
+        score: optimizedScoreUpto.mobile
       }
     }
   }
