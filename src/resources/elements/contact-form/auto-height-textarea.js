@@ -1,5 +1,3 @@
-import request from 'superagent'
-
 window.addEventListener('load', () => {
   const textAreas = document.querySelectorAll('.input-line.multi-line')
 

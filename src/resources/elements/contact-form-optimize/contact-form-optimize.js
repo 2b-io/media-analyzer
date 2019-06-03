@@ -2,7 +2,7 @@ import request from 'superagent'
 
 grecaptcha.ready(() => {
 
-  const form = document.getElementById('formContactOptimized')
+  const form = document.getElementById('form-contact-optimized')
 
   form.addEventListener('submit', async (event) => {
 

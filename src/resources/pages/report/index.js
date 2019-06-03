@@ -97,6 +97,8 @@ const handleTabs = () => {
     document.getElementById('report-desktop').style.display = 'none'
     document.getElementById('tab-mobile').className = 'elements-tab-active'
     document.getElementById('tab-desktop').className = 'elements-tab'
+    const formContactOptimized = document.getElementById('contact-form-optimized')
+    document.getElementById('report-mobile').appendChild(formContactOptimized)
   })
 
   document.getElementById('tab-desktop').addEventListener('click', () => {
@@ -104,6 +106,8 @@ const handleTabs = () => {
     document.getElementById('report-mobile').style.display = 'none'
     document.getElementById('tab-desktop').className = 'elements-tab-active'
     document.getElementById('tab-mobile').className = 'elements-tab'
+    const formContactOptimized = document.getElementById('contact-form-optimized')
+    document.getElementById('report-desktop').appendChild(formContactOptimized)
   })
 }
 
