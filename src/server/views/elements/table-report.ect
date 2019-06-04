@@ -20,6 +20,13 @@
   </div>
   <div class="report-description">
     <%- @scoreDescription %>
+    <% if !@degrade && @scoreIncreased : %>
+      <span>After the site is optimized automatically by the service of mr rocket, scores are analyzed by lighthouse has increased <%= Math.round(@scoreIncreased) %> score compared to the original website.</span>
+      <br/>
+      <span>
+        <a href="https://app.mr-rocket.io">Try our service is only from 0$, no credit card required.</a>
+      </span>
+    <% end %>
   </div>
   <div class="report-info">
     <% include 'elements/small-circle-chart', {

@@ -104,21 +104,18 @@
         scoreDescription: '<div>
           <span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>
           <br/>
-          <span>At the top of the report, lighthouse provides a score which summarizes the page’s performance. This score is determined by running Lighthouse to collect and analyze lab data about the page. A score of 90 or above is considered fast, and 50 to 90 is considered average. Below 50 is considered to be slow.</span>
+          <span>This score is determined by running Lighthouse to collect and analyze lab data about the page. A score of 90 or above is considered fast, and 50 to 90 is considered average. Below 50 is considered to be slow.</span>
           </div>'
       } %>
       <% include 'elements/table-report', {
-        titleReport: 'OPTIMIZED',
+        titleReport: 'OPTIMIZED BY MR ROCKET AUTOMATIC',
         score: @metrics.optimized.mobile.score,
         loadTime: @prettyMs(@metrics.optimized.mobile.loadTime),
         pageSize: @prettyBytes(@metrics.optimized.mobile.pageSize),
         loadTimePercent: ((@metrics.optimized.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
         pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.pageSize) + ',100',
-        scoreDescription: '<div>
-          <span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>
-          <br/>
-          <span> Opportunity Mr. Rocket service can speed up your page load.</span>
-          </div>',
+        scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
+        scoreIncreased: @metrics.optimized.mobile.score - @metrics.original.mobile.score,
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
       <% include 'elements/table-report', {
