@@ -122,18 +122,9 @@
         scoreIncreased: @metrics.optimized.mobile.score - @metrics.original.mobile.score,
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
-      <% include 'elements/table-report', {
+      <% include 'elements/table-speed-up', {
         titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
         score: @metrics.optimizedUpto.mobile.score,
-        loadTime: @prettyMs(@metrics.optimizedUpto.mobile.loadTime),
-        pageSize: @prettyBytes(@metrics.optimizedUpto.mobile.pageSize),
-        loadTimePercent: ((@metrics.optimizedUpto.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
-        pageSizePercent: ((@metrics.optimizedUpto.mobile.pageSize * 100) / @metrics.original.mobile.pageSize) + ',100',
-        scoreDescription: '<div>
-        <span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>
-        <span>opportunities for your site has the higher score. Please contact us, we will support you so that you achieve the highest score. Customized according to each technology are using your website.</span>
-        </div>',
-        degrade: @metrics.optimizedUpto.mobile.score < @metrics.original.mobile.score
       } %>
       <div class="screenshot">
         <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg" target="_blank">
@@ -145,7 +136,6 @@
           <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg?w=560">
         </a>
       </div>
-      <% include 'elements/contact-form-optimize' %>
     </div>
     <!--
     <div class="link-report-detail">
