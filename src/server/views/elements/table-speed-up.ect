@@ -1,17 +1,9 @@
-<div class="table-report">
+<div class="table-report" id='table-report-up-to-<%= @device %>'>
   <% if @score > 0 :%>
     <div class="score-report">
-      <% include 'elements/circle-chart', {
+      <% include 'elements/circle-big-chart', {
         value:  Math.round(@score),
         info:  Math.round(@score)
-      } %>
-    </div>
-  <% end %>
-  <% if @score == 0  :%>
-    <div class="score-report">
-      <% include 'elements/circle-chart', {
-        value:  '0,100',
-        info:  '?'
       } %>
     </div>
   <% end %>
@@ -21,12 +13,9 @@
   <div class="report-description">
     <%- @scoreDescription %>
     <% if !@degrade && @scoreIncreased : %>
-      <span>After the site is optimized automatically by the service of mr rocket, scores are analyzed by lighthouse has increased <%= Math.round(@scoreIncreased) %> score compared to the original website.</span>
-      <br/>
       <span>
         <a href="https://app.mr-rocket.io">Try our service is free, no credit card required.</a>
       </span>
     <% end %>
   </div>
-  <% include 'elements/contact-form-optimize' %>
 </div>

@@ -21,11 +21,6 @@
   <div class="report-description">
     <%- @scoreDescription %>
     <% if !@degrade && @scoreIncreased : %>
-      <span>After the site is optimized automatically by the service of mr rocket, scores are analyzed by lighthouse has increased <%= Math.round(@scoreIncreased) %> score compared to the original website.</span>
-      <br/>
-      <span>
-        <a href="https://app.mr-rocket.io">Try our service is free, no credit card required.</a>
-      </span>
     <% end %>
   </div>
   <div class="report-info">
@@ -36,9 +31,6 @@
     } %>
     <div class="report-description">
       It takes <strong><%= @loadTime %></strong> from the start of initial navigation until the begining of the window load event (onload).
-      <br/>
-      <span>Every 1 second delay in load time results in 7% loss in conversions, 11% fewer pageviews and 16% decrease in customer satisfaction. Ultimately, users want to have a pleasant experience when they visit a website, a fast loading site on any device and any connection signifies quality.</span>
-      <!-- <span>Evaluate the impact a faster site can have on your business in <a href="https://www.thinkwithgoogle.com/feature/testmysite"><strong>here</strong></a> </span> -->
     </div>
     <% include 'elements/small-circle-chart', {
       value: @pageSizePercent,
@@ -48,7 +40,11 @@
     <div class="report-description">
       The webpage weighs <strong><%= @pageSize %></strong>, which makes users wait and <a href="https://whatdoesmysitecost.com/#usdCost">costs money</a> to download over metered networks.
       <br/>
-      <!-- <span> Google announced that for the first time the use of mobile phones to conduct online searches had overtaken desktops in the top ten world economies. In 2018, Google initiated mobile-first indexing. This is a huge concern because web pages take more time to load on mobile devices than on desktops. The only way to improve load time on mobile devices is to reduce the size of your web pages. This is important because Google considers mobile responsiveness when deciding SEO rankings</span> -->
+    </div>
+    <div class="screenshot">
+      <a href="<%= @cdn %>/screenshots/<%= @reportIdentifier %>-<%= @device %>" target="_blank">
+        <img src="<%= @cdn %>/screenshots/<%= @reportIdentifier %>-<%= @device %>?w=360">
+      </a>
     </div>
   </div>
   <% if @degrade : %>

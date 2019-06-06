@@ -93,13 +93,14 @@ const handleTabs = () => {
   }
 
   const formContactOptimized = document.getElementById('contact-form-optimized')
+  document.getElementById('table-report-up-to-mobile').appendChild(formContactOptimized)
 
   document.getElementById('tab-mobile').addEventListener('click', () => {
     document.getElementById('report-mobile').style.display = 'grid'
     document.getElementById('report-desktop').style.display = 'none'
     document.getElementById('tab-mobile').className = 'elements-tab-active'
     document.getElementById('tab-desktop').className = 'elements-tab'
-    document.getElementById('report-mobile').appendChild(formContactOptimized)
+    document.getElementById('table-report-up-to-mobile').appendChild(formContactOptimized)
   })
 
   document.getElementById('tab-desktop').addEventListener('click', () => {
@@ -107,7 +108,7 @@ const handleTabs = () => {
     document.getElementById('report-mobile').style.display = 'none'
     document.getElementById('tab-desktop').className = 'elements-tab-active'
     document.getElementById('tab-mobile').className = 'elements-tab'
-    document.getElementById('report-desktop').appendChild(formContactOptimized)
+    document.getElementById('table-report-up-to-desktop').appendChild(formContactOptimized)
   })
 }
 
