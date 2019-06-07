@@ -10,11 +10,21 @@
 
 .report
   max-width: 1700px
-  width: 1700px !important
   display: grid
+  min-width: 1700px
   grid-template-columns: 1fr 1fr 1fr
   grid-gap: 16px
   margin: auto
+
+  @media screen and (max-width: 1200px)
+    grid-template-columns: 1fr 1fr
+    max-width: 1116px
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    grid-template-columns: 1fr
+    max-width: 600px
+    min-width: 600px
 
   &.content
     padding-top: 72px
@@ -24,6 +34,7 @@
   background-color: $color__white
   border-radius: 16px
   padding: 16px
+  min-width: 550px
 
   .title-report
     text-align: center
@@ -69,7 +80,16 @@
 
 .summary-domain
   text-align: center
+  min-width: 1700px
 
+  @media screen and (max-width: 1200px)
+    grid-template-columns: 1fr
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    grid-template-columns: 1fr
+    max-width: 600px
+    min-width: 320px
 
   .audited-url
     font-size: 24px
@@ -128,5 +148,14 @@
   border-radius: 16px
   padding: 16px
   max-width: 1700px
+  min-width: 1700px
   padding: 16px 8px 24px
   margin: auto
+
+  @media screen and (max-width: 1200px)
+    max-width: 1116px
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    max-width: 600px
+    min-width: 600px
