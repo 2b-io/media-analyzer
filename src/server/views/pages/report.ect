@@ -77,7 +77,8 @@
       <% include 'elements/table-speed-up', {
         titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
         score: @metrics.optimizedUpto.desktop.score,
-        device: 'desktop'
+        device: 'desktop',
+        audits: @report.data.lighthouse.desktop.audits
       } %>
     </div>
     <div class="report content" id="report-mobile">
@@ -112,7 +113,8 @@
       <% include 'elements/table-speed-up', {
         titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
         score: @metrics.optimizedUpto.mobile.score,
-        device: 'mobile'
+        device: 'mobile',
+        audits: @report.data.lighthouse.mobile.audits
       } %>
     </div>
     <div class="description-detail">
@@ -155,6 +157,6 @@
       <a target="_blank" href="<%- @report.identifier%>/detail">View Detail</a>
     </div>
     -->
+    <% include 'elements/contact-form-optimize' %>
   <% end %>
-  <% include 'elements/contact-form-optimize' %>
 </div>

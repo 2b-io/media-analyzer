@@ -1,3 +1,6 @@
+<script type="text/javascript">
+  console.log('audits',Object.values(<%- JSON.stringify(@audits) %>))
+</script>
 <div class="table-report" id='table-report-up-to-<%= @device %>'>
   <% if @score > 0 :%>
     <div class="score-report">
@@ -12,6 +15,19 @@
   </div>
   <div class="report-description">
     <%- @scoreDescription %>
+    <% if @audits : %>
+      <% for element in Object.values(@audits) : %>
+        <% if element.score < 0.5 : %>
+          <strong>
+            <span><%= element.title %></span>
+          </strong>
+            <span><%= element.displayValue %></span>
+          <br/>
+          <span><%= element.description %></span>
+          <br/>
+        <% end %>
+      <% end %>
+    <% end %>
     <% if !@degrade && @scoreIncreased : %>
       <span>
         <a href="https://app.mr-rocket.io">Try our service is free, no credit card required.</a>

@@ -72,7 +72,8 @@ export default {
             'progress',
             'url',
             'createdAt',
-            'updatedAt'
+            'updatedAt',
+            'data'
           ]),
           metrics
         })
