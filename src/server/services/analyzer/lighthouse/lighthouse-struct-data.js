@@ -22,6 +22,8 @@ const AUDIT_STRUCT_DATA = [
   'uses-optimized-images',
   'uses-text-compression',
   'uses-responsive-images',
+  'render-blocking-resources',
+  'total-byte-weight',
   'dom-size'
 ]
 
