@@ -13,6 +13,7 @@ import config from 'infrastructure/config'
 import { analyze, summarizeMetrics } from 'services/analyzer'
 import reportService from 'services/report'
 import { FINISH, TYPES } from 'services/report/watcher'
+import opportunity from 'services/analyzer/lighthouse/opportunity'
 import { getSocketServer } from 'socket-server'
 
 const SCHEMA = joi.object().keys({
@@ -64,6 +65,9 @@ export default {
 
         const metrics = summarizeMetrics(report.data)
 
+        const opportunityMobile = opportunity(report.data.lighthouse.mobile.audits)
+        const opportunityDestop = opportunity(report.data.lighthouse.desktop.audits)
+
         res.render('pages/report', {
           report: pick(report, [
             'identifier',
@@ -73,8 +77,9 @@ export default {
             'url',
             'createdAt',
             'updatedAt',
-            'data'
           ]),
+          opportunityMobile,
+          opportunityDestop,
           metrics
         })
 

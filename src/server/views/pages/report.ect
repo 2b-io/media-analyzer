@@ -78,7 +78,8 @@
         titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
         score: @metrics.optimizedUpto.desktop.score,
         device: 'desktop',
-        audits: @report.data.lighthouse.desktop.audits
+        opportunity: @opportunityDestop,
+        prettyMs: @prettyMs
       } %>
     </div>
     <div class="report content" id="report-mobile">
@@ -86,8 +87,8 @@
         reportIdentifier: @report.identifier,
         titleReport: 'ORIGINAL',
         score: @metrics.original.mobile.score,
-        loadTime: @prettyMs(@metrics.original.mobile.loadTime),
-        pageSize: @prettyBytes(@metrics.original.mobile.pageSize),
+        loadTime: (@metrics.original.mobile.loadTime),
+        pageSize: (@metrics.original.mobile.pageSize),
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
@@ -114,7 +115,8 @@
         titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
         score: @metrics.optimizedUpto.mobile.score,
         device: 'mobile',
-        audits: @report.data.lighthouse.mobile.audits
+        opportunity: @opportunityMobile,
+        prettyMs: @prettyMs
       } %>
     </div>
     <div class="description-detail">

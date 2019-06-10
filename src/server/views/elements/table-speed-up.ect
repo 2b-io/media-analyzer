@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  console.log('audits',Object.values(<%- JSON.stringify(@audits) %>))
+  console.log('opportunity',Object.values(<%- JSON.stringify(@opportunity) %>))
 </script>
 <div class="table-report" id='table-report-up-to-<%= @device %>'>
   <% if @score > 0 :%>
@@ -15,18 +15,44 @@
   </div>
   <div class="report-description">
     <%- @scoreDescription %>
-    <% if @audits : %>
-      <% for element in Object.values(@audits) : %>
-        <% if element.score < 0.5 : %>
-          <strong>
-            <span><%= element.title %></span>
-          </strong>
-            <span><%= element.displayValue %></span>
-          <br/>
-          <span><%= element.description %></span>
-          <br/>
-        <% end %>
+    <% if @opportunity : %>
+    <div class="accordion-opportunity">
+      <div class="accordion-opportunity-title-description">
+        <span>Opportunity</span>
+        <span>Estimated Savings</span>
+      </div>
+      <ul>
+        <% for element in @opportunity : %>
+          <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <div class="accordion-opportunity-title">
+              <h3><%= element.title %></h3>
+              <h3><%= @prettyMs(element.details.overallSavingsMs) %></h3>
+            </div>
+            <span class="accordion-opportunity-description">
+              <strong>Description: <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %></strong>
+                <% if element.details.items : %>
+                <table>
+                  <tr>
+                    <th>Url</th>
+                    <th>Size</th>
+                    <th>Potential Savings</th>
+                  </tr>
+                  <% for element in element.details.items : %>
+                    <tr>
+                      <td class="opportunity-url-item"><%= element.url %></td>
+                      <td class="opportunity-total-bytes-item"><%= element.totalBytes %></td>
+                      <td><%= element.wastedBytes %></td>
+                    </tr>
+                  <% end %>
+                </table>
+              <% end %>
+            </span>
+          </li>
       <% end %>
+      </ul>
+    </div>
     <% end %>
     <% if !@degrade && @scoreIncreased : %>
       <span>
