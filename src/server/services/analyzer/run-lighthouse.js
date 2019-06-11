@@ -2,7 +2,7 @@ import lighthouse from 'lighthouse'
 import { URL } from 'url'
 
 import { TYPES } from 'services/report/watcher'
-import formatDataLighthouse from './lighthouse/format-data-lighthouse'
+import formatDataLighthouse from './lighthouse/format-data'
 
 export const runLighthouse = async (cluster, identifier, url, updateProgress) => {
   updateProgress({

@@ -31,7 +31,10 @@
               <h3><%= @prettyMs(element.details.overallSavingsMs) %></h3>
             </div>
             <span class="accordion-opportunity-description">
-              <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %>
+              <% if element.descriptionDefine : %>
+                <%= element.descriptionDefine %>
+              <% else : %>
+                <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %>
               <% end %>
             </span>
           </li>

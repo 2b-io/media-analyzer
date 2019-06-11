@@ -1,10 +1,12 @@
-import { auditStructData } from './lighthouse-struct-data'
+import { auditStructData } from './struct-data'
+import descriptionDefine from './description-define'
 
  const formatDataLighthouse = (originalLighthouseData) => {
-  let auditsData = Object.keys(originalLighthouseData.audits).map((element) => {
+  const auditsData = Object.keys(originalLighthouseData.audits).map((element) => {
     if (auditStructData.indexOf(element) !== -1) {
       let key = element.replace(/-([ a-z ])/g, (g) => g[ 1 ].toUpperCase())
       let value = originalLighthouseData.audits[ element ]
+      value.descriptionDefine = descriptionDefine[ element ].description
 
       return { [ key ]: value }
     }
