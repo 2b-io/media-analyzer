@@ -20,6 +20,8 @@
   </div>
   <div class="report-description">
     <%- @scoreDescription %>
+    <% if !@degrade && @scoreIncreased : %>
+    <% end %>
   </div>
   <div class="report-info">
     <% include 'elements/small-circle-chart', {
@@ -27,14 +29,23 @@
       info: @loadTime,
       titleReport: 'Load Time'
     } %>
+    <div class="report-description">
+      It takes <strong><%= @loadTime %></strong> from the start of initial navigation until the begining of the window load event (onload).
+    </div>
     <% include 'elements/small-circle-chart', {
       value: @pageSizePercent,
       info: @pageSize,
       titleReport: 'Page Size'
     } %>
-  </div>
-  <div class="report-description">
-    It takes <strong><%= @loadTime %></strong> from the start of initial navigation until the begining of the window load event (onload). The webpage weighs <strong><%= @pageSize %></strong>, which makes users wait and <a href="https://whatdoesmysitecost.com/#usdCost">costs money</a> to download over metered networks.
+    <div class="report-description">
+      The webpage weighs <strong><%= @pageSize %></strong>, which makes users wait and <a href="https://whatdoesmysitecost.com/#usdCost">costs money</a> to download over metered networks.
+      <br/>
+    </div>
+    <div class="screenshot">
+      <a href="<%= @cdn %>/screenshots/<%= @reportIdentifier %>-<%= @device %>" target="_blank">
+        <img src="<%= @cdn %>/screenshots/<%= @reportIdentifier %>-<%= @device %>?w=360">
+      </a>
+    </div>
   </div>
   <% if @degrade : %>
     <div class="degrade-inform">

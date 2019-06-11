@@ -49,37 +49,43 @@
     <div class="report content" id="report-desktop">
       <% include 'elements/table-report', {
         titleReport: 'ORIGINAL',
+        reportIdentifier: @report.identifier,
         score: @metrics.original.desktop.score,
         loadTime: @prettyMs(@metrics.original.desktop.loadTime),
         pageSize: @prettyBytes(@metrics.original.desktop.pageSize)
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
-        scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
+        scoreDescription: '<div>
+          <span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>
+          </div>',
+        device: 'desktop-original.jpeg'
       } %>
       <% include 'elements/table-report', {
-        titleReport: 'OPTIMIZED',
+        titleReport: 'OPTIMIZED AUTOMATIC BY MR ROCKET',
+        reportIdentifier: @report.identifier,
         score: @metrics.optimized.desktop.score,
         loadTime: @prettyMs(@metrics.optimized.desktop.loadTime),
         pageSize: @prettyBytes(@metrics.optimized.desktop.pageSize),
         loadTimePercent: ((@metrics.optimized.desktop.loadTime * 100) / @metrics.original.desktop.loadTime) + ',100',
         pageSizePercent: ((@metrics.optimized.desktop.pageSize * 100) / @metrics.original.desktop.pageSize) + ',100',
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
+        scoreIncreased: @metrics.optimized.desktop.score - @metrics.original.desktop.score,
+        device: 'desktop-optimized.jpeg',
         degrade: @metrics.optimized.desktop.score < @metrics.original.desktop.score
       } %>
-      <div class="screenshot">
-        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg" target="_blank">
-          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-original.jpeg?w=560">
-        </a>
-      </div>
-      <div class="screenshot">
-        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg" target="_blank">
-          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-desktop-optimized.jpeg?w=560">
-        </a>
-      </div>
+      <% include 'elements/table-speed-up', {
+        titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
+        score: @metrics.optimizedUpto.desktop.score,
+        device: 'desktop',
+        opportunity: @opportunityDestop,
+        prettyMs: @prettyMs,
+        prettyBytes: @prettyBytes
+      } %>
     </div>
     <div class="report content" id="report-mobile">
       <% include 'elements/table-report', {
+        reportIdentifier: @report.identifier,
         titleReport: 'ORIGINAL',
         score: @metrics.original.mobile.score,
         loadTime: @prettyMs(@metrics.original.mobile.loadTime),
@@ -87,27 +93,67 @@
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
-        scoreDescription: '<span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>'
+        scoreDescription: '<div>
+          <span>The <a href="https://developers.google.com/web/tools/lighthouse/v3/scoring" target="_blank">speed score</a> is based on the lab data analyzed by <a href="https://developers.google.com/web/tools/lighthouse/" target="_blank">Lighthouse</a>.</span>
+          </div>'
+        device: 'mobile-original.jpeg'
       } %>
       <% include 'elements/table-report', {
-        titleReport: 'OPTIMIZED',
+        titleReport: 'OPTIMIZED AUTOMATIC BY MR ROCKET',
+        reportIdentifier: @report.identifier,
         score: @metrics.optimized.mobile.score,
         loadTime: @prettyMs(@metrics.optimized.mobile.loadTime),
         pageSize: @prettyBytes(@metrics.optimized.mobile.pageSize),
         loadTimePercent: ((@metrics.optimized.mobile.loadTime * 100) / @metrics.original.mobile.loadTime) + ',100',
         pageSizePercent: ((@metrics.optimized.mobile.pageSize * 100) / @metrics.original.mobile.pageSize) + ',100',
         scoreDescription: '<span>The speed score is estimated in a simulating system which integrates with Mr. Rocket service.</span>',
+        scoreIncreased: @metrics.optimized.mobile.score - @metrics.original.mobile.score,
+        device: 'mobile-optimized.jpeg',
+        cdn: @cdn,
         degrade: @metrics.optimized.mobile.score < @metrics.original.mobile.score
       } %>
-      <div class="screenshot">
-        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg" target="_blank">
-          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-original.jpeg?w=560">
-        </a>
-      </div>
-      <div class="screenshot">
-        <a href="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg" target="_blank">
-          <img src="<%= @cdn %>/screenshots/<%= @report.identifier %>-mobile-optimized.jpeg?w=560">
-        </a>
+      <% include 'elements/table-speed-up', {
+        titleReport: 'CUSTOM UP TO MAX SPEED BY MR ROCKET',
+        score: @metrics.optimizedUpto.mobile.score,
+        device: 'mobile',
+        opportunity: @opportunityMobile,
+        prettyMs: @prettyMs,
+        prettyBytes: @prettyBytes
+      } %>
+    </div>
+    <div class="description-detail">
+      <div class="accordion">
+        <ul>
+          <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <h3 class="accordion-title">Speed score</h3>
+            <span class="accordion-description">
+              After the site is optimized automatically by the service of mr rocket, scores are analyzed by lighthouse has changed score compared to the original website.
+              <a href="https://app.mr-rocket.io">Try our service is free, no credit card required.</a>
+            </span>
+          </li>
+          <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <h3 class="accordion-title">Load Time</h3>
+            <span class="accordion-description">
+              Every 1 second delay in load time results in 7% loss in conversions, 11% fewer pageviews and 16% decrease in customer satisfaction. Ultimately, users want to have a pleasant experience when they visit a website, a fast loading site on any device and any connection signifies quality.
+            </span>
+            <span>
+              Evaluate the impact a faster site can have on your business in <a href="https://www.thinkwithgoogle.com/feature/testmysite"> </a>
+            </span>
+          </li>
+          <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <h3 class="accordion-title">Page Size</h3>
+            <span class="accordion-description">By making the open state default for when :checked isn't detected, we can make this system accessable for browsers that don't recognize :checked. The fallback is simply an open accordion. The accordion can be manipulated with Javascript (if needed) by changing the "checked" property of the input element.</span>
+            <span>
+              Google announced that for the first time the use of mobile phones to conduct online searches had overtaken desktops in the top ten world economies. In 2018, Google initiated mobile-first indexing. This is a huge concern because web pages take more time to load on mobile devices than on desktops. The only way to improve load time on mobile devices is to reduce the size of your web pages. This is important because Google considers mobile responsiveness when deciding SEO rankings
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
     <!--
@@ -115,5 +161,6 @@
       <a target="_blank" href="<%- @report.identifier%>/detail">View Detail</a>
     </div>
     -->
+    <% include 'elements/contact-form-optimize' %>
   <% end %>
 </div>

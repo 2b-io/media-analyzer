@@ -9,10 +9,24 @@
   position: relative
   max-height: 485px
   min-height: 485px
+  min-width: 1700px
+
+  @media screen and (max-width: 1200px)
+    max-width: 1200px
+    min-width: 1200px
+
+  @media screen and (max-width: 600px)
+    max-width: 600px
+    min-width: 320px
 
   form
     position: relative
     z-index: 2
+
+    @media screen and (max-width: 600px)
+      max-width: 600px
+      min-width: 320px
+
     .analyze-input
       width: 100%
       padding: 8px 144px 8px 16px
@@ -62,6 +76,16 @@
     margin-left: -150px
     margin-right: -150px
     margin-top: -180px
+
+    @media screen and (max-width: 1200px)
+      margin-left: -150px
+      margin-right: -150px
+      margin-top: -150px
+
+    @media screen and (max-width: 600px)
+      margin-left: -150px
+      margin-right: -150px
+      margin-top: -105px
 
     .cloudy-layer
       height: 300px

@@ -2,6 +2,7 @@ import lighthouse from 'lighthouse'
 import { URL } from 'url'
 
 import { TYPES } from 'services/report/watcher'
+import formatDataLighthouse from './lighthouse/format-data'
 
 export const runLighthouse = async (cluster, identifier, url, updateProgress) => {
   updateProgress({
@@ -47,7 +48,7 @@ export const runLighthouse = async (cluster, identifier, url, updateProgress) =>
     isCompleted: true,
     data: {
       key: 'lighthouse.mobile',
-      value: mobile.lhr
+      value: formatDataLighthouse(mobile.lhr)
     }
   })
 
@@ -104,16 +105,16 @@ export const runLighthouse = async (cluster, identifier, url, updateProgress) =>
     isCompleted: true,
     data: {
       key: 'lighthouse.desktop',
-      value: desktop.lhr
+      value: formatDataLighthouse(desktop.lhr)
     }
   })
 
   return {
     desktop: {
-      lhr: desktop.lhr
+      lhr: formatDataLighthouse(desktop.lhr)
     },
     mobile: {
-      lhr: mobile.lhr
+      lhr: formatDataLighthouse(mobile.lhr)
     }
   }
 }

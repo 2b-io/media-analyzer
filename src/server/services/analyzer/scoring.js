@@ -1,5 +1,7 @@
 import ms from 'ms'
 
+import scoreUpto from './scoringUpto'
+
 const TARGET = {
   loadTime: ms('1s'),
   pageSize: 1000000 // ~2mb
@@ -125,6 +127,13 @@ export const summarizeMetrics = (data) => {
     mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
   }
 
+  const { desktopOptimizedScoreUpto, mobileOptimizedScoreUpto } = scoreUpto(optimizedScore.mobile, optimizedScore.desktop)
+
+  const optimizedScoreUpto = {
+    desktop: desktopOptimizedScoreUpto,
+    mobile: mobileOptimizedScoreUpto
+  }
+
   return {
     original: {
       desktop: {
@@ -148,6 +157,18 @@ export const summarizeMetrics = (data) => {
         loadTime: mobileOptimizedLoadTime,
         pageSize: mobileOptimizedPageSize,
         score: optimizedScore.mobile
+      }
+    },
+    optimizedUpto: {
+      desktop: {
+        loadTime: desktopOptimizedLoadTime - Math.round((desktopOptimizedLoadTime * 60)/100),
+        pageSize: desktopOptimizedPageSize - Math.round((desktopOptimizedPageSize * 50)/100),
+        score: optimizedScoreUpto.desktop
+      },
+      mobile: {
+        loadTime: mobileOptimizedLoadTime - Math.round((mobileOptimizedLoadTime * 60)/100),
+        pageSize: mobileOptimizedPageSize - Math.round((mobileOptimizedPageSize * 50)/100),
+        score: optimizedScoreUpto.mobile
       }
     }
   }

@@ -8,7 +8,7 @@ WORKDIR /usr/analyzer
 # Moved to stable version of Google Chrome after the unstable version started
 # leading to 'Page crashed!' errors.
 # Used the version suggested at https://github.com/alpeware/chrome-headless-stable/blob/master/Dockerfile
-ENV CHROME_VERSION=72.0.3626.81
+ENV CHROME_VERSION=74.0.3729.157
 
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer installs, work.

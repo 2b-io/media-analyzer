@@ -5,7 +5,8 @@ const schema = mongoose.Schema({
   name: String,
   phone: Number,
   content: String,
-  company: String
+  company: String,
+  urlAnalyze: String
 }, {
   timestamps: true
 })
