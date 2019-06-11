@@ -14,14 +14,13 @@
   .accordion-opportunity-title
     text-align: left
     font-size: $font-size__body
-    line-height: $line-size__body
+    line-height: $line-height__body
     font-weight: 300
     letter-spacing: 1px
     display: flex
     justify-content: space-between
     margin: 0
     color: $color__cod-gray
-    cursor: pointer
 
   .accordion-opportunity-title-description
     display: flex
@@ -45,13 +44,16 @@
     z-index: 2
 
   .opportunity-url-item
-    width: 100%
-    overflow: hidden !important
+    max-width: 330px
+    overflow: hidden
     text-overflow: ellipsis
+    white-space: nowrap
+    padding-right: 8px
 
   .opportunity-total-bytes-item
     display: inline-block
-    width: 50px
+    max-width: 60px
+    padding-right: 16px
 
   ul {
     list-style: none

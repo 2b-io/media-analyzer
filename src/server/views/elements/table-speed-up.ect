@@ -27,26 +27,11 @@
             <input type="checkbox" checked>
             <i></i>
             <div class="accordion-opportunity-title">
-              <h3><%= element.title %></h3>
+              <h3><strong><%= element.title %></strong></h3>
               <h3><%= @prettyMs(element.details.overallSavingsMs) %></h3>
             </div>
             <span class="accordion-opportunity-description">
-              <strong>Description: <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %></strong>
-                <% if element.details.items : %>
-                <table>
-                  <tr>
-                    <th>Url</th>
-                    <th>Size</th>
-                    <th>Potential Savings</th>
-                  </tr>
-                  <% for element in element.details.items : %>
-                    <tr>
-                      <td class="opportunity-url-item"><%= element.url %></td>
-                      <td class="opportunity-total-bytes-item"><%= element.totalBytes %></td>
-                      <td><%= element.wastedBytes %></td>
-                    </tr>
-                  <% end %>
-                </table>
+              <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %>
               <% end %>
             </span>
           </li>

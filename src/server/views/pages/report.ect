@@ -79,7 +79,8 @@
         score: @metrics.optimizedUpto.desktop.score,
         device: 'desktop',
         opportunity: @opportunityDestop,
-        prettyMs: @prettyMs
+        prettyMs: @prettyMs,
+        prettyBytes: @prettyBytes
       } %>
     </div>
     <div class="report content" id="report-mobile">
@@ -87,8 +88,8 @@
         reportIdentifier: @report.identifier,
         titleReport: 'ORIGINAL',
         score: @metrics.original.mobile.score,
-        loadTime: (@metrics.original.mobile.loadTime),
-        pageSize: (@metrics.original.mobile.pageSize),
+        loadTime: @prettyMs(@metrics.original.mobile.loadTime),
+        pageSize: @prettyBytes(@metrics.original.mobile.pageSize),
         loadTimePercent: '100,100',
         pageSizePercent: '100,100',
         error: @report.error,
@@ -116,7 +117,8 @@
         score: @metrics.optimizedUpto.mobile.score,
         device: 'mobile',
         opportunity: @opportunityMobile,
-        prettyMs: @prettyMs
+        prettyMs: @prettyMs,
+        prettyBytes: @prettyBytes
       } %>
     </div>
     <div class="description-detail">
