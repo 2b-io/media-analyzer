@@ -1,0 +1,51 @@
+<script type="text/javascript">
+  console.log('opportunity',Object.values(<%- JSON.stringify(@opportunity) %>))
+</script>
+<div class="table-report" id='table-report-up-to-<%= @device %>'>
+  <% if @score > 0 :%>
+    <div class="score-report">
+      <% include 'elements/circle-big-chart', {
+        value:  Math.round(@score),
+        info:  Math.round(@score)
+      } %>
+    </div>
+  <% end %>
+  <div class="title-report">
+    <h1><%= @titleReport %></h1>
+  </div>
+  <div class="report-description">
+    <%- @scoreDescription %>
+    <% if @opportunity : %>
+    <div class="accordion-opportunity">
+      <div class="accordion-opportunity-title-description">
+        <span>Opportunity</span>
+        <span>Estimated Savings</span>
+      </div>
+      <ul>
+        <% for element in @opportunity : %>
+          <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <div class="accordion-opportunity-title">
+              <h3><strong><%= element.title %></strong></h3>
+              <h3><%= @prettyMs(element.details.overallSavingsMs) %></h3>
+            </div>
+            <span class="accordion-opportunity-description">
+              <% if element.descriptionDefine : %>
+                <%= element.descriptionDefine %>
+              <% else : %>
+                <%= element.description.substring(0, element.description.indexOf(' [Learn more]')) %>
+              <% end %>
+            </span>
+          </li>
+      <% end %>
+      </ul>
+    </div>
+    <% end %>
+    <% if !@degrade && @scoreIncreased : %>
+      <span>
+        <a href="https://app.mr-rocket.io">Try our service is free, no credit card required.</a>
+      </span>
+    <% end %>
+  </div>
+</div>

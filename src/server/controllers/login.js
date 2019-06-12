@@ -9,12 +9,14 @@ export default {
     async (req, res, next) => {
       try {
         const accounts = await accountService.list()
+
         if (!accounts.length) {
           await accountService.create({
             email: config.emailAdmin,
             password: config.passwordAdmin
           })
         }
+
         const { session } = req
 
         const account = await sessionService.verify(session.token)
@@ -25,6 +27,7 @@ export default {
 
         return res.render('admin/login')
       } catch (e) {
+        console.log('e', e);
         return res.redirect('/')
       }
     }
@@ -34,6 +37,7 @@ export default {
     async (req, res, next) => {
       const body = req.body
       const { email, password } = body
+
       try {
         const session = await sessionService.create({
           email,
@@ -47,6 +51,7 @@ export default {
 
         return res.render('admin/login')
       } catch (e) {
+        console.log('e', e);
         return res.render('admin/login')
       }
     }

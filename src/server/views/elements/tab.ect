@@ -1,4 +1,4 @@
-<% if @report && @report.finish :%>
+<% if @report && @report.finish && !@report.error:%>
   <div class="report-tab">
     <span id="tab-mobile" class="elements-tab-active">Mobile</span>
     <span id="tab-desktop" class="elements-tab">Desktop</span>

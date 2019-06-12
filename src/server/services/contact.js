@@ -5,13 +5,14 @@ import ContactModel from 'models/contact'
 
 import sendEmail from 'services/send-email'
 
-const create = async ({ email, name, phone, company, content }) => {
+const create = async ({ email, name, phone, company, content, urlAnalyze }) => {
   const contact = await new ContactModel({
     email,
     name,
     phone,
     company,
-    content
+    content,
+    urlAnalyze
   }).save()
 
   if (contact) {

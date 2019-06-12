@@ -7,33 +7,32 @@ import path from 'path'
 
 import config from 'infrastructure/config'
 import initAsset from './asset'
+import initBrowser from './browser'
 import initRoutes from './routing'
 import initViewEngine from './view-engine'
-const state = {}
 
-export default () => {
-  if (!state.app) {
-    const app = express()
-    app.enable('strict routing')
-    app.enable('trust proxy')
-    app.disable('x-powered-by')
+export default async () => {
+  const app = express()
 
-    app.use(morgan('dev'), slash())
+  app.enable('strict routing')
+  app.enable('trust proxy')
+  app.disable('x-powered-by')
+  app.use(morgan('dev'), slash())
 
-    app.use(session({
-      secret: config.session.secret,
-      resave: true,
-      cookie: { maxAge: ms(config.session.ttl) },
-      saveUninitialized: true
-    }))
+  app.set('trust proxy', 1)
 
-    initAsset(app)
-    initViewEngine(app)
+  app.use(session({
+    secret: config.session.secret,
+    resave: true,
+    cookie: { maxAge: ms(config.session.ttl) },
+    saveUninitialized: true
 
-    initRoutes(app)
+  }))
+  await initAsset(app)
+  await initBrowser(app)
+  await initViewEngine(app)
 
-    state.app = app
-  }
+  await initRoutes(app)
 
-  return state.app
+  return app
 }

@@ -1,17 +1,31 @@
 @require '~style/base'
+@require '~elements/accordion'
+@require '~elements/accordion-opportunity'
 @require '~elements/circle-chart'
-@require '~elements/contact-form'
+@require '~elements/contact-form-optimize'
 @require '~elements/footer'
-@require '~elements/header'
+@require '~elements/header/index.styl'
 @require '~elements/report-tab'
 @require '~elements/table-report'
 @require '~elements/progress-bar'
 
 .report
+  max-width: 1700px
   display: grid
-  grid-template-columns: 1fr 1fr
+  min-width: 1700px
+  grid-template-columns: 1fr 1fr 1fr
   grid-gap: 16px
   margin: auto
+
+  @media screen and (max-width: 1200px)
+    grid-template-columns: 1fr 1fr
+    max-width: 1116px
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    grid-template-columns: 1fr
+    max-width: 600px
+    min-width: 600px
 
   &.content
     padding-top: 72px
@@ -21,6 +35,7 @@
   background-color: $color__white
   border-radius: 16px
   padding: 16px
+  min-width: 550px
 
   .title-report
     text-align: center
@@ -40,7 +55,7 @@
 
   .report-info
     display: grid
-    grid-template-columns: 1fr 1fr
+    grid-template-columns: 1fr
     grid-gap: 16px
     padding: 32px 0 16px
 
@@ -66,7 +81,16 @@
 
 .summary-domain
   text-align: center
+  min-width: 1700px
 
+  @media screen and (max-width: 1200px)
+    grid-template-columns: 1fr
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    grid-template-columns: 1fr
+    max-width: 600px
+    min-width: 320px
 
   .audited-url
     font-size: 24px
@@ -109,3 +133,30 @@
   font-size: $font-size__h3
   line-height: $line-height__h3
   padding-bottom: 8px
+
+.link-report-detail
+  text-align: center
+  padding-bottom: 48px
+  font-size: $font-size__h3
+  padding-top: 24px
+
+  a
+    text-decoration: underline
+
+.description-detail
+  position: relative
+  background-color: #fff
+  border-radius: 16px
+  padding: 16px
+  max-width: 1700px
+  min-width: 1700px
+  padding: 16px 8px 24px
+  margin: auto
+
+  @media screen and (max-width: 1200px)
+    max-width: 1116px
+    min-width: 1116px
+
+  @media screen and (max-width: 600px)
+    max-width: 600px
+    min-width: 600px

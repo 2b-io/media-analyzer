@@ -6,9 +6,26 @@
   background-color: $color__cornflower-blue
   color: $color__white
   text-align: center
+  position: relative
+  max-height: 485px
+  min-height: 485px
+  min-width: 1700px
+
+  @media screen and (max-width: 1200px)
+    max-width: 1200px
+    min-width: 1200px
+
+  @media screen and (max-width: 600px)
+    max-width: 600px
+    min-width: 320px
 
   form
     position: relative
+    z-index: 2
+
+    @media screen and (max-width: 600px)
+      max-width: 600px
+      min-width: 320px
 
     .analyze-input
       width: 100%
@@ -54,3 +71,48 @@
 
     a
       color: $color__gallery
+
+  .cloudy-background
+    margin-left: -150px
+    margin-right: -150px
+    margin-top: -180px
+
+    @media screen and (max-width: 1200px)
+      margin-left: -150px
+      margin-right: -150px
+      margin-top: -150px
+
+    @media screen and (max-width: 600px)
+      margin-left: -150px
+      margin-right: -150px
+      margin-top: -105px
+
+    .cloudy-layer
+      height: 300px
+      width: 100%
+      background-repeat: repeat
+      background-size: 100%
+
+      &.front
+        background-image: url('~img/cloud-over.svg')
+
+      &.back
+        background-image: url('~img/cloud-under.svg')
+
+    &.animated
+      .cloudy-layer
+        &.front
+          animation: slide 15s ease infinite
+
+        &.back
+          animation: slide 30s ease infinite
+
+@keyframes slide
+  0%
+    background-position: 0 0
+
+  50%
+    background-position: -100px 0
+
+  100%
+    background-position: 0 0

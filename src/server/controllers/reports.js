@@ -6,7 +6,7 @@ export default {
     async (req, res, next) => {
       try {
         const { account } = req.session
-        const { page } = req.query || 1
+        const { page } = req.query
 
         if (!account) {
           return res.redirect('/login')

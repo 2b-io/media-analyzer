@@ -1,14 +1,19 @@
+import asynk from 'async'
 import hash from '@emotion/hash'
 import bodyParser from 'body-parser'
 import { BAD_REQUEST, NOT_FOUND } from 'http-status-codes'
 import joi from 'joi'
 import ms from 'ms'
 import normalizeUrl from 'normalize-url'
+import pick from 'object.pick'
 import serializeError from 'serialize-error'
+import uuid from 'uuid'
 
 import config from 'infrastructure/config'
-import { analyze } from 'services/analyzer'
+import { analyze, summarizeMetrics } from 'services/analyzer'
 import reportService from 'services/report'
+import { FINISH, TYPES } from 'services/report/watcher'
+import opportunity from 'services/analyzer/lighthouse/opportunity'
 import { getSocketServer } from 'socket-server'
 
 const SCHEMA = joi.object().keys({
@@ -17,6 +22,12 @@ const SCHEMA = joi.object().keys({
 
 export default {
   get: [
+    (req, res, next) => {
+      res.locals.TYPES = TYPES
+      res.locals.FINISH = FINISH
+
+      next()
+    },
     async (req, res, next) => {
       try {
         const { identifier } = req.params
@@ -28,138 +39,50 @@ export default {
           return res.redirect('/')
         }
 
-        if (!report.finish || !report.desktop || !report.mobile) {
-          return res.render('pages/report', { report })
+        if (report.error) {
+          return res.render('pages/report', {
+            report
+          })
         }
 
-        // calculate optimized score here
-        const {
-          desktop: {
-            original: {
-              loadTime: desktopOriginalLoadTime,
-              downloadedBytes: desktopOriginalPageSize
-            },
-            optimized: {
-              loadTime: desktopOptimizedLoadTime,
-              downloadedBytes: desktopOptimizedPageSize
-            },
-            originalPerformanceScore: desktopOriginalScore
-          },
-          mobile: {
-            original: {
-              loadTime: mobileOriginalLoadTime,
-              downloadedBytes: mobileOriginalPageSize
-            },
-            optimized: {
-              loadTime: mobileOptimizedLoadTime,
-              downloadedBytes: mobileOptimizedPageSize
-            },
-            originalPerformanceScore: mobileOriginalScore
+        if (!report.finish
+          || report.process !== TYPES.FINISH
+        ) {
+          if (Date.now() - report.createdAt > ms('5m')) {
+            // mark as not able to finish
+            const watcher = reportService.createWatcher(identifier)
+
+            await watcher.finish('Timeout 10m')
           }
-        } = report
 
-        const metrics = {
-          desktop: {
-            score: {
-              original: desktopOriginalScore
-            },
-            loadTime: {
-              original: desktopOriginalLoadTime,
-              optimized: desktopOptimizedLoadTime
-            },
-            pageSize: {
-              original: desktopOriginalPageSize,
-              optimized: desktopOptimizedPageSize
+          return res.render('pages/report', {
+            report: {
+              ...report,
+              error: Date.now() - report.createdAt > ms('5m')
             }
-          },
-          mobile: {
-            score: {
-              original: mobileOriginalScore
-            },
-            loadTime: {
-              original: mobileOriginalLoadTime,
-              optimized: mobileOptimizedLoadTime
-            },
-            pageSize: {
-              original: mobileOriginalPageSize,
-              optimized: mobileOptimizedPageSize
-            }
-          }
+          })
         }
 
-        const target = {
-          loadTime: ms('1s'),
-          pageSize: 1000000 // ~2mb
-        }
+        const metrics = summarizeMetrics(report.data)
 
-        // const target = {
-        //   loadTime: 0,
-        //   pageSize: 0
-        // }
-
-        const needImprove = {
-          desktop: {
-            score: 100 - metrics.desktop.score.original,
-            loadTime: {
-              original: Math.max(1, metrics.desktop.loadTime.original - target.loadTime),
-              optimized: Math.max(1, metrics.desktop.loadTime.optimized - target.loadTime)
-            },
-            pageSize: {
-              original: Math.max(1, metrics.desktop.pageSize.original - target.pageSize),
-              optimized: Math.max(1, metrics.desktop.pageSize.optimized - target.pageSize)
-            }
-          },
-          mobile: {
-            score: 100 - metrics.mobile.score.original,
-            loadTime: {
-              original: Math.max(1, metrics.mobile.loadTime.original - target.loadTime),
-              optimized: Math.max(1, metrics.mobile.loadTime.optimized - target.loadTime)
-            },
-            pageSize: {
-              original: Math.max(1, metrics.mobile.pageSize.original - target.pageSize),
-              optimized: Math.max(1, metrics.mobile.pageSize.optimized - target.pageSize)
-            }
-          }
-        }
-
-        // weight: loadTime = 4/5, pageSize = 1/5
-
-        const penaltyScore = {
-          desktop: {
-            loadTime: (needImprove.desktop.score / 5 * 4) * needImprove.desktop.loadTime.optimized / needImprove.desktop.loadTime.original,
-            pageSize: (needImprove.desktop.score / 5) * needImprove.desktop.pageSize.optimized / needImprove.desktop.pageSize.original
-          },
-          mobile: {
-            loadTime: (needImprove.mobile.score / 5 * 4) * needImprove.mobile.loadTime.optimized / needImprove.mobile.loadTime.original,
-            pageSize: (needImprove.mobile.score / 5) * needImprove.mobile.pageSize.optimized / needImprove.mobile.pageSize.original
-          }
-        }
-
-        const optimizedScore = {
-          desktop: Math.max(1, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
-          mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
-        }
-
-        // return res.json({
-        //   optimizedScore,
-        //   metrics,
-        //   needImprove,
-        //   penaltyScore
-        // })
+        const opportunityMobile = opportunity(report.data.lighthouse.mobile.audits)
+        const opportunityDestop = opportunity(report.data.lighthouse.desktop.audits)
 
         res.render('pages/report', {
-          report: {
-            ...report,
-            desktop: {
-              ...report.desktop,
-              optimizedPerformanceScore: optimizedScore.desktop
-            },
-            mobile: {
-              ...report.mobile,
-              optimizedPerformanceScore: optimizedScore.mobile
-            }
-          }
+          report: pick(report, [
+            'identifier',
+            'error',
+            'finish',
+            'progress',
+            'url',
+            'createdAt',
+            'updatedAt',
+          ]),
+          opportunityMobile,
+          opportunityDestop,
+          metrics
         })
+
       } catch (e) {
         console.error(e)
 
@@ -170,6 +93,45 @@ export default {
   post: [
     bodyParser.urlencoded({ extended: true }),
     async (req, res, next) => {
+      const { browserCluster } = req.app.locals
+
+      if (!browserCluster) {
+        return res.json({
+          error: 'No Browser Cluster'
+        })
+      }
+
+      const body = req.body
+      const values = await joi.validate(body, SCHEMA)
+
+      const { identifier, url } = await reportService.create({
+        url: normalizeUrl(values.url, {
+          stripWWW: false
+        })
+      })
+
+      const watcher = reportService.createWatcher(identifier)
+
+      res.redirect(`/reports/${ identifier }`)
+
+      try {
+        await analyze(browserCluster, identifier, url, watcher.updateProgress)
+      } catch (e) {
+        console.log('NOT ABLE TO FINISH ANALYZING!', e)
+
+        await watcher.finish(e)
+      } finally {
+        await watcher.finish()
+      }
+    }
+  ],
+  _post: [
+    bodyParser.urlencoded({ extended: true }),
+    async (req, res, next) => {
+      return res.json({
+        ok: true
+      })
+
       try {
         const body = req.body
         const values = await joi.validate(body, SCHEMA)
