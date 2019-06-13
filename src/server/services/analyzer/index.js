@@ -1,33 +1,27 @@
-import callPuppeteer from 'services/analyzer/launch-puppeteer'
-import callGooglePagespeed from 'services/analyzer/launch-google-page-speed'
+import { analyzeByDevice } from './analyze-by-device'
+import { runLighthouse } from './run-lighthouse'
 
-import reportService from 'services/report'
+export { summarizeMetrics } from './scoring'
 
-export const analyze = async (params) => {
-  const { url, identifier } = params
-  try {
-    console.time('time analyze')
+export const analyze = async (cluster, identifier, url, updateProgress) => {
+  const [
+    mobile,
+    desktop,
+    lighthouse
+   ] = await Promise.all([
+    analyzeByDevice(cluster, identifier, url, 'mobile', updateProgress),
+    analyzeByDevice(cluster, identifier, url, 'desktop', updateProgress),
+    runLighthouse(cluster, identifier, url, updateProgress)
+  ])
 
-    const [
-      desktopPuppeteerResult,
-      mobilePuppeteerResult,
-      desktopPageSpeedResult,
-      mobilePageSpeedResult
-    ] = await Promise.all([
-      callPuppeteer(params, 'desktop'),
-      callPuppeteer(params, 'mobile'),
-      callGooglePagespeed(url, identifier, 'desktop'),
-      callGooglePagespeed(url, identifier, 'mobile')
-    ])
-
-  } catch (e) {
-    throw e
-  } finally {
-    await reportService.update(identifier, {
-      finish: true
-    })
-    await reportService.updateProgress(identifier, 'Finished!')
-
-    console.timeEnd('time analyze')
+  return {
+    mobile: {
+      ...mobile,
+      lhr: lighthouse.mobile.lhr
+    },
+    desktop: {
+      ...desktop,
+      lhr: lighthouse.desktop.lhr
+    }
   }
 }

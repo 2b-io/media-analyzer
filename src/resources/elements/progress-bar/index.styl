@@ -1,3 +1,11 @@
+@keyframes flashing
+  0&
+    opacity: 1
+  50%
+    opacity: 0.2
+  100%
+    opacity: 1
+
 .progress-bar
   overflow: hidden
   border-radius: 16px
@@ -18,3 +26,40 @@
       border-radius: 10px
       min-width: 16px
       transition: width .2s
+
+.steps
+  padding: 16px 64px
+
+  .step
+    display: flex
+
+    .content
+      flex-grow: 1
+
+    .status
+      display: none
+      flex-basis: 24px
+      flex-grow: 0
+      flex-shrink: 0
+      text-align: center
+      width: 24px
+      height: 24px
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 14px 14px
+
+      &.flashing
+        animation: flashing 2s linear infinite
+
+      &.processing
+        display: block
+        background-image: url('~img/circle.svg')
+
+      &.failed
+        background-image: url('~img/x.svg')
+
+      &.succeed
+        background-image: url('~img/check.svg')
+
+.reload-manual
+  text-align: center

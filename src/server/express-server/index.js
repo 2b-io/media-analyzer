@@ -8,18 +8,24 @@ import path from 'path'
 
 import config from 'infrastructure/config'
 import initAsset from './asset'
+import initBrowser from './browser'
 import initRoutes from './routing'
 import initViewEngine from './view-engine'
-const state = {}
 
-export default () => {
-  if (!state.app) {
-    const app = express()
-    app.enable('strict routing')
-    app.enable('trust proxy')
-    app.disable('x-powered-by')
+export default async () => {
+  const app = express()
 
-    app.use(morgan('dev'), slash())
+  app.enable('strict routing')
+  app.enable('trust proxy')
+  app.disable('x-powered-by')
+
+  app.use(morgan('dev'), slash())
+
+  await initAsset(app)
+  await initBrowser(app)
+  await initViewEngine(app)
+
+  await initRoutes(app)
 
     const mongoStore = connectMongo(session)
     const store = new mongoStore({
@@ -39,13 +45,7 @@ export default () => {
       store: store,
     }))
 
-    initAsset(app)
-    initViewEngine(app)
 
-    initRoutes(app)
 
-    state.app = app
-  }
-
-  return state.app
+  return app
 }

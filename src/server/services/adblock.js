@@ -5,6 +5,7 @@ const blacklist = [
   'lg1.logging.admicro.vn',
   'media1.admicro.vn',
   'cm.g.doubleclick.net',
+  'googleads4.g.doubleclick.net',
   'pagead2.googlesyndication.com',
   'static.xx.fbcdn.net',
   's.ytimg.com',
@@ -20,7 +21,20 @@ const blacklist = [
   'cs.gssprt.jp',
   'images-na.ssl-images-amazon.com',
   'p.adsymptotic.com',
-  'penta.a.one.impact-ad.jp'
+  'penta.a.one.impact-ad.jp',
+  'stats.g.doubleclick.net',
+  'www.google.com',
+  'www.google.com.vn',
+  'www.googletagmanager.com',
+  'in.treasuredata.com',
+  'contextual.media.net',
+  'beacon.krxd.net',
+  'idsync.rlcdn.com',
+  'criteo-sync.teads.tv',
+  'ir-jp.amazon-adsystem.com',
+  'cnt.fout.jp',
+  'sync.fout.jp',
+  'ssp-sync.i-mobile.co.jp'
 ]
 
 const blacklistIndices = blacklist.reduce(
