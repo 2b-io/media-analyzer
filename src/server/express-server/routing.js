@@ -45,6 +45,7 @@ export default (app) => {
 
   app.get('/dashboard', controllers.dashboard.get)
   app.get('/dashboard/reports', controllers.reports.get)
+  app.get('/dashboard/jobs', controllers.jobs.get)
 
   app.post('/logout', controllers.logout.post)
 

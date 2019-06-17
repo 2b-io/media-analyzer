@@ -1,0 +1,50 @@
+<% extend './layout-admin' %>
+
+<% block 'body-end' :%>
+<% if @__asset('reports.js') :%>
+  <script src="<%= @__asset('reports.js') %>" defer></script>
+  <script>
+    var REPORTS = <%- JSON.stringify(@data) %>;
+  </script>
+<% end %>
+<% end %>
+<% if @__asset('reports.css') :%>
+  <link rel="stylesheet" href="<%= @__asset('reports.css') %>">
+<% end %>
+<div class="dashboard">
+  <div class="dashboard-content">
+    <h3 class="dashboard-content-title">List Jobs By Project</h3>
+    <div class="dashboard-search-content">
+      <form id="form" method="get" action="/dashboard/jobs?project=">
+        <input type="text" name="project" placeholder="Enter a project name" class="dashboard-search-input" value="<%= @project %>" equired>
+        <button type="submit" class="dashboard-search-button">Search</button>
+      </form>
+    </div>
+  <% if @data.reports :%>
+    <p>Total records: <%= @data.reportsHit %></p>
+    <table>
+      <tr>
+        <th class="report-url">Project</th>
+        <th>Jobs</th>
+        <th>Status</th>
+        <th>Create</th>
+        <th>Next Run</th>
+        <th>Action</th>
+      </tr>
+      <% for report in @data.reports :%>
+        <tr>
+          <td class="report-url"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </table>
+    <div class="report-pagination">
+      <% include 'elements/pagination'%>
+    </div>
+  <% end %>
+  </div>
+</div>
