@@ -9,7 +9,7 @@ export default {
     bodyParser.urlencoded({ extended: true }),
     async (req, res, next) => {
       try {
-        const  page = req.query.page || 1
+        const  page = req.query.page
 
         const url = req.query.url || ''
 
@@ -21,7 +21,6 @@ export default {
 
         return res.render('admin/reports', { account: req.session.account, data: reports, url })
       } catch (e) {
-        console.error('Error', e)
         return res.redirect('/login')
       }
     }

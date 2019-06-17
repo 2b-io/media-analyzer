@@ -44,10 +44,10 @@
       <% for report in @data.reports :%>
         <tr>
           <td class="report-url"><%= report.url %></td>
-          <td><%= Math.round(report.desktop.originalPerformanceScore) %></td>
-          <td><%= Math.round(report.desktop.optimizePerformanceScore) %></td>
-          <td><%= Math.round(report.mobile.originalPerformanceScore) %></td>
-          <td><%= Math.round(report.mobile.optimizePerformanceScore) %></td>
+          <td><%= @prettyMs(report.data.original.desktop.stat.loadTime) %></td>
+          <td><%= @prettyMs(report.data.optimized.desktop.stat.loadTime) %></td>
+          <td><%= @prettyMs(report.data.original.mobile.stat.loadTime) %></td>
+          <td><%= @prettyMs(report.data.optimized.mobile.stat.loadTime) %></td>
           <% if report?.error : %>
             <td class="report-error">Error</td>
           <% else : %>
