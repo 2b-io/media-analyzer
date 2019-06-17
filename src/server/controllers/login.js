@@ -11,6 +11,7 @@ export default {
     async (req, res, next) => {
       try {
         const accounts = await accountService.list()
+
         if (!accounts.length) {
           await accountService.create({
             email: config.emailAdmin,
@@ -18,7 +19,7 @@ export default {
           })
         }
 
-        if (req.session.loggedIn ) {
+        if (req.session.loggedIn) {
           return res.redirect('/dashboard')
         } else {
           return res.render('admin/login')
@@ -46,7 +47,6 @@ export default {
 
         return res.redirect('/dashboard')
       } catch (e) {
-        console.error('Error', e)
         return res.render('admin/login')
       }
     }

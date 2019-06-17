@@ -21,31 +21,28 @@ export default async () => {
 
   app.use(morgan('dev'), slash())
 
+  const mongoStore = connectMongo(session)
+  const store = new mongoStore({
+    uri: config.mongodb,
+    collection: 'mySessions'
+  })
+
+  store.on('error', (error) => {
+    console.log('error', error)
+  })
+
+  app.use(session({
+    secret: config.session.secret,
+    resave: true,
+    cookie: { maxAge: ms(config.session.ttl) },
+    saveUninitialized: true,
+    store: store,
+  }))
+
   await initAsset(app)
   await initBrowser(app)
   await initViewEngine(app)
-
   await initRoutes(app)
-
-    const mongoStore = connectMongo(session)
-    const store = new mongoStore({
-      uri: config.mongodb,
-      collection: 'mySessions'
-    })
-
-    store.on('error', (error) => {
-      console.log('error', error)
-    })
-
-    app.use(session({
-      secret: config.session.secret,
-      resave: true,
-      cookie: { maxAge: ms(config.session.ttl) },
-      saveUninitialized: true,
-      store: store,
-    }))
-
-
 
   return app
 }
