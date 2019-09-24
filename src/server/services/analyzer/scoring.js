@@ -121,8 +121,8 @@ export const summarizeMetrics = (data) => {
   }
 
   const optimizedScore = {
-    desktop: Math.max(1, Math.min(99, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
-    mobile: Math.max(1, Math.min(99, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
+    desktop: Math.max(1, Math.min(100, 100 - penaltyScore.desktop.loadTime - penaltyScore.desktop.pageSize)),
+    mobile: Math.max(1, Math.min(100, 100 - penaltyScore.mobile.loadTime - penaltyScore.mobile.pageSize)),
   }
 
   return {
