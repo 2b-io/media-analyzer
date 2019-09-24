@@ -11,7 +11,7 @@ export default {
       maxConcurrency: os.cpus().length,
       // monitor: true,
       puppeteerOptions: {
-        headless: true,
+        // headless: true,
         // executablePath: 'google-chrome',
         args: [
           '--no-sandbox',

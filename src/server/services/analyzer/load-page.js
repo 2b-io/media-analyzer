@@ -18,7 +18,7 @@ export const loadPage = async ({ cluster, page, requestInterception, screenshot,
     await page.setRequestInterception(true)
     await page.on('request', requestInterception)
     await page._client.on('Network.dataReceived', (event) => {
-      const req = page._networkManager._requestIdToRequest.get(event.requestId)
+      const req = page._frameManager._networkManager._requestIdToRequest.get(event.requestId)
 
       if (!req) {
         return
