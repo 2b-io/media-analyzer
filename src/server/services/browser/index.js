@@ -8,7 +8,7 @@ export default {
   async createCluster() {
     const cluster = await Cluster.launch({
       concurrency: Cluster.CONCURRENCY_CONTEXT,
-      maxConcurrency: os.cpus().length,
+      maxConcurrency: os.cpus().length * 2,
       // monitor: true,
       puppeteerOptions: {
         // headless: true,
