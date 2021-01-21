@@ -67,7 +67,7 @@
     "puppeteer-har": "1.0.5",
     "remove": "0.1.5",
     "serialize-error": "4.1.0",
-    "socket.io": "2.2.0",
+    "socket.io": "2.4.0",
     "socket.io-client": "2.2.0",
     "superagent": "5.0.2",
     "treeify": "1.1.0",
