@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@emotion/hash": "0.7.1",
-    "async": "2.6.2",
+    "async": "3.2.2",
     "body-parser": "1.18.3",
     "boolean": "1.0.0",
     "clone-buffer": "1.0.0",
