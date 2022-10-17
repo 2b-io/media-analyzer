@@ -3,14 +3,14 @@ import { runLighthouse } from './run-lighthouse'
 
 export { summarizeMetrics } from './scoring'
 
-export const analyze = async (cluster, identifier, url, updateProgress) => {
+export const analyze = async (cluster, identifier, url, optimize, updateProgress) => {
   const [
     mobile,
     desktop,
     lighthouse
    ] = await Promise.all([
-    analyzeByDevice(cluster, identifier, url, 'mobile', updateProgress),
-    analyzeByDevice(cluster, identifier, url, 'desktop', updateProgress),
+    analyzeByDevice(cluster, identifier, url, optimize, 'mobile', updateProgress),
+    analyzeByDevice(cluster, identifier, url, optimize, 'desktop', updateProgress),
     runLighthouse(cluster, identifier, url, updateProgress)
   ])
 

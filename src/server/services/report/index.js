@@ -4,10 +4,11 @@ import Report from 'models/report'
 
 import { createWatcher } from './watcher'
 
-const create = async ({ url }) => {
+const create = async ({ url, optimize }) => {
   return new Report({
     identifier: uuid.v4(),
-    url
+    url,
+    optimize
   }).save()
 }
 

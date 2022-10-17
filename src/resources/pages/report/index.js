@@ -106,10 +106,18 @@ const handleTabs = () => {
   })
 }
 
+const checkOptionOptimize = () => {
+  if (!REPORT.optimize) {
+    document.getElementById('switch-optimize').checked = true
+    document.getElementById('switch-optimize').disabled = true
+  }
+}
+
 const main = () => {
   listenSocket()
 
   handleTabs()
+  checkOptionOptimize()
 }
 
 main()

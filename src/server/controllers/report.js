@@ -16,7 +16,8 @@ import { FINISH, TYPES } from 'services/report/watcher'
 import { getSocketServer } from 'socket-server'
 
 const SCHEMA = joi.object().keys({
-  url: joi.string().trim().required()
+  url: joi.string().trim().required(),
+  optimize: joi.boolean()
 })
 
 export default {
@@ -98,10 +99,13 @@ export default {
       const body = req.body
       const values = await joi.validate(body, SCHEMA)
 
+      const optimize = values.optimize === undefined ? true : false
+
       const { identifier, url } = await reportService.create({
         url: normalizeUrl(values.url, {
           stripWWW: false
-        })
+        }),
+        optimize
       })
 
       const watcher = reportService.createWatcher(identifier)
@@ -109,7 +113,7 @@ export default {
       res.redirect(`/reports/${ identifier }`)
 
       try {
-        await analyze(browserCluster, identifier, url, watcher.updateProgress)
+        await analyze(browserCluster, identifier, url, optimize, watcher.updateProgress)
       } catch (e) {
         console.log('NOT ABLE TO FINISH ANALYZING!', e)
 
